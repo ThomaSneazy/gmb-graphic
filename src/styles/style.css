@@ -1,0 +1,76 @@
+.grid__project {
+  display: grid;
+  grid-template-columns: repeat(32, 1fr);
+  grid-template-rows: repeat(18, 1fr);
+  width: min(200vw, 2760px);
+  height: min(170vh, 1440px);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  transition: transform 0.3s ease-out;
+}
+
+
+/* Distribution des 13 éléments .grid__item */
+.grid__item:nth-child(1)  { grid-area: 8 / 14 / span 5 / span 8; }
+.grid__item:nth-child(2)  { grid-area: 3 / 17 / span 3 / span 4; }
+.grid__item:nth-child(3)  { grid-area: 2 / 31 / span 3 / span 3; }
+.grid__item:nth-child(4)  { grid-area: 2 / 2 / span 3 / span 4; }
+.grid__item:nth-child(5)  { grid-area: 6 / 8 / span 4 / span 3; }
+.grid__item:nth-child(6)  { grid-area: 11 / 25 / span 4 / span 3; }
+.grid__item:nth-child(7)  { grid-area: 9 / 1 / span 3 / span 4; }
+.grid__item:nth-child(8)  { grid-area: 12 / 4 / span 3 / span 6; }
+.grid__item:nth-child(9)  { grid-area: 5 / 26 / span 4 / span 3; }
+.grid__item:nth-child(10) { grid-area: 16 / 4 / span 3 / span 3; }
+.grid__item:nth-child(11) { grid-area: 15 / 13 / span 3 / span 4; }
+.grid__item:nth-child(12) { grid-area: 16 / 28 / span 3 / span 5; }
+.grid__item:nth-child(13) { grid-area: 10 / 31 / span 3 / span 4; }
+
+/* Couleurs de bordure différentes pour chaque .grid__item */
+.grid__item:nth-child(1)  { border-color: #FF0000; } /* Rouge */
+.grid__item:nth-child(2)  { border-color: #00FF00; } /* Vert */
+.grid__item:nth-child(3)  { border-color: #0000FF; } /* Bleu */
+.grid__item:nth-child(4)  { border-color: #FFFF00; } /* Jaune */
+.grid__item:nth-child(5)  { border-color: #FF00FF; } /* Magenta */
+.grid__item:nth-child(6)  { border-color: #00FFFF; } /* Cyan */
+.grid__item:nth-child(7)  { border-color: #FFA500; } /* Orange */
+.grid__item:nth-child(8)  { border-color: #800080; } /* Violet */
+.grid__item:nth-child(9)  { border-color: #008000; } /* Vert foncé */
+.grid__item:nth-child(10) { border-color: #000080; } /* Bleu marine */
+.grid__item:nth-child(11) { border-color: #FFC0CB; } /* Rose */
+.grid__item:nth-child(12) { border-color: #800000; } /* Marron */
+.grid__item:nth-child(13) { border-color: #808080; } /* Gris */
+
+
+/* Styles de base pour tous les .grid__item */
+.grid__item {
+  width: 100%;
+  height: 100%;
+  /* overflow: hidden; */
+  /* display: flex;
+  justify-content: center;
+  align-items: center; */
+  border: 2px solid; /* Suppression de la couleur rouge */
+}
+
+
+/* Styles pour les éléments avec data-aspect="portrait" */
+/* .grid__item[data-aspect="portrait"] img {
+  max-width: 15em;
+  max-height: 25em;
+  width: auto;
+  height: auto;
+  object-fit: cover;
+} */
+
+/* Styles pour les éléments avec data-aspect="landscape" */
+/* .grid__item[data-aspect="landscape"] img {
+  max-width: 25em;
+  max-height: 20em;
+  width: auto;
+  height: auto;
+  object-fit: cover;
+} */
+
+
