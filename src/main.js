@@ -14,7 +14,6 @@ let targetX = 0;
 let targetY = 0;
 
 
-///////////Test com 
 wrapper.addEventListener('mousemove', (e) => {
   let mousePercentX = e.clientX / wrapper.offsetWidth;
   let mousePercentY = e.clientY / wrapper.offsetHeight;

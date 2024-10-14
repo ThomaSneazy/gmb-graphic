@@ -3,12 +3,9 @@ import gsap from 'gsap'
 import { Flip } from 'gsap/Flip'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-// Enregistrer les plugins Flip et ScrollTrigger
 gsap.registerPlugin(Flip, ScrollTrigger)
 
-// Attendre que le DOM soit chargé
 document.addEventListener('DOMContentLoaded', () => {
-  // Sélectionner les éléments nécessaires
   const navLinks = document.querySelectorAll('.hp-slider-nav-link')
   const slideActive = document.querySelector('.hp-slide-active')
   const slideSecond = document.querySelector('.hp-slide-second')
@@ -17,7 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const slideBckSecond = document.querySelector('.hp-slide-bck-second')
   const slideBckThird = document.querySelector('.hp-slide-bck-third')
 
-  // Vérifier que tous les éléments nécessaires existent
   if (!slideActive || !slideSecond || !slideThird || !slideBckActive || !slideBckSecond || !slideBckThird) {
     console.error("Un ou plusieurs éléments sont manquants.")
     return
