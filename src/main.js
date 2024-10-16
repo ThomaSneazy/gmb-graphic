@@ -2,6 +2,8 @@ import './styles/style.css'
 
 console.log('Hello KEZ')
 
+
+///////////GMB GRAPHIC GRID////////////////
 const grid = document.querySelector('.grid__project');
 const wrapper = document.querySelector('.page-wrapper');
 

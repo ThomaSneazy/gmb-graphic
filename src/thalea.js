@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   let isAnimating = false
-  let activeLink = navLinks[0] // Supposons que le premier lien est actif au départ
+  let activeLink = navLinks[0] 
 
   const updateActiveLink = (newActiveLink) => {
     if (activeLink) {
