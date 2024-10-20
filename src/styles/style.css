@@ -13,7 +13,6 @@
 }
 
 
-/* Distribution des 13 éléments .grid__item avec des spans ajustés */
 .grid__item:nth-child(1)  { grid-area: 7 / 13 / span 6 / span 8; }
 .grid__item:nth-child(2)  { grid-area: 2 / 16 / span 4 / span 5; }
 .grid__item:nth-child(3)  { grid-area: 1 / 29 / span 4 / span 4; }
