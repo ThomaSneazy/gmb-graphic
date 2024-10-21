@@ -2,6 +2,25 @@ import './styles/style.css'
 import gsap from 'gsap'
 
 console.log('Hello KEZ')
+
+
+const tooltip = document.getElementById('tooltip');
+const hoverables = document.querySelectorAll('.hoverable');
+
+hoverables.forEach(el => {
+    el.addEventListener('mousemove', (e) => {
+        tooltip.style.display = 'block';
+        tooltip.textContent = el.dataset.tooltip;
+        tooltip.style.left = e.pageX + 10 + 'px';
+        tooltip.style.top = e.pageY + 10 + 'px';
+    });
+
+    el.addEventListener('mouseleave', () => {
+        tooltip.style.display = 'none';
+    });
+});
+
+
 document.querySelectorAll('.grid__item').forEach(item => {
   item.addEventListener('mouseenter', () => {
     document.querySelectorAll('.grid__item').forEach(otherItem => {
