@@ -1,6 +1,6 @@
 .grid__project {
   display: grid;
-  grid-template-columns: repeat(32, 1fr);
+  grid-template-columns: repeat(34, 1fr);
   grid-template-rows: repeat(18, 1fr);
   width: min(200vw, 2760px);
   height: min(170vh, 1440px);
@@ -13,19 +13,19 @@
 }
 
 
-.grid__item:nth-child(1)  { grid-area: 7 / 13 / span 6 / span 8; }
-.grid__item:nth-child(2)  { grid-area: 2 / 16 / span 4 / span 5; }
+.grid__item:nth-child(1)  { grid-area: 7 / 14 / span 6 / span 8; }
+.grid__item:nth-child(2)  { grid-area: 2 / 18 / span 4 / span 5; }
 .grid__item:nth-child(3)  { grid-area: 1 / 29 / span 4 / span 4; }
 .grid__item:nth-child(4)  { grid-area: 4 / 4 / span 5 / span 4; }
 .grid__item:nth-child(5)  { grid-area: 6 / 9 / span 5 / span 4; }
-.grid__item:nth-child(6)  { grid-area: 9 / 21 / span 5 / span 3; }
+.grid__item:nth-child(6)  { grid-area: 9 / 23 / span 5 / span 3; }
 .grid__item:nth-child(7)  { grid-area: 8 / 2 / span 5 / span 4; }
 .grid__item:nth-child(8)  { grid-area: 11 / 7 / span 4 / span 5; }
-.grid__item:nth-child(9)  { grid-area: 4 / 23 / span 5 / span 4; }
-.grid__item:nth-child(10) { grid-area: 14 / 5 / span 5 / span 5; }
+.grid__item:nth-child(9)  { grid-area: 2 / 25 / span 5 / span 4; }
+.grid__item:nth-child(10) { grid-area: 14 / 2 / span 5 / span 5; }
 .grid__item:nth-child(11) { grid-area: 14 / 13 / span 4 / span 4; }
-.grid__item:nth-child(12) { grid-area: 11 / 25 / span 4 / span 5; }
-.grid__item:nth-child(13) { grid-area: 6 / 28 / span 5 / span 4; }
+.grid__item:nth-child(12) { grid-area: 11 / 27 / span 4 / span 5; }
+.grid__item:nth-child(13) { grid-area: 6 / 30 / span 5 / span 4; }
 
 /* Couleurs de bordure différentes pour chaque .grid__item */
 .grid__item:nth-child(1)  { border-color: #FF0000; } /* Rouge */
@@ -50,6 +50,22 @@
   overflow: hidden;
   position: relative;
   border: 3px solid;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+/* Règles pour les éléments avec data-aspect="portrait" */
+.grid__item[data-aspect="portrait"] {
+  /* border-width: 10px; */
+  max-width: 14em;
+  max-height: 22.5em;
+}
+
+/* Nouvelles règles pour les éléments avec data-aspect="landscape" */
+.grid__item[data-aspect="landscape"] {
+  /* border-width: 20px; */
+  max-width: 25em;
+  max-height: 15em;
 }
 
 .grid__item img {
@@ -59,15 +75,20 @@
   object-fit: cover;
 }
 
-
-/* Styles pour les éléments avec data-aspect="portrait" */
-/* .grid__item[data-aspect="portrait"] img {
-  max-width: 15em;
-  max-height: 25em;
-  width: auto;
-  height: auto;
+/* Ajustement spécifique pour les images dans les éléments portrait */
+.grid__item[data-aspect="portrait"] img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-} */
+}
+
+/* Ajustement spécifique pour les images dans les éléments landscape */
+.grid__item[data-aspect="landscape"] img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 
 /* Styles pour les éléments avec data-aspect="landscape" */
 /* .grid__item[data-aspect="landscape"] img {
@@ -79,3 +100,9 @@
 } */
 
 
+
+
+/* Tous les éléments de la grille ont une opacité de 1 par défaut */
+.grid__item {
+  transition: opacity 0.4s ease; /* Transition ajoutée ici */
+}
