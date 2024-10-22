@@ -118,10 +118,15 @@ Test ZSH
 
 #tooltip {
   position: fixed;
-  padding: 10px;
-  background-color: #333;
-  color: white;
-  border-radius: 5px;
+  padding: 0.2rem;
+  background-color: #ffffff;
+  color: rgb(0, 0, 0);
+  border-radius: 0.3rem;
+  border: 1px solid #0000007c;
   display: none;
   pointer-events: none;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 0.8rem;
+  
 }

@@ -22,18 +22,34 @@ hoverables.forEach(el => {
 
 
 document.querySelectorAll('.grid__item').forEach(item => {
+  const projectDesc = item.querySelector('.project__desc');
+
+  if (projectDesc) {
+    // Utilisez l'attribut data-project-name s'il existe, sinon utilisez le texte actuel
+    const projectName = item.getAttribute('data-project-name') || projectDesc.textContent;
+    projectDesc.setAttribute('data-project-name', projectName);
+    projectDesc.textContent = projectName; // Assurez-vous que le texte initial est correct
+  }
+
   item.addEventListener('mouseenter', () => {
     document.querySelectorAll('.grid__item').forEach(otherItem => {
       if (otherItem !== item) {
         otherItem.style.opacity = '0.1';
       }
     });
+    if (projectDesc) {
+      animateText(projectDesc);
+    }
   });
 
   item.addEventListener('mouseleave', () => {
     document.querySelectorAll('.grid__item').forEach(otherItem => {
       otherItem.style.opacity = '1';
     });
+    if (projectDesc) {
+      cancelAnimationFrame(projectDesc.animationFrame);
+      projectDesc.textContent = projectDesc.getAttribute('data-project-name');
+    }
   });
 });
 
@@ -194,3 +210,43 @@ document.addEventListener('DOMContentLoaded', () => {
   // adjustGridItemSizes();
   animatePrenomNomWrapper();
 });
+
+// Ajoutez cette fonction pour générer des caractères aléatoires
+function getRandomChar() {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!';
+  return chars[Math.floor(Math.random() * chars.length)];
+}
+
+// Ajoutez cette fonction pour animer le texte
+function animateText(element) {
+  const originalText = element.getAttribute('data-project-name');
+  const textLength = originalText.length;
+  let animationFrame;
+  let startTime;
+  let lastUpdateTime = 0;
+
+  function animate(currentTime) {
+    if (!startTime) startTime = currentTime;
+    const elapsedTime = currentTime - startTime;
+    const progress = Math.min(elapsedTime / 1000, 1); // Animation sur 3 secondes
+
+    // Mettre à jour les caractères seulement toutes les 100ms
+    if (currentTime - lastUpdateTime > 100) {
+      const animatedText = originalText.split('').map((letter, index) => {
+        return Math.random() > progress ? getRandomChar() : originalText[index];
+      }).join('');
+
+      element.textContent = animatedText;
+      lastUpdateTime = currentTime;
+    }
+
+    if (progress < 1) {
+      animationFrame = requestAnimationFrame(animate);
+    } else {
+      element.textContent = originalText; // Assurez-vous que le texte final est correct
+    }
+  }
+
+  cancelAnimationFrame(element.animationFrame);
+  element.animationFrame = requestAnimationFrame(animate);
+}
