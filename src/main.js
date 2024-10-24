@@ -25,7 +25,6 @@ document.querySelectorAll('.grid__item').forEach(item => {
   const projectDesc = item.querySelector('.project__desc');
 
   if (projectDesc) {
-    // Utilisez l'attribut data-project-name s'il existe, sinon utilisez le texte actuel
     const projectName = item.getAttribute('data-project-name') || projectDesc.textContent;
     projectDesc.setAttribute('data-project-name', projectName);
     projectDesc.textContent = projectName; // Assurez-vous que le texte initial est correct
