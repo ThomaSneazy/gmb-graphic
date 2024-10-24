@@ -13,7 +13,7 @@
 }
 
 
-.grid__item:nth-child(1)  { grid-area: 7 / 14 / span 6 / span 8; }
+.grid__item:nth-child(1)  { grid-area: 7 / 14 / span 6 / span 8; height: 0; }
 .grid__item:nth-child(2)  { grid-area: 2 / 18 / span 4 / span 5; }
 .grid__item:nth-child(3)  { grid-area: 1 / 29 / span 4 / span 4; }
 .grid__item:nth-child(4)  { grid-area: 4 / 4 / span 5 / span 4; }
@@ -102,9 +102,9 @@
 
 
 /* Tous les éléments de la grille ont une opacité de 1 par défaut */
-.grid__item {
+/* .grid__item {
   transition: opacity 0.6s ease; /* Transition ajoutée ici */
-}
+
 
 /* 
 Test ZSH
@@ -118,15 +118,44 @@ Test ZSH
 
 #tooltip {
   position: fixed;
-  padding: 0.2rem;
+  padding: 0.125rem;
   background-color: #ffffff;
   color: rgb(0, 0, 0);
-  border-radius: 0.3rem;
-  border: 1px solid #0000007c;
+  /* border-radius: 0.5rem; */
+  /* border: 1px solid #000000c6; */
   display: none;
   pointer-events: none;
   text-transform: uppercase;
   font-weight: 600;
-  font-size: 0.8rem;
-  
+  font-size: 0.6rem;
+  /* display: block; */
+}
+
+.link__nav {
+  display: none;
+  opacity: 0;
+}
+
+/* .img-item__load {
+  position: absolute;
+  width: 50vw;
+  height: 50vh;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 1;
+  border: 1px solid #f30000c6;
+} */
+
+.grid__item__load {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 1;
+  border: 3px solid #f30000c6;  /* Vous pouvez ajouter d'autres styles ici si nécessaire */
+}
+
+.grid__item.reset-position {
+  position: static;
 }

@@ -1,5 +1,9 @@
 import './styles/style.css'
 import gsap from 'gsap'
+import { Flip } from 'gsap/Flip';
+
+// Enregistrez le plugin Flip avec GSAP
+gsap.registerPlugin(Flip);
 
 console.log('Hello KEZ')
 
@@ -27,7 +31,7 @@ document.querySelectorAll('.grid__item').forEach(item => {
   if (projectDesc) {
     const projectName = item.getAttribute('data-project-name') || projectDesc.textContent;
     projectDesc.setAttribute('data-project-name', projectName);
-    projectDesc.textContent = projectName; // Assurez-vous que le texte initial est correct
+    projectDesc.textContent = projectName; 
   }
 
   item.addEventListener('mouseenter', () => {
@@ -117,10 +121,9 @@ function animatePrenomNomWrapper() {
   const gridItems = document.querySelectorAll('.grid__item');
   const grid = document.querySelector('.grid__project');
 
-  // Centrer tous les éléments de la grille
   gsap.set(gridItems, { 
-    opacity: 0,
-    scale: 0.5,
+    // opacity: 0,
+    // scale: 0.5,
     xPercent: -50,
     yPercent: -50,
     left: '50%',
@@ -128,28 +131,33 @@ function animatePrenomNomWrapper() {
     position: 'absolute'
   });
 
+  gsap.set('.grid__item:nth-child(1)', {
+    opacity: 1
+  });
+
+
+  // Assurez-vous que les .link__nav sont en display: none au départ
+  gsap.set('.link__nav', { display: 'none', opacity: 0 });
+
   gsap.timeline({
     defaults: { duration: 1.2, ease: "power3.inOut" },
     onComplete: () => {
-      // Créer l'effet de flip pour chaque élément de la grille
-      gridItems.forEach((item) => {
-        const bounds = item.getBoundingClientRect();
-        const flipFrom = {
-          x: window.innerWidth / 2 - bounds.left - bounds.width / 2,
-          y: window.innerHeight / 2 - bounds.top - bounds.height / 2,
-          opacity: 0,
-          scale: 0.5
-        };
-        
-        gsap.fromTo(item, flipFrom, {
-          x: 0,
-          y: 0,
-          opacity: 1,
-          scale: 1,
-          duration: 1.5,
-          ease: "power3.out",
-          clearProps: "all"
-        });
+      gridItems.forEach((item, index) => {
+        if (index !== 0) { // Exclure le premier élément
+          gsap.to(item, {
+            opacity: 1,
+            duration: 1.5,
+            ease: "power3.out"
+          });
+        }
+      });
+
+      // Animation d'apparition des .link__nav
+      gsap.to('.link__nav', {
+        display: 'flex',
+        opacity: 1,
+        duration: 0.6,
+        stagger: 0.1
       });
 
       // Activer l'animation de la grille une fois tout en place
@@ -185,30 +193,32 @@ function animatePrenomNomWrapper() {
     left: '0%',
     right: 'auto',
     bottom: '0%',
-    duration: 1.5
+    duration: 1
   })
   .to(nom, {
     right: '0%',
     top: '0%',
-    duration: 1.5
+    duration: 1
   }, "<")
   .to(prenom, { 
     top: '0%',
     transform: 'translateY(0)',
-    duration: 1.5
+    duration: 1
   }, "+=0.5")
   .to(nom, {
     top: 'auto',
     bottom: '0%',
-    duration: 1.5
+    duration: 1
   }, "<")
+  .to('.grid__item:nth-child(1)', {
+    height: '100%',
+    duration: 1
+  }, "<") // Synchroniser avec le mouvement du prénom et du nom
 }
 
-// Modifiez l'événement DOMContentLoaded pour utiliser la nouvelle fonction
-document.addEventListener('DOMContentLoaded', () => {
-  // adjustGridItemSizes();
+  // Appeler la fonction d'animation du prénom et du nom
   animatePrenomNomWrapper();
-});
+
 
 // Ajoutez cette fonction pour générer des caractères aléatoires
 function getRandomChar() {
@@ -249,3 +259,15 @@ function animateText(element) {
   cancelAnimationFrame(element.animationFrame);
   element.animationFrame = requestAnimationFrame(animate);
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+  const gridItems = document.querySelectorAll('.img-item');
+  const gridItemLoad = document.querySelector('.grid__item__load');
+
+  gridItems.forEach((item, index) => {
+    if (!item.closest('.grid__item:nth-child(1)')) {
+      item.style.position = 'absolute';
+      gridItemLoad.appendChild(item);
+    }
+  });
+});
