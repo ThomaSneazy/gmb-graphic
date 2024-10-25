@@ -219,13 +219,13 @@ function animatePrenomNomWrapper() {
     bottom: 'auto',
   })
   .to(prenom, { 
-    left: '0%',
+    left: '2rem',
     right: 'auto',
     bottom: '0%',
     duration: 1
   })
   .to(nom, {
-    right: '0%',
+    right: '2rem',
     top: '0%',
     duration: 1
   }, "<")
@@ -349,18 +349,19 @@ document.addEventListener('DOMContentLoaded', () => {
           onComplete: () => gsap.set(gridItems, {display: 'none'})
         }, "<")
         .to(nomWrapper, {
-          height: '100vh',
+          height: '80vh',
           duration: 0.8
         })
         .to(prenomWrapper, {
-          height: '0vh',
+          height: '20vh',
           duration: 0.8
         }, "<")
         .to(nom, {
           top: 0,
           bottom: 'auto',
-          duration: 0.6
-        }, "+=0.2") // Décalage de 0.2s après l'animation précédente
+          duration: 0.6,
+          // ease: "power3.inOut"
+        }, "+=0.1") // Décalage de 0.2s après l'animation précédente
         .set(listWrapper, {display: 'flex'})
         .to(listWrapper, {
           height: '100vh',
