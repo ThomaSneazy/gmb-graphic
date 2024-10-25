@@ -22,7 +22,7 @@
 .grid__item:nth-child(7)  { grid-area: 8 / 2 / span 5 / span 4; }
 .grid__item:nth-child(8)  { grid-area: 11 / 7 / span 4 / span 5; }
 .grid__item:nth-child(9)  { grid-area: 2 / 25 / span 5 / span 4; }
-.grid__item:nth-child(10) { grid-area: 14 / 2 / span 5 / span 5; }
+.grid__item:nth-child(10) { grid-area: 13 / 2 / span 5 / span 5; }
 .grid__item:nth-child(11) { grid-area: 14 / 13 / span 4 / span 4; }
 .grid__item:nth-child(12) { grid-area: 11 / 27 / span 4 / span 5; }
 .grid__item:nth-child(13) { grid-area: 6 / 30 / span 5 / span 4; }
@@ -131,10 +131,12 @@ Test ZSH
   /* display: block; */
 }
 
-.link__nav {
+
+
+/* .link__nav {
   display: none;
   opacity: 0;
-}
+} */
 
 /* .img-item__load {
   position: absolute;
@@ -147,15 +149,15 @@ Test ZSH
   border: 1px solid #f30000c6;
 } */
 
-.grid__item__load {
+/* .grid__item__load {
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
   opacity: 1;
-  border: 3px solid #f30000c6;  /* Vous pouvez ajouter d'autres styles ici si nécessaire */
+  border: 3px solid #f30000c6;  
 }
 
 .grid__item.reset-position {
   position: static;
-}
+} */

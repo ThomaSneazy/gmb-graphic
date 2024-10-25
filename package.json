@@ -16,6 +16,7 @@
   "dependencies": {
     "gsap": "^3.9.1",
     "html2canvas": "^1.4.1",
+    "split-type": "^0.3.4",
     "three": "^0.169.0"
   }
 }
