@@ -136,7 +136,8 @@ function animatePrenomNomWrapper() {
   const gridItems = document.querySelectorAll('.grid__item');
   const grid = document.querySelector('.grid__project');
   const projectDescWrappers = document.querySelectorAll('.project__desc__wrapper');
-
+  const linkWrapperPrenom = document.querySelectorAll('.link__wrapper.is-home');
+  const linkWrapperNom = document.querySelectorAll('.link__wrapper.is-filter');
   gsap.set(gridItems, { 
     xPercent: -50,
     yPercent: -50,
@@ -173,30 +174,38 @@ function animatePrenomNomWrapper() {
       });
 
       // Animation d'apparition des .link__nav
-      // gsap.to('.link__wrapper', {
+      // gsap.to('.link__wrapper ', {
       //   display: 'flex',
-      //   opacity: 1,
+      //   opacity: 0,
       //   duration: 0.6,
       //   stagger: 0.1
       // });
-      const lastAnimation = gsap.to('.grid__item:last-child', {
-        width: '100%',
-        duration: 1,
-        onComplete: () => {
-          isAnimationEnabled = true;
-          // Afficher toutes les descriptions de projet un peu avant la fin des animations
-          gsap.to(projectDescWrappers, {
-            yPercent: 0,
-            opacity: 1,
-            duration: 0.4,
-            ease: "power2.out",
-          });
-        }
-      });
+      // const lastAnimation = gsap.to('.grid__item:last-child', {
+      //   width: '100%',
+      //   duration: 1,
+      //   onComplete: () => {
+      //     isAnimationEnabled = true;
+      //     // Afficher toutes les descriptions de projet un peu avant la fin des animations
+      //     gsap.to(projectDescWrappers, {
+      //       yPercent: 0,
+      //       opacity: 1,
+      //       duration: 0.4,
+      //       ease: "power2.out",
+      //     });
+      //   }
+      // });
     }
   })
-  .set(prenomWrapper, { 
+  .set(linkWrapperPrenom, { 
     position: 'relative',
+    display: 'none',
+    yPercent: -20,
+    opacity: 0,
+    // overflow: 'hidden'
+  })
+  .set(linkWrapperNom, { 
+    position: 'relative',
+    display: 'none',
     // overflow: 'hidden'
   })
   .set(prenom, { 
@@ -208,7 +217,8 @@ function animatePrenomNomWrapper() {
     transform: 'translateY(-0%)'
   })
   .set(nomWrapper, {
-    position: 'relative',
+    position: 'fixed',
+    height: '50vh',
     // overflow: 'hidden'
   })
   .set(nom, {
@@ -219,21 +229,22 @@ function animatePrenomNomWrapper() {
     bottom: 'auto',
   })
   .to(prenom, { 
-    left: '2rem',
+    left: '0rem',
     right: 'auto',
     bottom: '0%',
     duration: 1
   })
   .to(nom, {
-    right: '2rem',
-    top: '0%',
+    right: '0rem',
+    bottom: '0%',
     duration: 1
   }, "<")
   .to(prenom, { 
     top: '0%',
-    transform: 'translateY(0)',
+    // transform: 'translateY(0)',
+    bottom: 'auto',
     duration: 1
-  }, "+=0.5")
+  }, "+=0.2")
   .to(nom, {
     top: 'auto',
     bottom: '0%',
@@ -243,6 +254,17 @@ function animatePrenomNomWrapper() {
     height: '100%',
     duration: 1
   }, "<") 
+  .to(linkWrapperPrenom, {
+    display: 'flex',
+    yPercent: 0,
+    opacity: 1,
+    duration: 0.4,
+  }, "+=0.1")
+  .to([nomWrapper, prenomWrapper], {
+    position: 'fixed', 
+    height: '85vh',
+    // overflow: 'hidden'
+  }, "<")
   .to('.grid__item:not(:nth-child(1))', { 
     height: '100%',
     duration: 1,
@@ -251,14 +273,19 @@ function animatePrenomNomWrapper() {
       from: "random"
     },
     ease: "power2.inOut"
-  }, "+=0.1") 
+  }, "<") 
+  .to(projectDescWrappers, {
+    yPercent: 0,
+    opacity: 1,
+    duration: 0.4,
+    ease: "power2.out",
+  }, "+=0.1").eventCallback("onComplete", () => {
+    isAnimationEnabled = true;
+  });
 }
-
-  // Appeler la fonction d'animation du prénom et du nom
   animatePrenomNomWrapper();
 
 
-// Ajoutez cette fonction pour générer des caractères aléatoires
 function getRandomChar() {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!';
   return chars[Math.floor(Math.random() * chars.length)];
@@ -312,20 +339,23 @@ function animateText(element) {
 
 
 // Gestion des clics sur les liens de navigation
-document.addEventListener('DOMContentLoaded', () => {
   const navLinks = document.querySelectorAll('.link__nav');
   const gridProject = document.querySelector('.grid__project');
   const gridItems = document.querySelectorAll('.grid__item');
   const listWrapper = document.querySelector('.list__wrapper');
   const nomWrapper = document.querySelector('.nom__wrapper');
-  const prenomWrapper = document.querySelector('.prenom__wrapper');
+  // const prenomWrapper = document.querySelector('.prenom__wrapper');
   const nom = nomWrapper.querySelector('.nom');
+  const linkWrapperNom = document.querySelectorAll('.link__wrapper.is-filter');
+
 
   // Cacher la list__wrapper au chargement
   gsap.set(listWrapper, { display: 'none', height: 0 });
   
   // Positionner .nom initialement
   gsap.set(nom, { position: 'absolute', bottom: 0, top: 'auto' });
+  gsap.set(linkWrapperNom, { position: 'absolute', bottom: 0, top: 'auto' });
+
 
   navLinks.forEach(link => {
     link.addEventListener('click', (e) => {
@@ -337,6 +367,17 @@ document.addEventListener('DOMContentLoaded', () => {
       if (link.classList.contains('list')) {
         const tl = gsap.timeline({defaults: {ease: "power3.inOut"}});
 
+        // Préparation des éléments de liste
+        gsap.set('.list__link__item', {
+          opacity: 0,
+          x: 50 
+        });
+        gsap.set(linkWrapperNom, {
+          display: 'none',
+          yPercent: -20,
+          opacity: 0,
+        });
+
         tl.to(gridProject, {
           x: 0,
           y: 0,
@@ -345,28 +386,35 @@ document.addEventListener('DOMContentLoaded', () => {
         .to(gridItems, {
           opacity: 0,
           duration: 0.6,
-          stagger: 0.05,
+          stagger: 0.04,
           onComplete: () => gsap.set(gridItems, {display: 'none'})
-        }, "<")
-        .to(nomWrapper, {
-          height: '80vh',
-          duration: 0.8
-        })
-        .to(prenomWrapper, {
-          height: '20vh',
-          duration: 0.8
         }, "<")
         .to(nom, {
           top: 0,
           bottom: 'auto',
-          duration: 0.6,
-          // ease: "power3.inOut"
-        }, "+=0.1") // Décalage de 0.2s après l'animation précédente
+          duration: 1,
+          ease: "power3.inOut"
+        })
         .set(listWrapper, {display: 'flex'})
         .to(listWrapper, {
+          opacity: 1,
           height: '100vh',
           duration: 0.8
-        });
+        })
+        .to(linkWrapperNom, {
+          display: 'flex',
+          yPercent: 0,
+          opacity: 1,
+          duration: 0.8
+        }, "<")
+        // Animation des éléments de liste
+        .to('.list__link__item', {
+          opacity: 1,
+          x: 0,
+          duration: 0.5,
+          stagger: 0.05,
+          ease: "power2.out"
+        }, "-=0.4"); // Commence légèrement avant la fin de l'animation précédente
 
         isAnimationEnabled = false;
       } else if (link.classList.contains('grid')) {
@@ -377,17 +425,17 @@ document.addEventListener('DOMContentLoaded', () => {
           duration: 0.6,
           onComplete: () => gsap.set(listWrapper, {display: 'none'})
         })
-        .to(nomWrapper, {
-          height: '50vh',
-          duration: 0.8
-        })
-        .to(prenomWrapper, {
-          height: '50vh',
-          duration: 0.8
-        }, "<")
+        // .to(nomWrapper, {
+        //   height: '50vh',
+        //   duration: 0.8
+        // })
+        // .to(prenomWrapper, {
+        //   height: '50vh',
+        //   duration: 0.8
+        // }, "<")
         .to(nom, {
           top: 'auto',
-          bottom: 0,
+          bottom: "0%",
           duration: 0.6
         }, "+=0.2") // Décalage de 0.2s après l'animation précédente
         .set(gridItems, {display: 'flex'})
@@ -404,7 +452,8 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
-});
+
+
 
 
 
