@@ -197,7 +197,7 @@ function animatePrenomNomWrapper() {
   })
   .set(prenomWrapper, { 
     position: 'relative',
-    overflow: 'hidden'
+    // overflow: 'hidden'
   })
   .set(prenom, { 
     position: 'absolute',
@@ -209,7 +209,7 @@ function animatePrenomNomWrapper() {
   })
   .set(nomWrapper, {
     position: 'relative',
-    overflow: 'hidden'
+    // overflow: 'hidden'
   })
   .set(nom, {
     position: 'absolute',
