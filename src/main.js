@@ -772,6 +772,19 @@ if (videoGrid) {
         videoShowreel.style.cursor = 'default';
         clearTimeout(controlsTimer);
     });
+
+    // Ajouter un gestionnaire d'événements pour la touche espace
+    document.addEventListener('keydown', (e) => {
+        // Vérifier si la vidéo est visible et si c'est la touche espace
+        if (e.code === 'Space' && videoShowreel.style.display !== 'none') {
+            e.preventDefault(); // Empêcher le défilement de la page
+            if (player.paused()) {
+                player.play();
+            } else {
+                player.pause();
+            }
+        }
+    });
 }
 
 const bigPlayButton = player.getChild('BigPlayButton');
