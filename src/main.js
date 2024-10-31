@@ -4,20 +4,73 @@ import gsap from 'gsap'
 
 console.log('Hello KEZ')
 
+// document.addEventListener('DOMContentLoaded', function() {
+//   var player = videojs('my-video', {
+//     controls: true,
+//     autoplay: false,
+//     preload: 'auto'
+//   });
+// });
+
+
+
 
 const tooltip = document.getElementById('tooltip');
-const hoverables = document.querySelectorAll('.hoverable');
+const hoverables = document.querySelectorAll('.hoverable, .tooltip, .esc');
+
+// Variable pour suivre l'état de l'animation
+let tooltipAnimation;
 
 hoverables.forEach(el => {
     el.addEventListener('mousemove', (e) => {
+        // Annuler l'animation précédente si elle existe
+        if (tooltipAnimation) tooltipAnimation.kill();
+        
+        let tooltipText;
+        if (el.classList.contains('tooltip')) {
+            tooltipText = 'click';
+        } else if (el.classList.contains('esc')) {
+            tooltipText = 'PRESS OR CLICK';
+        } else {
+            tooltipText = el.dataset.tooltip;
+        }
+        
+        tooltip.textContent = tooltipText;
+
+        // Assurer que le tooltip est visible
         tooltip.style.display = 'block';
-        tooltip.textContent = el.dataset.tooltip;
-        tooltip.style.left = e.pageX + 10 + 'px';
-        tooltip.style.top = e.pageY + 10 + 'px';
+        
+        // Animation de position immédiate
+        gsap.set(tooltip, {
+            x: e.pageX + 10,
+            y: e.pageY + 10
+        });
+
+        // Animation de l'apparition
+        tooltipAnimation = gsap.to(tooltip, {
+            opacity: 1,
+            scale: 1,
+            duration: 0.2,
+            ease: "power2.out",
+            overwrite: true
+        });
     });
 
     el.addEventListener('mouseleave', () => {
-        tooltip.style.display = 'none';
+        // Annuler l'animation précédente si elle existe
+        if (tooltipAnimation) tooltipAnimation.kill();
+        
+        tooltipAnimation = gsap.to(tooltip, {
+            opacity: 0,
+            scale: 0.95,
+            duration: 0.2,
+            ease: "power2.in",
+            onComplete: () => {
+                if (tooltip.style.opacity === '0') {
+                    tooltip.style.display = 'none';
+                }
+            }
+        });
     });
 });
 
@@ -355,6 +408,7 @@ function animateText(element) {
   // Positionner .nom initialement
   gsap.set(nom, { position: 'absolute', bottom: 0, top: 'auto' });
   gsap.set(linkWrapperNom, { position: 'absolute', bottom: 0, top: 'auto' });
+  gsap.set('.img__list', { opacity: 0 });
 
 
   navLinks.forEach(link => {
@@ -409,12 +463,62 @@ function animateText(element) {
         }, "<")
         // Animation des éléments de liste
         .to('.list__link__item', {
-          opacity: 1,
+          opacity: 0.4,
           x: 0,
           duration: 0.5,
           stagger: 0.05,
+          ease: "power2.out",
+          onComplete: () => {
+            function initializeListView() {
+              const listItems = document.querySelectorAll('.list__link__item');
+              const imgItems = document.querySelectorAll('.list__link__img__item');
+            
+              if (listItems[0]) {
+                listItems[0].classList.add('active');
+                gsap.to(listItems[0], { opacity: 1, duration: 0 }); // Ajout de l'animation d'opacité
+                
+                const firstProjectId = listItems[0].getAttribute('data-list-project');
+                const firstImg = document.querySelector(`.list__link__img__item[data-list-project="${firstProjectId}"]`);
+                if (firstImg) {
+                  firstImg.classList.add('active');
+                  gsap.to(firstImg, { opacity: 1, duration: 0 }); // Ajout de l'animation d'opacité
+                }
+              }
+            
+              listItems.forEach(item => {
+                item.addEventListener('mouseenter', () => {
+                  const projectId = item.getAttribute('data-list-project');
+            
+                  // Animer tous les éléments vers l'opacité 0.4
+                  listItems.forEach(otherItem => {
+                    otherItem.classList.remove('active');
+                    gsap.to(otherItem, { opacity: 0.4, duration: 0 });
+                  });
+                  imgItems.forEach(img => {
+                    img.classList.remove('active');
+                    gsap.to(img, { opacity: 0, duration: 0 });
+                  });
+            
+                  // Animer l'élément actif vers l'opacité 1
+                  item.classList.add('active');
+                  gsap.to(item, { opacity: 1, duration: 0 });
+                  
+                  const correspondingImg = document.querySelector(`.list__link__img__item[data-list-project="${projectId}"]`);
+                  if (correspondingImg) {
+                    correspondingImg.classList.add('active');
+                    gsap.to(correspondingImg, { opacity: 1, duration: 0 });
+                  }
+                });
+              });
+            }
+            initializeListView();
+          }
+        }, "-=0.4")
+        .to('.img__list', {
+          opacity: 1,
+          duration: 0.5,
           ease: "power2.out"
-        }, "-=0.4"); // Commence légèrement avant la fin de l'animation précédente
+        }, "+=0.01");
 
         isAnimationEnabled = false;
       } else if (link.classList.contains('grid')) {
@@ -456,4 +560,227 @@ function animateText(element) {
 
 
 
+
+  // function initializeListView() {
+  //   const listItems = document.querySelectorAll('.list__link__item');
+  //   const imgItems = document.querySelectorAll('.list__link__img__item');
+
+  //   // Activer le premier élément (index 0)
+  //   if (listItems[0]) {
+  //     listItems[0].classList.add('active');
+  //     const firstProjectId = listItems[0].getAttribute('data-list-project');
+  //     const firstImg = document.querySelector(`.list__link__img__item[data-list-project="${firstProjectId}"]`);
+  //     if (firstImg) {
+  //       firstImg.classList.add('active');
+  //     }
+  //   }
+
+  //   listItems.forEach(item => {
+  //     item.addEventListener('mouseenter', () => {
+  //       const projectId = item.getAttribute('data-list-project');
+
+  //       // Retirer la classe active de tous les éléments
+  //       listItems.forEach(otherItem => otherItem.classList.remove('active'));
+  //       imgItems.forEach(img => img.classList.remove('active'));
+
+  //       // Ajouter la classe active sur l'élément survolé et son image
+  //       item.classList.add('active');
+  //       const correspondingImg = document.querySelector(`.list__link__img__item[data-list-project="${projectId}"]`);
+  //       if (correspondingImg) {
+  //         correspondingImg.classList.add('active');
+  //       }
+  //     });
+  //   });
+  // }
+
+  // // S'assurer que la fonction est appelée après le chargement du DOM
+  // document.addEventListener('DOMContentLoaded', initializeListView);
+
+const videoGrid = document.querySelector('.video-grid');
+const videoShowreel = document.querySelector('.video__showreel__item');
+const videoJs = document.querySelector('.videojs');
+let player;
+
+if (videoGrid) {
+    // Initialisation de Video.js
+    player = videojs('my-video', {
+        controls: true,
+        autoplay: false,
+        preload: 'auto'
+    });
+
+    // Configuration de base de la vidéo grid
+    videoGrid.autoplay = false;
+    videoGrid.muted = true;
+    videoGrid.loop = true;
+
+    // Configuration initiale de video-js
+    gsap.set(videoJs, {
+        display: 'none',
+        opacity: 0
+    });
+
+    // Animation au survol
+    videoGrid.addEventListener('mouseenter', () => {
+        videoGrid.play();
+    });
+
+    videoGrid.addEventListener('mouseleave', () => {
+        videoGrid.pause();
+    });
+
+    videoGrid.addEventListener('click', () => {
+        const tl = gsap.timeline({
+            defaults: { 
+                ease: "power3.inOut",
+                duration: 1
+            }
+        });
+
+        // Configuration initiale
+        gsap.set(videoShowreel, {
+            display: 'flex',
+            width: '0%',
+            height: '0%'
+        });
+
+        // Timeline d'animation
+        tl.to(videoShowreel, {
+            width: '100%',
+            height: '1%'
+        })
+        .to(videoShowreel, {
+            height: '100%',
+            duration: 1
+        })
+        .set(videoJs, {
+            display: 'block'
+        })
+        .to(videoJs, {
+            opacity: 1,
+            duration: 0.4,
+            onComplete: () => {
+                player.play(); 
+            }
+        });
+    });
+
+    const closeVideo = document.querySelector('.close-video');
+    let mouseTimer;
+
+    gsap.set(closeVideo, {
+        opacity: 0,
+        display: 'none'
+    });
+
+    const hideCloseButton = () => {
+        gsap.to(closeVideo, {
+            opacity: 0,
+            duration: 0.3,
+            onComplete: () => {
+                gsap.set(closeVideo, { display: 'none' });
+            }
+        });
+    };
+
+    videoShowreel.addEventListener('mousemove', () => {
+        gsap.set(closeVideo, { display: 'block' });
+        gsap.to(closeVideo, {
+            opacity: 1,
+            duration: 0.3
+        });
+
+        clearTimeout(mouseTimer);
+        mouseTimer = setTimeout(hideCloseButton, 2300);
+    });
+
+    videoShowreel.addEventListener('mouseleave', hideCloseButton);
+
+    // Ajouter l'écouteur d'événement pour la fin de la vidéo
+    player.on('ended', () => {
+        closeVideoWithAnimation();
+    });
+
+    // Fonction pour fermer la vidéo avec animation
+    const closeVideoWithAnimation = () => {
+        const tl = gsap.timeline({
+            defaults: { 
+                ease: "power3.inOut",
+                duration: 1
+            }
+        });
+
+        tl.to(videoJs, {
+            opacity: 0,
+            duration: 0.4,
+            onComplete: () => {
+                player.pause();
+                gsap.set(videoJs, { display: 'none' });
+            }
+        })
+        .to(closeVideo, {
+            opacity: 0,
+            duration: 0.3,
+            onComplete: () => {
+                gsap.set(closeVideo, { display: 'none' });
+            }
+        })
+        .to(videoShowreel, {
+            height: '1%',
+            duration: 1
+        }, "-=0.2")
+        .to(videoShowreel, {
+            width: '0%',
+            height: '0%',
+            onComplete: () => {
+                gsap.set(videoShowreel, { display: 'none' });
+            }
+        });
+    };
+
+    // Gestionnaire pour le bouton close
+    closeVideo.addEventListener('click', closeVideoWithAnimation);
+
+    // Gestionnaire pour la touche Échap
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && videoShowreel.style.display !== 'none') {
+            closeVideoWithAnimation();
+        }
+    });
+
+    let controlsTimer;
+
+    // Ajouter une classe pour gérer le curseur
+    videoShowreel.style.cursor = 'default';
+
+    videoShowreel.addEventListener('mousemove', () => {
+        // Afficher les contrôles et le curseur
+        player.controlBar.show();
+        videoShowreel.style.cursor = 'default';
+        
+        // Réinitialiser le timer à chaque mouvement
+        clearTimeout(controlsTimer);
+        controlsTimer = setTimeout(() => {
+            player.controlBar.hide();
+            videoShowreel.style.cursor = 'none'; // Cacher le curseur
+        }, 2300);
+    });
+
+    // Cacher les contrôles et le curseur quand la souris quitte la zone
+    videoShowreel.addEventListener('mouseleave', () => {
+        player.controlBar.hide();
+        videoShowreel.style.cursor = 'default';
+        clearTimeout(controlsTimer);
+    });
+}
+
+const bigPlayButton = player.getChild('BigPlayButton');
+
+player.on('play', () => {
+    bigPlayButton.el().textContent = '⏸';
+});
+
+player.on('pause', () => {
+    bigPlayButton.el().textContent = '▶';
+});
 

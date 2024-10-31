@@ -1,3 +1,85 @@
+/* link__nav {
+  pointer-events: defaut;
+} */
+
+.video-js.vjs-custom-theme {
+  /* Fond rouge pour voir les dimensions */
+  /* background-color: rgba(255, 0, 0, 0.1) !important; */
+}
+
+/* Barre de contrôle en rouge */
+.video-js.vjs-custom-theme .vjs-control-bar {
+  background-color: rgba(0, 0, 0, 0.0) !important;
+  display: flex !important;
+  justify-content: flex-end !important;
+  width: 100% !important;
+  opacity: 0 !important;
+  transition: opacity 0.6s ease !important;
+}
+
+/* Affiche les contrôles uniquement quand la vidéo est "active" (souris bouge) */
+.video-js.vjs-custom-theme.vjs-user-active .vjs-control-bar {
+  opacity: 1 !important;
+}
+
+/* Cache tous les contrôles sauf le volume */
+.video-js.vjs-custom-theme .vjs-control-bar > *:not(.vjs-volume-panel) {
+  display: none !important;
+}
+
+/* Style du contrôle volume */
+.video-js.vjs-custom-theme .vjs-volume-panel {
+  color: white !important;
+  display: flex !important;
+  font-size: 1.5rem !important;
+}
+
+/* Style du gros bouton play/pause central */
+.video-js.vjs-custom-theme .vjs-big-play-button {
+  background-color: transparent !important;
+  border: none !important;
+  color: white !important;
+  opacity: 0 !important;
+  font-size: 10rem !important;
+  transition: opacity 0.6s ease !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  pointer-events: none !important;
+}
+
+/* État par défaut (pause) */
+.video-js.vjs-custom-theme.vjs-paused .vjs-big-play-button {
+  content: "▶" !important;
+}
+
+/* État de lecture */
+.video-js.vjs-custom-theme.vjs-playing .vjs-big-play-button {
+  content: "⏸" !important;
+}
+
+/* Affichage du bouton en mode actif */
+.video-js.vjs-custom-theme.vjs-user-active .vjs-big-play-button {
+  opacity: 1 !important;
+}
+
+.close-video {
+  opacity: 0;
+}
+
+/* Alternative avec Font Awesome si vous préférez */
+/* 
+.video-js.vjs-custom-theme.vjs-playing .vjs-big-play-button:before {
+  font-family: "Font Awesome 5 Free" !important;
+  content: "\f04c" !important; 
+}
+
+.video-js.vjs-custom-theme.vjs-paused .vjs-big-play-button:before {
+  font-family: "Font Awesome 5 Free" !important;
+  content: "\f04b" !important;
+}
+*/
+
 .grid__project {
   display: grid;
   grid-template-columns: repeat(34, 1fr);
@@ -20,8 +102,14 @@
   display: block;
 }
 
+.grid__item:nth-child(1) .img-item .link-to-project {
+  pointer-events: none;
+  /* cursor: default; */
+}
 
-.grid__item:nth-child(1)  { grid-area: 7 / 14 / span 6 / span 8; height: 0; }
+
+.grid__item:nth-child(1) { grid-area: 7 / 14 / span 6 / span 8; height: 0; max-height: 25rem; }
+.grid__item:nth-child(1) .img-item { transform: scale(1); }
 .grid__item:nth-child(2)  { grid-area: 2 / 18 / span 4 / span 5; }
 .grid__item:nth-child(3)  { grid-area: 1 / 29 / span 4 / span 4; }
 .grid__item:nth-child(4)  { grid-area: 4 / 4 / span 5 / span 4; }
@@ -126,6 +214,7 @@ Test ZSH
 
 #tooltip {
   position: fixed;
+  z-index: 1000;
   padding: 0.125rem;
   background-color: #ffffff;
   color: rgb(0, 0, 0);
