@@ -2,10 +2,6 @@
   pointer-events: defaut;
 } */
 
-.video-js.vjs-custom-theme {
-  /* Fond rouge pour voir les dimensions */
-  /* background-color: rgba(255, 0, 0, 0.1) !important; */
-}
 
 /* Barre de contrôle en rouge */
 .video-js.vjs-custom-theme .vjs-control-bar {

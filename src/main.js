@@ -1,5 +1,7 @@
 import './styles/style.css'
 import gsap from 'gsap'
+import SwupParallelPlugin from '@swup/parallel-plugin';
+
 
 
 console.log('Hello KEZ')
@@ -22,56 +24,56 @@ const hoverables = document.querySelectorAll('.hoverable, .tooltip, .esc');
 let tooltipAnimation;
 
 hoverables.forEach(el => {
-    el.addEventListener('mousemove', (e) => {
-        // Annuler l'animation précédente si elle existe
-        if (tooltipAnimation) tooltipAnimation.kill();
-        
-        let tooltipText;
-        if (el.classList.contains('tooltip')) {
-            tooltipText = 'click';
-        } else if (el.classList.contains('esc')) {
-            tooltipText = 'PRESS OR CLICK';
-        } else {
-            tooltipText = el.dataset.tooltip;
+  el.addEventListener('mousemove', (e) => {
+    // Annuler l'animation précédente si elle existe
+    if (tooltipAnimation) tooltipAnimation.kill();
+
+    let tooltipText;
+    if (el.classList.contains('tooltip')) {
+      tooltipText = 'click';
+    } else if (el.classList.contains('esc')) {
+      tooltipText = 'PRESS OR CLICK';
+    } else {
+      tooltipText = el.dataset.tooltip;
+    }
+
+    tooltip.textContent = tooltipText;
+
+    // Assurer que le tooltip est visible
+    tooltip.style.display = 'block';
+
+    // Animation de position immédiate
+    gsap.set(tooltip, {
+      x: e.pageX + 10,
+      y: e.pageY + 10
+    });
+
+    // Animation de l'apparition
+    tooltipAnimation = gsap.to(tooltip, {
+      opacity: 1,
+      scale: 1,
+      duration: 0.2,
+      ease: "power2.out",
+      overwrite: true
+    });
+  });
+
+  el.addEventListener('mouseleave', () => {
+    // Annuler l'animation précédente si elle existe
+    if (tooltipAnimation) tooltipAnimation.kill();
+
+    tooltipAnimation = gsap.to(tooltip, {
+      opacity: 0,
+      scale: 0.95,
+      duration: 0.2,
+      ease: "power2.in",
+      onComplete: () => {
+        if (tooltip.style.opacity === '0') {
+          tooltip.style.display = 'none';
         }
-        
-        tooltip.textContent = tooltipText;
-
-        // Assurer que le tooltip est visible
-        tooltip.style.display = 'block';
-        
-        // Animation de position immédiate
-        gsap.set(tooltip, {
-            x: e.pageX + 10,
-            y: e.pageY + 10
-        });
-
-        // Animation de l'apparition
-        tooltipAnimation = gsap.to(tooltip, {
-            opacity: 1,
-            scale: 1,
-            duration: 0.2,
-            ease: "power2.out",
-            overwrite: true
-        });
+      }
     });
-
-    el.addEventListener('mouseleave', () => {
-        // Annuler l'animation précédente si elle existe
-        if (tooltipAnimation) tooltipAnimation.kill();
-        
-        tooltipAnimation = gsap.to(tooltip, {
-            opacity: 0,
-            scale: 0.95,
-            duration: 0.2,
-            ease: "power2.in",
-            onComplete: () => {
-                if (tooltip.style.opacity === '0') {
-                    tooltip.style.display = 'none';
-                }
-            }
-        });
-    });
+  });
 });
 
 
@@ -81,7 +83,7 @@ document.querySelectorAll('.grid__item').forEach(item => {
   if (projectDesc) {
     const projectName = item.getAttribute('data-project-name') || projectDesc.textContent;
     projectDesc.setAttribute('data-project-name', projectName);
-    projectDesc.textContent = projectName; 
+    projectDesc.textContent = projectName;
   }
 
   item.addEventListener('mouseenter', () => {
@@ -125,7 +127,7 @@ wrapper.addEventListener('mousemove', (e) => {
 
   let mousePercentX = e.clientX / wrapper.offsetWidth;
   let mousePercentY = e.clientY / wrapper.offsetHeight;
-  
+
   targetX = (mousePercentX - 0.5) * maxMoveX * 2.2;
   targetY = (mousePercentY - 0.5) * maxMoveY * 2.2;
 
@@ -147,15 +149,15 @@ function animate() {
   if (isAnimationEnabled) {
     currentX += (targetX - currentX) * 0.09;
     currentY += (targetY - currentY) * 0.09;
-    
+
     gsap.to(grid, {
       x: -currentX,
       y: -currentY,
       duration: 0.6,
-      ease: "power2.out" 
+      ease: "power2.out"
     });
   }
-  
+
   requestAnimationFrame(animate);
 }
 
@@ -163,11 +165,11 @@ animate();
 
 // function adjustGridItemSizes() {
 //   const gridItems = document.querySelectorAll('.grid__item');
-  
+
 //   gridItems.forEach((item, index) => {
 //     const aspect = item.getAttribute('data-aspect');
 //     let gridArea = item.style.gridArea.split(' / ');
-    
+
 //     if (aspect === 'portrait') {
 //       gridArea[2] = 'span 5';
 //       gridArea[3] = 'span 3';
@@ -175,7 +177,7 @@ animate();
 //       gridArea[2] = 'span 4';
 //       gridArea[3] = 'span 5';
 //     }
-    
+
 //     item.style.gridArea = gridArea.join(' / ');
 //   });
 // }
@@ -191,7 +193,7 @@ function animatePrenomNomWrapper() {
   const projectDescWrappers = document.querySelectorAll('.project__desc__wrapper');
   const linkWrapperPrenom = document.querySelectorAll('.link__wrapper.is-home');
   const linkWrapperNom = document.querySelectorAll('.link__wrapper.is-filter');
-  gsap.set(gridItems, { 
+  gsap.set(gridItems, {
     xPercent: -50,
     yPercent: -50,
     left: '50%',
@@ -249,94 +251,95 @@ function animatePrenomNomWrapper() {
       // });
     }
   })
-  .set(linkWrapperPrenom, { 
-    position: 'relative',
-    display: 'none',
-    yPercent: -20,
-    opacity: 0,
-    // overflow: 'hidden'
-  })
-  .set(linkWrapperNom, { 
-    position: 'relative',
-    display: 'none',
-    // overflow: 'hidden'
-  })
-  .set(prenom, { 
-    position: 'absolute',
-    left: 'auto',
-    right: 'auto',
-    top: 'auto',
-    bottom: '0%',
-    transform: 'translateY(-0%)'
-  })
-  .set(nomWrapper, {
-    position: 'fixed',
-    height: '50vh',
-    // overflow: 'hidden'
-  })
-  .set(nom, {
-    position: 'absolute',
-    top: '0%',
-    left: 'auto',
-    right: 'auto',
-    bottom: 'auto',
-  })
-  .to(prenom, { 
-    left: '0rem',
-    right: 'auto',
-    bottom: '0%',
-    duration: 1
-  })
-  .to(nom, {
-    right: '0rem',
-    bottom: '0%',
-    duration: 1
-  }, "<")
-  .to(prenom, { 
-    top: '0%',
-    // transform: 'translateY(0)',
-    bottom: 'auto',
-    duration: 1
-  }, "+=0.2")
-  .to(nom, {
-    top: 'auto',
-    bottom: '0%',
-    duration: 1
-  }, "<")
-  .to('.grid__item:nth-child(1)', {
-    height: '100%',
-    duration: 1
-  }, "<") 
-  .to(linkWrapperPrenom, {
-    display: 'flex',
-    yPercent: 0,
-    opacity: 1,
-    duration: 0.4,
-  }, "+=0.1")
-  .to([nomWrapper, prenomWrapper], {
-    position: 'fixed', 
-    height: '85vh',
-    // overflow: 'hidden'
-  }, "<")
-  .to('.grid__item:not(:nth-child(1))', { 
-    height: '100%',
-    duration: 1,
-    stagger: {
-      amount: 0.5,
-      from: "random"
-    },
-    ease: "power2.inOut"
-  }, "<") 
-  .to(projectDescWrappers, {
-    yPercent: 0,
-    opacity: 1,
-    duration: 0.4,
-    ease: "power2.out",
-  }, "+=0.1").eventCallback("onComplete", () => {
-    isAnimationEnabled = true;
-  });
+    .set(linkWrapperPrenom, {
+      position: 'relative',
+      display: 'none',
+      yPercent: -20,
+      opacity: 0,
+      // overflow: 'hidden'
+    })
+    .set(linkWrapperNom, {
+      position: 'relative',
+      display: 'none',
+      // overflow: 'hidden'
+    })
+    .set(prenom, {
+      position: 'absolute',
+      left: 'auto',
+      right: 'auto',
+      top: 'auto',
+      bottom: '0%',
+      // transform: 'translateY(-0%)'
+    })
+    .set(nomWrapper, {
+      position: 'fixed',
+      height: '50vh',
+      // overflow: 'hidden'
+    })
+    .set(nom, {
+      position: 'absolute',
+      left: 'auto',
+      right: 'auto',
+      bottom: 'auto',
+      top: '0%',
+    })
+    .to(prenom, {
+      // position: 'absolute',
+      left: '0%',
+      right: '0%',
+      // bottom: '0%',
+      duration: 1
+    })
+    .to(nom, {
+      right: '0%',
+      bottom: '0%',
+      duration: 1
+    }, "<")
+    .to(prenom, {
+      top: '0%',
+      // transform: 'translateY(0)',
+      bottom: 'auto',
+      duration: 1
+    }, "+=0.2")
+    .to(nom, {
+      top: 'auto',
+      bottom: '0%',
+      duration: 1
+    }, "<")
+    .to('.grid__item:nth-child(1)', {
+      height: '100%',
+      duration: 1
+    }, "<")
+    .to(linkWrapperPrenom, {
+      display: 'flex',
+      yPercent: 0,
+      opacity: 1,
+      duration: 0.4,
+    }, "+=0.1")
+    .to([nomWrapper, prenomWrapper], {
+      position: 'fixed',
+      height: '100vh',
+      // overflow: 'hidden'
+    }, "<")
+    .to('.grid__item:not(:nth-child(1))', {
+      height: '100%',
+      duration: 1,
+      stagger: {
+        amount: 0.5,
+        from: "random"
+      },
+      ease: "power2.inOut"
+    }, "<")
+    .to(projectDescWrappers, {
+      yPercent: 0,
+      opacity: 1,
+      duration: 0.4,
+      ease: "power2.out",
+    }, "+=0.1").eventCallback("onComplete", () => {
+      isAnimationEnabled = true;
+    });
 }
-  animatePrenomNomWrapper();
+animatePrenomNomWrapper();
 
 
 function getRandomChar() {
@@ -392,56 +395,56 @@ function animateText(element) {
 
 
 // Gestion des clics sur les liens de navigation
-  const navLinks = document.querySelectorAll('.link__nav');
-  const gridProject = document.querySelector('.grid__project');
-  const gridItems = document.querySelectorAll('.grid__item');
-  const listWrapper = document.querySelector('.list__wrapper');
-  const nomWrapper = document.querySelector('.nom__wrapper');
-  // const prenomWrapper = document.querySelector('.prenom__wrapper');
-  const nom = nomWrapper.querySelector('.nom');
-  const linkWrapperNom = document.querySelectorAll('.link__wrapper.is-filter');
+const navLinks = document.querySelectorAll('.link__wrapper.is-home .link__nav');
+const gridProject = document.querySelector('.grid__project');
+const gridItems = document.querySelectorAll('.grid__item');
+const listWrapper = document.querySelector('.list__wrapper');
+const nomWrapper = document.querySelector('.nom__wrapper');
+// const prenomWrapper = document.querySelector('.prenom__wrapper');
+const nom = nomWrapper.querySelector('.nom');
+const linkWrapperNom = document.querySelectorAll('.link__wrapper.is-filter');
 
 
-  // Cacher la list__wrapper au chargement
-  gsap.set(listWrapper, { display: 'none', height: 0 });
-  
-  // Positionner .nom initialement
-  gsap.set(nom, { position: 'absolute', bottom: 0, top: 'auto' });
-  gsap.set(linkWrapperNom, { position: 'absolute', bottom: 0, top: 'auto' });
-  gsap.set('.img__list', { opacity: 0 });
+// Cacher la list__wrapper au chargement
+gsap.set(listWrapper, { display: 'none', height: 0 });
+
+// Positionner .nom initialement
+gsap.set(nom, { position: 'absolute', bottom: 0, top: 'auto' });
+gsap.set(linkWrapperNom, { position: 'absolute', bottom: 0, top: 'auto' });
+gsap.set('.img__list', { opacity: 0 });
 
 
-  navLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      
-      navLinks.forEach(l => l.classList.remove('active'));
-      link.classList.add('active');
-      
-      if (link.classList.contains('list')) {
-        const tl = gsap.timeline({defaults: {ease: "power3.inOut"}});
+navLinks.forEach(link => {
+  link.addEventListener('click', (e) => {
+    // e.preventDefault();
 
-        // Préparation des éléments de liste
-        gsap.set('.list__link__item', {
-          opacity: 0,
-          x: 50 
-        });
-        gsap.set(linkWrapperNom, {
-          display: 'none',
-          yPercent: -20,
-          opacity: 0,
-        });
+    navLinks.forEach(l => l.classList.remove('active'));
+    link.classList.add('active');
 
-        tl.to(gridProject, {
-          x: 0,
-          y: 0,
-          duration: 0.6
-        })
+    if (link.classList.contains('list')) {
+      const tl = gsap.timeline({ defaults: { ease: "power3.inOut" } });
+
+      // Préparation des éléments de liste
+      gsap.set('.list__link__item', {
+        opacity: 0,
+        x: 50
+      });
+      gsap.set(linkWrapperNom, {
+        display: 'none',
+        yPercent: -20,
+        opacity: 0,
+      });
+
+      tl.to(gridProject, {
+        x: 0,
+        y: 0,
+        duration: 0.6
+      })
         .to(gridItems, {
           opacity: 0,
           duration: 0.6,
           stagger: 0.04,
-          onComplete: () => gsap.set(gridItems, {display: 'none'})
+          onComplete: () => gsap.set(gridItems, { display: 'none' })
         }, "<")
         .to(nom, {
           top: 0,
@@ -449,7 +452,7 @@ function animateText(element) {
           duration: 1,
           ease: "power3.inOut"
         })
-        .set(listWrapper, {display: 'flex'})
+        .set(listWrapper, { display: 'flex' })
         .to(listWrapper, {
           opacity: 1,
           height: '100vh',
@@ -472,11 +475,11 @@ function animateText(element) {
             function initializeListView() {
               const listItems = document.querySelectorAll('.list__link__item');
               const imgItems = document.querySelectorAll('.list__link__img__item');
-            
+
               if (listItems[0]) {
                 listItems[0].classList.add('active');
                 gsap.to(listItems[0], { opacity: 1, duration: 0 }); // Ajout de l'animation d'opacité
-                
+
                 const firstProjectId = listItems[0].getAttribute('data-list-project');
                 const firstImg = document.querySelector(`.list__link__img__item[data-list-project="${firstProjectId}"]`);
                 if (firstImg) {
@@ -484,11 +487,11 @@ function animateText(element) {
                   gsap.to(firstImg, { opacity: 1, duration: 0 }); // Ajout de l'animation d'opacité
                 }
               }
-            
+
               listItems.forEach(item => {
                 item.addEventListener('mouseenter', () => {
                   const projectId = item.getAttribute('data-list-project');
-            
+
                   // Animer tous les éléments vers l'opacité 0.4
                   listItems.forEach(otherItem => {
                     otherItem.classList.remove('active');
@@ -498,11 +501,11 @@ function animateText(element) {
                     img.classList.remove('active');
                     gsap.to(img, { opacity: 0, duration: 0 });
                   });
-            
+
                   // Animer l'élément actif vers l'opacité 1
                   item.classList.add('active');
                   gsap.to(item, { opacity: 1, duration: 0 });
-                  
+
                   const correspondingImg = document.querySelector(`.list__link__img__item[data-list-project="${projectId}"]`);
                   if (correspondingImg) {
                     correspondingImg.classList.add('active');
@@ -520,81 +523,116 @@ function animateText(element) {
           ease: "power2.out"
         }, "+=0.01");
 
-        isAnimationEnabled = false;
-      } else if (link.classList.contains('grid')) {
-        const tl = gsap.timeline({defaults: {ease: "power3.inOut"}});
+      isAnimationEnabled = false;
+    } else if (link.classList.contains('grid')) {
+      const tl = gsap.timeline({ defaults: { ease: "power3.inOut" } });
 
-        tl.to(listWrapper, {
-          height: 0,
-          duration: 0.6,
-          onComplete: () => gsap.set(listWrapper, {display: 'none'})
-        })
-        // .to(nomWrapper, {
-        //   height: '50vh',
-        //   duration: 0.8
-        // })
-        // .to(prenomWrapper, {
-        //   height: '50vh',
-        //   duration: 0.8
-        // }, "<")
+      tl.to('.img__list', {
+        opacity: 0,
+        duration: 0.5,
+        ease: "power2.out"
+      })
+        // Animation initiale visible du nom
         .to(nom, {
-          top: 'auto',
-          bottom: "0%",
-          duration: 0.6
-        }, "+=0.2") // Décalage de 0.2s après l'animation précédente
-        .set(gridItems, {display: 'flex'})
+          y: '-100vh',
+          duration: 0.8,
+          ease: "power2.in"
+        })
+        .to('.list__link__item', {
+          opacity: 0,
+          x: 50,
+          duration: 0.3,
+          stagger: 0.05
+        }, "<")
+        // Réinitialisation rapide de la position pendant que le nom est invisible
+        .set(nom, {
+          opacity: 0,
+          y: '100%',
+          position: 'absolute',
+          bottom: 0,
+          top: 'auto'
+        })
+        // Animations simultanées des autres éléments
+        
+        .to(linkWrapperNom, {
+          yPercent: -20,
+          opacity: 0,
+          duration: 0.3,
+          onComplete: () => gsap.set(linkWrapperNom, { display: 'none' })
+        }, "<")
+        .to(listWrapper, {
+          height: 0,
+          opacity: 0,
+          duration: 1,
+          onComplete: () => gsap.set(listWrapper, { display: 'none' })
+        }, "<")
+        // Animation finale du nom
+        .to(nom, {
+          y: '0%',
+          opacity: 1,
+          duration: 0.5,
+          ease: "power3.out",
+        })
+        .set(gridItems, { display: 'flex' })
         .to(gridItems, {
           opacity: 1,
           duration: 0.6,
-          stagger: 0.05
+          stagger: 0.05,
+          onComplete: () => {
+            isAnimationEnabled = true;
+          }
         });
-
-        isAnimationEnabled = true;
-      } else if (link.classList.contains('info')) {
-        // Code existant pour 'info'
-        // ...
-      }
-    });
+    } else if (link.classList.contains('info')) {
+      const tl = gsap.timeline({ defaults: { ease: "power3.inOut" } });
+      
+      tl.to(nom, {
+        position: 'absolute', 
+        top: 0,
+        bottom: 'auto',
+        duration: 0.8
+      });
+    }
   });
+});
 
 
 
 
 
-  // function initializeListView() {
-  //   const listItems = document.querySelectorAll('.list__link__item');
-  //   const imgItems = document.querySelectorAll('.list__link__img__item');
+// function initializeListView() {
+//   const listItems = document.querySelectorAll('.list__link__item');
+//   const imgItems = document.querySelectorAll('.list__link__img__item');
 
-  //   // Activer le premier élément (index 0)
-  //   if (listItems[0]) {
-  //     listItems[0].classList.add('active');
-  //     const firstProjectId = listItems[0].getAttribute('data-list-project');
-  //     const firstImg = document.querySelector(`.list__link__img__item[data-list-project="${firstProjectId}"]`);
-  //     if (firstImg) {
-  //       firstImg.classList.add('active');
-  //     }
-  //   }
+//   // Activer le premier élément (index 0)
+//   if (listItems[0]) {
+//     listItems[0].classList.add('active');
+//     const firstProjectId = listItems[0].getAttribute('data-list-project');
+//     const firstImg = document.querySelector(`.list__link__img__item[data-list-project="${firstProjectId}"]`);
+//     if (firstImg) {
+//       firstImg.classList.add('active');
+//     }
+//   }
 
-  //   listItems.forEach(item => {
-  //     item.addEventListener('mouseenter', () => {
-  //       const projectId = item.getAttribute('data-list-project');
+//   listItems.forEach(item => {
+//     item.addEventListener('mouseenter', () => {
+//       const projectId = item.getAttribute('data-list-project');
 
-  //       // Retirer la classe active de tous les éléments
-  //       listItems.forEach(otherItem => otherItem.classList.remove('active'));
-  //       imgItems.forEach(img => img.classList.remove('active'));
+//       // Retirer la classe active de tous les éléments
+//       listItems.forEach(otherItem => otherItem.classList.remove('active'));
+//       imgItems.forEach(img => img.classList.remove('active'));
 
-  //       // Ajouter la classe active sur l'élément survolé et son image
-  //       item.classList.add('active');
-  //       const correspondingImg = document.querySelector(`.list__link__img__item[data-list-project="${projectId}"]`);
-  //       if (correspondingImg) {
-  //         correspondingImg.classList.add('active');
-  //       }
-  //     });
-  //   });
-  // }
+//       // Ajouter la classe active sur l'élément survolé et son image
+//       item.classList.add('active');
+//       const correspondingImg = document.querySelector(`.list__link__img__item[data-list-project="${projectId}"]`);
+//       if (correspondingImg) {
+//         correspondingImg.classList.add('active');
+//       }
+//     });
+//   });
+// }
 
-  // // S'assurer que la fonction est appelée après le chargement du DOM
-  // document.addEventListener('DOMContentLoaded', initializeListView);
+// // S'assurer que la fonction est appelée après le chargement du DOM
+// document.addEventListener('DOMContentLoaded', initializeListView);
 
 const videoGrid = document.querySelector('.video-grid');
 const videoShowreel = document.querySelector('.video__showreel__item');
@@ -602,198 +640,386 @@ const videoJs = document.querySelector('.videojs');
 let player;
 
 if (videoGrid) {
-    // Initialisation de Video.js
-    player = videojs('my-video', {
-        controls: true,
-        autoplay: false,
-        preload: 'auto'
+  // Initialisation de Video.js
+  player = videojs('my-video', {
+    controls: true,
+    autoplay: false,
+    preload: 'auto'
+  });
+
+  // Configuration de base de la vidéo grid
+  videoGrid.autoplay = false;
+  videoGrid.muted = true;
+  videoGrid.loop = true;
+
+  // Configuration initiale de video-js
+  gsap.set(videoJs, {
+    display: 'none',
+    opacity: 0
+  });
+
+  // Animation au survol
+  videoGrid.addEventListener('mouseenter', () => {
+    videoGrid.play();
+  });
+
+  videoGrid.addEventListener('mouseleave', () => {
+    videoGrid.pause();
+  });
+
+  videoGrid.addEventListener('click', () => {
+    const tl = gsap.timeline({
+      defaults: {
+        ease: "power3.inOut",
+        duration: 1
+      }
     });
 
-    // Configuration de base de la vidéo grid
-    videoGrid.autoplay = false;
-    videoGrid.muted = true;
-    videoGrid.loop = true;
-
-    // Configuration initiale de video-js
-    gsap.set(videoJs, {
-        display: 'none',
-        opacity: 0
+    // Configuration initiale
+    gsap.set(videoShowreel, {
+      display: 'flex',
+      width: '0%',
+      height: '0%'
     });
 
-    // Animation au survol
-    videoGrid.addEventListener('mouseenter', () => {
-        videoGrid.play();
-    });
-
-    videoGrid.addEventListener('mouseleave', () => {
-        videoGrid.pause();
-    });
-
-    videoGrid.addEventListener('click', () => {
-        const tl = gsap.timeline({
-            defaults: { 
-                ease: "power3.inOut",
-                duration: 1
-            }
-        });
-
-        // Configuration initiale
-        gsap.set(videoShowreel, {
-            display: 'flex',
-            width: '0%',
-            height: '0%'
-        });
-
-        // Timeline d'animation
-        tl.to(videoShowreel, {
-            width: '100%',
-            height: '1%'
-        })
-        .to(videoShowreel, {
-            height: '100%',
-            duration: 1
-        })
-        .set(videoJs, {
-            display: 'block'
-        })
-        .to(videoJs, {
-            opacity: 1,
-            duration: 0.4,
-            onComplete: () => {
-                player.play(); 
-            }
-        });
-    });
-
-    const closeVideo = document.querySelector('.close-video');
-    let mouseTimer;
-
-    gsap.set(closeVideo, {
-        opacity: 0,
-        display: 'none'
-    });
-
-    const hideCloseButton = () => {
-        gsap.to(closeVideo, {
-            opacity: 0,
-            duration: 0.3,
-            onComplete: () => {
-                gsap.set(closeVideo, { display: 'none' });
-            }
-        });
-    };
-
-    videoShowreel.addEventListener('mousemove', () => {
-        gsap.set(closeVideo, { display: 'block' });
-        gsap.to(closeVideo, {
-            opacity: 1,
-            duration: 0.3
-        });
-
-        clearTimeout(mouseTimer);
-        mouseTimer = setTimeout(hideCloseButton, 2300);
-    });
-
-    videoShowreel.addEventListener('mouseleave', hideCloseButton);
-
-    // Ajouter l'écouteur d'événement pour la fin de la vidéo
-    player.on('ended', () => {
-        closeVideoWithAnimation();
-    });
-
-    // Fonction pour fermer la vidéo avec animation
-    const closeVideoWithAnimation = () => {
-        const tl = gsap.timeline({
-            defaults: { 
-                ease: "power3.inOut",
-                duration: 1
-            }
-        });
-
-        tl.to(videoJs, {
-            opacity: 0,
-            duration: 0.4,
-            onComplete: () => {
-                player.pause();
-                gsap.set(videoJs, { display: 'none' });
-            }
-        })
-        .to(closeVideo, {
-            opacity: 0,
-            duration: 0.3,
-            onComplete: () => {
-                gsap.set(closeVideo, { display: 'none' });
-            }
-        })
-        .to(videoShowreel, {
-            height: '1%',
-            duration: 1
-        }, "-=0.2")
-        .to(videoShowreel, {
-            width: '0%',
-            height: '0%',
-            onComplete: () => {
-                gsap.set(videoShowreel, { display: 'none' });
-            }
-        });
-    };
-
-    // Gestionnaire pour le bouton close
-    closeVideo.addEventListener('click', closeVideoWithAnimation);
-
-    // Gestionnaire pour la touche Échap
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && videoShowreel.style.display !== 'none') {
-            closeVideoWithAnimation();
+    // Timeline d'animation
+    tl.to(videoShowreel, {
+      width: '100%',
+      height: '1%'
+    })
+      .to(videoShowreel, {
+        height: '100%',
+        duration: 1
+      })
+      .set(videoJs, {
+        display: 'block'
+      })
+      .to(videoJs, {
+        opacity: 1,
+        duration: 0.4,
+        onComplete: () => {
+          player.play();
         }
+      });
+  });
+
+  const closeVideo = document.querySelector('.close-video');
+  let mouseTimer;
+
+  gsap.set(closeVideo, {
+    opacity: 0,
+    display: 'none'
+  });
+
+  const hideCloseButton = () => {
+    gsap.to(closeVideo, {
+      opacity: 0,
+      duration: 0.3,
+      onComplete: () => {
+        gsap.set(closeVideo, { display: 'none' });
+      }
+    });
+  };
+
+  videoShowreel.addEventListener('mousemove', () => {
+    gsap.set(closeVideo, { display: 'block' });
+    gsap.to(closeVideo, {
+      opacity: 1,
+      duration: 0.3
     });
 
-    let controlsTimer;
+    clearTimeout(mouseTimer);
+    mouseTimer = setTimeout(hideCloseButton, 2300);
+  });
 
-    // Ajouter une classe pour gérer le curseur
+  videoShowreel.addEventListener('mouseleave', hideCloseButton);
+
+  // Ajouter l'écouteur d'événement pour la fin de la vidéo
+  player.on('ended', () => {
+    closeVideoWithAnimation();
+  });
+
+  // Fonction pour fermer la vidéo avec animation
+  const closeVideoWithAnimation = () => {
+    const tl = gsap.timeline({
+      defaults: {
+        ease: "power3.inOut",
+        duration: 1
+      }
+    });
+
+    tl.to(videoJs, {
+      opacity: 0,
+      duration: 0.4,
+      onComplete: () => {
+        player.pause();
+        gsap.set(videoJs, { display: 'none' });
+      }
+    })
+      .to(closeVideo, {
+        opacity: 0,
+        duration: 0.3,
+        onComplete: () => {
+          gsap.set(closeVideo, { display: 'none' });
+        }
+      })
+      .to(videoShowreel, {
+        height: '1%',
+        duration: 1
+      }, "-=0.2")
+      .to(videoShowreel, {
+        width: '0%',
+        height: '0%',
+        onComplete: () => {
+          gsap.set(videoShowreel, { display: 'none' });
+        }
+      });
+  };
+
+  // Gestionnaire pour le bouton close
+  closeVideo.addEventListener('click', closeVideoWithAnimation);
+
+  // Gestionnaire pour la touche Échap
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && videoShowreel.style.display !== 'none') {
+      closeVideoWithAnimation();
+    }
+  });
+
+  let controlsTimer;
+
+  // Ajouter une classe pour gérer le curseur
+  videoShowreel.style.cursor = 'default';
+
+  videoShowreel.addEventListener('mousemove', () => {
+    // Afficher les contrôles et le curseur
+    player.controlBar.show();
     videoShowreel.style.cursor = 'default';
 
-    videoShowreel.addEventListener('mousemove', () => {
-        // Afficher les contrôles et le curseur
-        player.controlBar.show();
-        videoShowreel.style.cursor = 'default';
-        
-        // Réinitialiser le timer à chaque mouvement
-        clearTimeout(controlsTimer);
-        controlsTimer = setTimeout(() => {
-            player.controlBar.hide();
-            videoShowreel.style.cursor = 'none'; // Cacher le curseur
-        }, 2300);
-    });
+    // Réinitialiser le timer à chaque mouvement
+    clearTimeout(controlsTimer);
+    controlsTimer = setTimeout(() => {
+      player.controlBar.hide();
+      videoShowreel.style.cursor = 'none'; // Cacher le curseur
+    }, 2300);
+  });
 
-    // Cacher les contrôles et le curseur quand la souris quitte la zone
-    videoShowreel.addEventListener('mouseleave', () => {
-        player.controlBar.hide();
-        videoShowreel.style.cursor = 'default';
-        clearTimeout(controlsTimer);
-    });
+  // Cacher les contrôles et le curseur quand la souris quitte la zone
+  videoShowreel.addEventListener('mouseleave', () => {
+    player.controlBar.hide();
+    videoShowreel.style.cursor = 'default';
+    clearTimeout(controlsTimer);
+  });
 
-    // Ajouter un gestionnaire d'événements pour la touche espace
-    document.addEventListener('keydown', (e) => {
-        // Vérifier si la vidéo est visible et si c'est la touche espace
-        if (e.code === 'Space' && videoShowreel.style.display !== 'none') {
-            e.preventDefault(); // Empêcher le défilement de la page
-            if (player.paused()) {
-                player.play();
-            } else {
-                player.pause();
-            }
-        }
-    });
+  // Ajouter un gestionnaire d'événements pour la touche espace
+  document.addEventListener('keydown', (e) => {
+    // Vérifier si la vidéo est visible et si c'est la touche espace
+    if (e.code === 'Space' && videoShowreel.style.display !== 'none') {
+      e.preventDefault(); // Empêcher le défilement de la page
+      if (player.paused()) {
+        player.play();
+      } else {
+        player.pause();
+      }
+    }
+  });
 }
 
 const bigPlayButton = player.getChild('BigPlayButton');
 
 player.on('play', () => {
-    bigPlayButton.el().textContent = '⏸';
+  bigPlayButton.el().textContent = '⏸';
 });
 
 player.on('pause', () => {
-    bigPlayButton.el().textContent = '▶';
+  bigPlayButton.el().textContent = '▶';
+});
+
+// Ajout du système de filtrage par catégorie
+function initializeCategoryFilter() {
+  const filterLinks = document.querySelectorAll('.link__wrapper.is-filter .link__nav');
+  const listItems = document.querySelectorAll('.list__link__item');
+  
+  updateCategoryCounts();
+  
+  filterLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      
+      const filterWrapper = link.closest('.link__wrapper.is-filter');
+      if (filterWrapper) {
+        filterWrapper.querySelectorAll('.link__nav').forEach(fl => fl.classList.remove('active'));
+        link.classList.add('active');
+      }
+
+      const selectedCategory = link.getAttribute('data-category').toLowerCase();
+      
+      const tl = gsap.timeline({
+        defaults: { ease: "power3.inOut" }
+      });
+
+      tl.to(listItems, {
+        opacity: 0,
+        x: 50,
+        duration: 0.4,
+        stagger: 0.03,
+        onComplete: () => {
+          listItems.forEach(item => {
+            const categoryText = item.querySelector('.category-text');
+            const itemCategory = categoryText ? categoryText.getAttribute('data-category').toLowerCase() : '';
+            
+            if (selectedCategory === 'all' || itemCategory === selectedCategory) {
+              gsap.set(item, { display: 'flex' });
+            } else {
+              gsap.set(item, { display: 'none' });
+            }
+          });
+        }
+      })
+      .to(listItems, {
+        opacity: 0.4,
+        x: 0,
+        duration: 0.4,
+        stagger: 0.05,
+        ease: "power2.out",
+        onComplete: () => {
+          // Attendre que l'animation soit complètement terminée avant d'activer le premier item
+          const visibleItems = Array.from(listItems).filter(item => item.style.display !== 'none');
+          const firstVisibleItem = visibleItems[0];
+
+          if (firstVisibleItem) {
+            // Mettre à jour les classes active
+            listItems.forEach(item => item.classList.remove('active'));
+            firstVisibleItem.classList.add('active');
+            gsap.to(firstVisibleItem, { opacity: 1, duration: 0.2 });
+
+            // Mettre à jour l'image correspondante
+            const projectId = firstVisibleItem.getAttribute('data-list-project');
+            const imgs = document.querySelectorAll('.list__link__img__item');
+            imgs.forEach(img => {
+              if (img.getAttribute('data-list-project') === projectId) {
+                img.classList.add('active');
+                gsap.to(img, { opacity: 1, duration: 0.2 });
+              } else {
+                img.classList.remove('active');
+                gsap.to(img, { opacity: 0, duration: 0.2 });
+              }
+            });
+          }
+        }
+      });
+    });
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initializeCategoryFilter();
+  
+  const allLink = document.querySelector('.link__nav.all.tooltip');
+  if (allLink) {
+    allLink.classList.add('active');
+  }
+});
+
+function updateCategoryCounts() {
+  const listItems = document.querySelectorAll('.list__link__item');
+  const categoryCounts = {};
+  
+  listItems.forEach(item => {
+    const categoryText = item.querySelector('.category-text');
+    if (categoryText) {
+      const category = categoryText.getAttribute('data-category').toLowerCase();
+      categoryCounts[category] = (categoryCounts[category] || 0) + 1;
+    }
+  });
+  
+  document.querySelectorAll('.category-text.nb').forEach(counter => {
+    const category = counter.getAttribute('data-category').toLowerCase();
+    const count = categoryCounts[category] || 0;
+    counter.textContent = count.toString().padStart(2, '0');
+  });
+}
+
+// Fonction pour réinitialiser les filtres et les images
+function resetFilters() {
+  const allLink = document.querySelector('.link__nav.all.tooltip');
+  const listItems = document.querySelectorAll('.list__link__item');
+  const imgs = document.querySelectorAll('.list__link__img__item');
+
+  // Réinitialiser le filtre "all"
+  if (allLink) {
+    document.querySelectorAll('.link__wrapper.is-filter .link__nav').forEach(link => {
+      link.classList.remove('active');
+    });
+    allLink.classList.add('active');
+  }
+
+  // Réinitialiser l'affichage des items
+  listItems.forEach(item => {
+    gsap.set(item, { display: 'flex', opacity: 0.4 });
+  });
+
+  // Activer le premier item et son image
+  if (listItems[0]) {
+    listItems.forEach(item => item.classList.remove('active'));
+    listItems[0].classList.add('active');
+    gsap.to(listItems[0], { opacity: 1, duration: 0.2 });
+
+    const firstProjectId = listItems[0].getAttribute('data-list-project');
+    imgs.forEach(img => {
+      if (img.getAttribute('data-list-project') === firstProjectId) {
+        img.classList.add('active');
+        gsap.to(img, { opacity: 1, duration: 0.2 });
+      } else {
+        img.classList.remove('active');
+        gsap.to(img, { opacity: 0, duration: 0.2 });
+      }
+    });
+  }
+}
+
+// Modification du gestionnaire des liens de navigation
+navLinks.forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault(); 
+
+    const homeWrapper = link.closest('.link__wrapper.is-home');
+    if (homeWrapper) {
+      homeWrapper.querySelectorAll('.link__nav').forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+    }
+
+    // Ajouter le hash correspondant
+    if (link.classList.contains('grid')) {
+      window.location.hash = '';
+      resetFilters(); // Réinitialiser les filtres quand on retourne à la grille
+    } else if (link.classList.contains('list')) {
+      window.location.hash = 'list';
+    } else if (link.classList.contains('info')) {
+      window.location.hash = 'info';
+    }
+
+    // Le reste de votre code existant pour grid/list/info...
+  });
+});
+
+// Gérer l'état initial basé sur le hash URL
+function handleInitialState() {
+  const hash = window.location.hash.slice(1); // Enlever le #
+  const navLink = document.querySelector(`.link__nav.${hash}`) || 
+                 document.querySelector('.link__nav.grid'); // Par défaut: grid
+
+  if (navLink) {
+    navLink.click(); // Simuler un clic sur le bon lien
+  }
+}
+
+// Gérer les changements de hash
+window.addEventListener('hashchange', handleInitialState);
+
+// Initialisation
+document.addEventListener('DOMContentLoaded', () => {
+  initializeCategoryFilter();
+  handleInitialState();
 });
 
