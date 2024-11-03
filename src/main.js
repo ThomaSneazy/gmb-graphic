@@ -566,7 +566,6 @@ navLinks.forEach(link => {
           duration: 1,
           onComplete: () => gsap.set(listWrapper, { display: 'none' })
         }, "<")
-        // Animation finale du nom
         .to(nom, {
           y: '0%',
           opacity: 1,
