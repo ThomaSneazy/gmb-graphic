@@ -1005,8 +1005,16 @@ navLinks.forEach(link => {
 // Gérer l'état initial basé sur le hash URL
 function handleInitialState() {
   const hash = window.location.hash.slice(1); // Enlever le #
-  const navLink = document.querySelector(`.link__nav.${hash}`) || 
-                 document.querySelector('.link__nav.grid'); // Par défaut: grid
+  let navLink;
+  
+  if (hash) {
+    navLink = document.querySelector(`.link__nav.${hash}`);
+  }
+  
+  // Si pas de hash ou lien non trouvé, utiliser grid par défaut
+  if (!navLink) {
+    navLink = document.querySelector('.link__nav.grid');
+  }
 
   if (navLink) {
     navLink.click(); // Simuler un clic sur le bon lien
