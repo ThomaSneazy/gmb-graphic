@@ -1002,23 +1002,23 @@ navLinks.forEach(link => {
   });
 });
 
-// Gérer l'état initial basé sur le hash URL
-function handleInitialState() {
-  const hash = window.location.hash.slice(1); // Enlever le #
-  const navLink = document.querySelector(`.link__nav.${hash}`) || 
-                 document.querySelector('.link__nav.grid'); // Par défaut: grid
+// // Gérer l'état initial basé sur le hash URL
+// function handleInitialState() {
+//   const hash = window.location.hash.slice(1); // Enlever le #
+//   const navLink = document.querySelector(`.link__nav.${hash}`) || 
+//                  document.querySelector('.link__nav.grid'); // Par défaut: grid
 
-  if (navLink) {
-    navLink.click(); // Simuler un clic sur le bon lien
-  }
-}
+//   if (navLink) {
+//     navLink.click(); // Simuler un clic sur le bon lien
+//   }
+// }
 
 // Gérer les changements de hash
-window.addEventListener('hashchange', handleInitialState);
+// window.addEventListener('hashchange', handleInitialState);
 
 // Initialisation
 document.addEventListener('DOMContentLoaded', () => {
   initializeCategoryFilter();
-  handleInitialState();
+  // handleInitialState();
 });
 

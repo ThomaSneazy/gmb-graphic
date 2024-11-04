@@ -143,6 +143,7 @@
   /* border: 3px solid; */
   opacity: 1;
   transition: opacity 0.3s ease;
+  border: 1px solid #f30000c6;
 }
 
 /* Règles pour les éléments avec data-aspect="portrait" */
