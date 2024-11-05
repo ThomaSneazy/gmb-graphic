@@ -193,12 +193,14 @@ function animatePrenomNomWrapper() {
   const projectDescWrappers = document.querySelectorAll('.project__desc__wrapper');
   const linkWrapperPrenom = document.querySelectorAll('.link__wrapper.is-home');
   const linkWrapperNom = document.querySelectorAll('.link__wrapper.is-filter');
+  const bgWrapper = document.querySelector('.test-bg');
   gsap.set(gridItems, {
     xPercent: -50,
     yPercent: -50,
     left: '50%',
     top: '50%',
-    position: 'absolute'
+    position: 'absolute',
+    display: 'flex'
   });
 
   gsap.set('.grid__item:not(:nth-child(1))', {
@@ -206,7 +208,8 @@ function animatePrenomNomWrapper() {
   });
 
   gsap.set('.grid__item:nth-child(1)', {
-    opacity: 1
+    opacity: 1,
+    display: 'flex'
   });
 
   gsap.set(projectDescWrappers, {
@@ -215,11 +218,15 @@ function animatePrenomNomWrapper() {
     overflow: 'hidden'
   });
 
+  gsap.set(bgWrapper, {
+    opacity: 1,
+  });
+
   gsap.timeline({
     defaults: { duration: 1.2, ease: "power3.inOut" },
     onComplete: () => {
       gridItems.forEach((item, index) => {
-        if (index !== 0) { // Exclure le premier élément
+        if (index !== 0) { 
           gsap.to(item, {
             opacity: 1,
             duration: 1.5,
@@ -227,28 +234,6 @@ function animatePrenomNomWrapper() {
           });
         }
       });
-
-      // Animation d'apparition des .link__nav
-      // gsap.to('.link__wrapper ', {
-      //   display: 'flex',
-      //   opacity: 0,
-      //   duration: 0.6,
-      //   stagger: 0.1
-      // });
-      // const lastAnimation = gsap.to('.grid__item:last-child', {
-      //   width: '100%',
-      //   duration: 1,
-      //   onComplete: () => {
-      //     isAnimationEnabled = true;
-      //     // Afficher toutes les descriptions de projet un peu avant la fin des animations
-      //     gsap.to(projectDescWrappers, {
-      //       yPercent: 0,
-      //       opacity: 1,
-      //       duration: 0.4,
-      //       ease: "power2.out",
-      //     });
-      //   }
-      // });
     }
   })
     .set(linkWrapperPrenom, {
@@ -309,6 +294,10 @@ function animatePrenomNomWrapper() {
     .to('.grid__item:nth-child(1)', {
       height: '100%',
       duration: 1
+    }, "<")
+    .to(bgWrapper, {
+      backgroundColor: 'transparent',
+      duration: 0.4
     }, "<")
     .to(linkWrapperPrenom, {
       display: 'flex',
@@ -412,19 +401,41 @@ gsap.set(listWrapper, { display: 'none', height: 0 });
 gsap.set(nom, { position: 'absolute', bottom: 0, top: 'auto' });
 gsap.set(linkWrapperNom, { position: 'absolute', bottom: 0, top: 'auto' });
 gsap.set('.img__list', { opacity: 0 });
+gsap.set('.test-info', { display: 'none', opacity: 0 });
+// gsap.set('.grid__item', { display: 'none', opacity: 0 });
+// gsap.set('.video-showreel__wrapper', { display: 'none', opacity: 0 });
+
+
 
 
 navLinks.forEach(link => {
   link.addEventListener('click', (e) => {
-    // e.preventDefault();
+    e.preventDefault();
+
+    // Ajouter le curseur de chargement au début
+    document.body.style.cursor = 'progress';
 
     navLinks.forEach(l => l.classList.remove('active'));
     link.classList.add('active');
 
     if (link.classList.contains('list')) {
-      const tl = gsap.timeline({ defaults: { ease: "power3.inOut" } });
+      const tl = gsap.timeline({ 
+        defaults: { ease: "power3.inOut" },
+        onComplete: () => {
+          // Remettre le curseur normal à la fin
+          document.body.style.cursor = 'default';
+        }
+      });
 
-      // Préparation des éléments de liste
+      // Masquer .test-info si elle est visible
+      if (document.querySelector('.test-info').style.display === 'block') {
+        tl.to('.test-info', {
+          opacity: 0,
+          duration: 0.3,
+          onComplete: () => gsap.set('.test-info', { display: 'none' })
+        });
+      }
+
       gsap.set('.list__link__item', {
         opacity: 0,
         x: 50
@@ -525,7 +536,21 @@ navLinks.forEach(link => {
 
       isAnimationEnabled = false;
     } else if (link.classList.contains('grid')) {
-      const tl = gsap.timeline({ defaults: { ease: "power3.inOut" } });
+      const tl = gsap.timeline({ 
+        defaults: { ease: "power3.inOut" },
+        onComplete: () => {
+          document.body.style.cursor = 'default';
+        }
+      });
+
+      // Masquer .test-info si elle est visible
+      if (document.querySelector('.test-info').style.display === 'block') {
+        tl.to('.test-info', {
+          opacity: 0,
+          duration: 0.3,
+          onComplete: () => gsap.set('.test-info', { display: 'none' })
+        });
+      }
 
       tl.to('.img__list', {
         opacity: 0,
@@ -544,7 +569,6 @@ navLinks.forEach(link => {
           duration: 0.3,
           stagger: 0.05
         }, "<")
-        // Réinitialisation rapide de la position pendant que le nom est invisible
         .set(nom, {
           opacity: 0,
           y: '100%',
@@ -552,7 +576,6 @@ navLinks.forEach(link => {
           bottom: 0,
           top: 'auto'
         })
-        // Animations simultanées des autres éléments
         
         .to(linkWrapperNom, {
           yPercent: -20,
@@ -572,6 +595,7 @@ navLinks.forEach(link => {
           duration: 0.5,
           ease: "power3.out",
         })
+        .set(gridProject, { display: 'grid' })
         .set(gridItems, { display: 'flex' })
         .to(gridItems, {
           opacity: 1,
@@ -582,14 +606,68 @@ navLinks.forEach(link => {
           }
         });
     } else if (link.classList.contains('info')) {
-      const tl = gsap.timeline({ defaults: { ease: "power3.inOut" } });
-      
-      tl.to(nom, {
-        position: 'absolute', 
-        top: 0,
-        bottom: 'auto',
-        duration: 0.8
+      const tl = gsap.timeline({ 
+        defaults: { ease: "power3.inOut" },
+        onComplete: () => {
+          document.body.style.cursor = 'default';
+        }
       });
+
+      // Si on est sur la liste
+      if (listWrapper.style.display !== 'none') {
+        tl.to('.img__list', {
+          opacity: 0,
+          duration: 0.5,
+          ease: "power2.out"
+        })
+        .to('.list__link__item', {
+          opacity: 0,
+          x: 50,
+          duration: 0.3,
+          stagger: 0.05
+        }, "<")
+        .to(linkWrapperNom, {
+          yPercent: -20,
+          opacity: 0,
+          duration: 0.3,
+          onComplete: () => gsap.set(linkWrapperNom, { display: 'none' })
+        })
+        .to(listWrapper, {
+          height: 0,
+          opacity: 0,
+          duration: 1,
+          onComplete: () => gsap.set(listWrapper, { display: 'none' })
+        }, "<");
+      }
+      // Si on est sur la grid
+      else if (gridProject.style.display !== 'none') {
+        tl.to(gridProject, {
+          x: 0,
+          y: 0,
+          duration: 0.6
+        })
+        .to(gridItems, {
+          opacity: 0,
+          duration: 0.6,
+          stagger: 0.04,
+          onComplete: () => gsap.set(gridItems, { display: 'none' })
+        }, "<")
+        .to(nom, {
+          top: 0,
+          bottom: 'auto',
+          duration: 1,
+          ease: "power3.inOut"
+        });
+      }
+
+      // Ajouter l'animation de .test-info à la fin de la timeline
+      tl.set('.test-info', { display: 'block' })
+        .to('.test-info', {
+          opacity: 1,
+          duration: 0.3
+        });
+
+      isAnimationEnabled = false;
     }
   });
 });

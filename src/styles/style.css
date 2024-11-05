@@ -2,6 +2,10 @@
   pointer-events: defaut;
 } */
 
+body.loading {
+  pointer-events: none;
+  cursor: progress !important;
+}
 
 /* Barre de contrôle en rouge */
 .video-js.vjs-custom-theme .vjs-control-bar {
