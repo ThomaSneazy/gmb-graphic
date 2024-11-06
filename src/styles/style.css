@@ -113,7 +113,7 @@ body.loading {
 .grid__item:nth-child(2)  { grid-area: 2 / 18 / span 4 / span 5; }
 .grid__item:nth-child(3)  { grid-area: 1 / 29 / span 4 / span 4; }
 .grid__item:nth-child(4)  { grid-area: 4 / 4 / span 5 / span 4; }
-.grid__item:nth-child(5)  { grid-area: 6 / 9 / span 5 / span 4; }
+.grid__item:nth-child(5)  { grid-area: 6 / 9 / span 3 / span 4; }
 .grid__item:nth-child(6)  { grid-area: 9 / 23 / span 5 / span 3; }
 .grid__item:nth-child(7)  { grid-area: 8 / 2 / span 5 / span 4; }
 .grid__item:nth-child(8)  { grid-area: 11 / 7 / span 4 / span 5; }
@@ -124,7 +124,7 @@ body.loading {
 .grid__item:nth-child(13) { grid-area: 6 / 30 / span 5 / span 4; }
 
 /* Couleurs de bordure différentes pour chaque .grid__item */
-/* .grid__item:nth-child(1)  { border-color: #FF0000; } 
+.grid__item:nth-child(1)  { border-color: #FF0000; border-width: 9px; } 
 .grid__item:nth-child(2)  { border-color: #00FF00; }
 .grid__item:nth-child(3)  { border-color: #0000FF; } 
 .grid__item:nth-child(4)  { border-color: #FFFF00; } 
@@ -136,7 +136,7 @@ body.loading {
 .grid__item:nth-child(10) { border-color: #8888fd; } 
 .grid__item:nth-child(11) { border-color: #FFC0CB; } 
 .grid__item:nth-child(12) { border-color: #c615b4; } 
-.grid__item:nth-child(13) { border-color: #808080; }  */
+.grid__item:nth-child(13) { border-color: #808080; } 
 
 /* Styles de base pour tous les .grid__item */
 .grid__item {
@@ -144,59 +144,38 @@ body.loading {
   height: 100%;
   overflow: hidden;
   position: relative;
-  /* border: 3px solid; */
   opacity: 1;
   transition: opacity 0.3s ease;
   border: 1px solid #f30000c6;
+  display: flex;
+  /* align-items: center;
+  justify-content: center; */
 }
 
 /* Règles pour les éléments avec data-aspect="portrait" */
-.grid__item[data-aspect="portrait"] {
-  /* border-width: 10px; */
-  max-width: 14em;
-  max-height: 22.5em;
-}
-
-/* Nouvelles règles pour les éléments avec data-aspect="landscape" */
-.grid__item[data-aspect="landscape"] {
-  /* border-width: 20px; */
-  max-width: 25em;
-  max-height: 15em;
-}
-
-.grid__item img {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* Ajustement spécifique pour les images dans les éléments portrait */
-.grid__item[data-aspect="portrait"] img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* Ajustement spécifique pour les images dans les éléments landscape */
-.grid__item[data-aspect="landscape"] img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-
-/* Styles pour les éléments avec data-aspect="landscape" */
-/* .grid__item[data-aspect="landscape"] img {
-  max-width: 25em;
-  max-height: 20em;
-  width: auto;
-  height: auto;
-  object-fit: cover;
+/* .grid__item[data-aspect="portrait"] {
+  max-width: 20em;
+  max-height: 25.5em;
 } */
 
+/* Règles pour les éléments avec data-aspect="landscape" */
+/* .grid__item[data-aspect="landscape"] {
+  max-width: 25em;
+  max-height: 15em;
+} */
 
+.grid__item img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  position: relative;
+  /* object-fit: cover; */
+}
 
+/* Supprimez ou commentez les règles spécifiques pour portrait/landscape car elles ne sont plus nécessaires */
+/* .grid__item[data-aspect="portrait"] img { ... }
+.grid__item[data-aspect="landscape"] img { ... } */
 
 /* Tous les éléments de la grille ont une opacité de 1 par défaut */
 /* .grid__item {

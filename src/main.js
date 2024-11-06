@@ -17,6 +17,8 @@ console.log('Hello KEZ')
 
 
 
+
+
 const tooltip = document.getElementById('tooltip');
 const hoverables = document.querySelectorAll('.hoverable, .tooltip, .esc');
 
@@ -139,7 +141,7 @@ wrapper.addEventListener('mousemove', (e) => {
     gsap.to(img, {
       x: moveX,
       y: moveY,
-      duration: 0.3, // Durée de l'animation pour un effet smooth
+      duration: 0.225, // Durée de l'animation pour un effet smooth
       // ease: "power2.out", // Easing function pour un mouvement fluide
     });
   });
@@ -147,8 +149,8 @@ wrapper.addEventListener('mousemove', (e) => {
 
 function animate() {
   if (isAnimationEnabled) {
-    currentX += (targetX - currentX) * 0.09;
-    currentY += (targetY - currentY) * 0.09;
+    currentX += (targetX - currentX) * 0.325;
+    currentY += (targetY - currentY) * 0.325;
 
     gsap.to(grid, {
       x: -currentX,
@@ -311,14 +313,15 @@ function animatePrenomNomWrapper() {
       // overflow: 'hidden'
     }, "<")
     .to('.grid__item:not(:nth-child(1))', {
-      height: '100%',
-      duration: 1,
+      height: '100%', 
+      duration: 0.8,
+      transformOrigin: gsap.utils.random(['top', 'bottom']), // Anime depuis le haut ou le bas aléatoirement
       stagger: {
-        amount: 0.5,
+        amount: 0.3, // Stagger plus rapide
         from: "random"
       },
       ease: "power2.inOut"
-    }, "<")
+    }, "-=1") // Commence légèrement plus tôt
     .to(projectDescWrappers, {
       yPercent: 0,
       opacity: 1,
@@ -613,6 +616,19 @@ navLinks.forEach(link => {
         }
       });
 
+      // Configuration initiale
+      gsap.set('.info__text__block', {
+        opacity: 0,
+        y: -20
+      });
+      gsap.set('.img-info__wrapper img', {
+        // bottom: 0,
+        // top: 'auto',
+        // height: 0,
+        transformOrigin: 'bottom',
+        opacity: 0
+      });
+
       // Si on est sur la liste
       if (listWrapper.style.display !== 'none') {
         tl.to('.img__list', {
@@ -660,12 +676,24 @@ navLinks.forEach(link => {
         });
       }
 
-      // Ajouter l'animation de .test-info à la fin de la timeline
+      // Animation de test-info
       tl.set('.test-info', { display: 'block' })
         .to('.test-info', {
           opacity: 1,
           duration: 0.3
-        });
+        })
+        .to('.info__text__block', {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          stagger: 0.1
+        })
+        .to('.img-info__wrapper img', {
+          // height: '100%',
+          opacity: 1,
+          duration: 0.8,
+          ease: "power2.inOut"
+        }, "-=0.3");
 
       isAnimationEnabled = false;
     }
