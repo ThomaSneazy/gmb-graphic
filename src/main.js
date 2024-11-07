@@ -16,7 +16,9 @@ console.log('Hello KEZ')
 
 
 
-
+document.querySelectorAll('.project__desc.date').forEach(el => {
+  el.textContent = el.textContent.replace(/\b20/, '');
+});
 
 
 const tooltip = document.getElementById('tooltip');
@@ -132,19 +134,18 @@ wrapper.addEventListener('mousemove', (e) => {
 
   targetX = (mousePercentX - 0.5) * maxMoveX * 2.2;
   targetY = (mousePercentY - 0.5) * maxMoveY * 2.2;
-
   // Modification pour cibler les images à l'intérieur des .img-item avec smooth et delay
-  const imgItems = document.querySelectorAll('.img-item img');
-  imgItems.forEach((img, index) => {
-    const moveX = (0.5 - mousePercentX) * 20;
-    const moveY = (0.5 - mousePercentY) * 20;
-    gsap.to(img, {
-      x: moveX,
-      y: moveY,
-      duration: 0.225, // Durée de l'animation pour un effet smooth
-      // ease: "power2.out", // Easing function pour un mouvement fluide
-    });
-  });
+  // const imgItems = document.querySelectorAll('.img-item img');
+  // imgItems.forEach((img, index) => {
+  //   const moveX = (0.5 - mousePercentX) * 20;
+  //   const moveY = (0.5 - mousePercentY) * 20;
+  //   gsap.to(img, {
+  //     x: moveX,
+  //     y: moveY, 
+  //     duration: 0.225, // Durée de l'animation pour un effet smooth
+  //     // ease: "power2.out", // Easing function pour un mouvement fluide
+  //   });
+  // });
 });
 
 function animate() {
@@ -313,7 +314,7 @@ function animatePrenomNomWrapper() {
       // overflow: 'hidden'
     }, "<")
     .to('.grid__item:not(:nth-child(1))', {
-      height: '100%', 
+      height: 'auto', 
       duration: 0.8,
       transformOrigin: gsap.utils.random(['top', 'bottom']), // Anime depuis le haut ou le bas aléatoirement
       stagger: {
@@ -749,7 +750,8 @@ if (videoGrid) {
   player = videojs('my-video', {
     controls: true,
     autoplay: false,
-    preload: 'auto'
+    preload: 'auto',
+
   });
 
   // Configuration de base de la vidéo grid

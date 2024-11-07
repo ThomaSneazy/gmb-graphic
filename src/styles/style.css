@@ -1,36 +1,65 @@
-/* link__nav {
-  pointer-events: defaut;
-} */
-
 body.loading {
   pointer-events: none;
   cursor: progress !important;
 }
 
-/* Barre de contrôle en rouge */
-.video-js.vjs-custom-theme .vjs-control-bar {
-  background-color: rgba(0, 0, 0, 0.0) !important;
-  display: flex !important;
-  justify-content: flex-end !important;
-  width: 100% !important;
-  opacity: 0 !important;
-  transition: opacity 0.6s ease !important;
+/* Cache tous les éléments spécifiques */
+.vjs-volume-panel,
+.vjs-remaining-time,
+.vjs-current-time,
+.vjs-time-control,
+.vjs-fullscreen-control,
+.vjs-picture-in-picture-control,
+.vjs-play-control,
+.vjs-time-divider,
+.vjs-live-control,
+.vjs-playback-rate,
+.vjs-volume-panel-horizontal {
+  display: none !important;
 }
 
-/* Affiche les contrôles uniquement quand la vidéo est "active" (souris bouge) */
-.video-js.vjs-custom-theme.vjs-user-active .vjs-control-bar {
-  opacity: 1 !important;
+/* Style de base de la barre de contrôle */
+.video-js.vjs-custom-theme .vjs-control-bar {
+  position: absolute !important;
+  background-color: green !important;
+  display: flex !important;
+  width: 100% !important;
+  height: 5px !important;
+  bottom: 0 !important;
+}
+
+
+/* Style de la barre de progression */
+.video-js.vjs-custom-theme .vjs-progress-control {
+  display: block !important;
+  position: absolute !important;
+  width: 100% !important;
+  bottom: 0 !important;
+}
+
+/* Assure que la barre de progression est visible */
+.video-js.vjs-custom-theme .vjs-progress-holder {
+  margin: 0 !important;
 }
 
 /* Cache tous les contrôles sauf le volume */
-.video-js.vjs-custom-theme .vjs-control-bar > *:not(.vjs-volume-panel) {
+/* .video-js.vjs-custom-theme .vjs-control-bar > *:not(.vjs-volume-panel) {
+  display: block !important;
+} */
+
+.vjs-volume-panel .vjs-control .vjs-volume-panel-horizontal {
+  display: none !important;
+}
+
+.vjs-remaining-time .vjs-time-control {
   display: none !important;
 }
 
 /* Style du contrôle volume */
 .video-js.vjs-custom-theme .vjs-volume-panel {
-  color: white !important;
-  display: flex !important;
+  color: rgb(255, 255, 255) !important;
+  /* display: flex !important; */
+  display: block;
   font-size: 1.5rem !important;
 }
 
@@ -50,11 +79,13 @@ body.loading {
 
 /* État par défaut (pause) */
 .video-js.vjs-custom-theme.vjs-paused .vjs-big-play-button {
+  font-size: 8rem !important;
   content: "▶" !important;
 }
 
 /* État de lecture */
 .video-js.vjs-custom-theme.vjs-playing .vjs-big-play-button {
+  font-size: 10rem !important;
   content: "⏸" !important;
 }
 
@@ -67,20 +98,7 @@ body.loading {
   opacity: 0;
 }
 
-/* Alternative avec Font Awesome si vous préférez */
-/* 
-.video-js.vjs-custom-theme.vjs-playing .vjs-big-play-button:before {
-  font-family: "Font Awesome 5 Free" !important;
-  content: "\f04c" !important; 
-}
-
-.video-js.vjs-custom-theme.vjs-paused .vjs-big-play-button:before {
-  font-family: "Font Awesome 5 Free" !important;
-  content: "\f04b" !important;
-}
-*/
-
-.grid__project {
+/* .grid__project {
   display: grid;
   grid-template-columns: repeat(34, 1fr);
   grid-template-rows: repeat(18, 1fr);
@@ -92,7 +110,7 @@ body.loading {
   transform: translate(-50%, -50%);
   transition: transform 0.3s ease-out;
   gap: 1rem;
-}
+} */
 
 .prenom__block {
   display: block;
@@ -108,9 +126,9 @@ body.loading {
 }
 
 
-.grid__item:nth-child(1) { grid-area: 7 / 14 / span 6 / span 8; height: 0; max-height: 25rem; }
-.grid__item:nth-child(1) .img-item { transform: scale(1); }
-.grid__item:nth-child(2)  { grid-area: 2 / 18 / span 4 / span 5; }
+/* .grid__item:nth-child(1) { grid-area: 7 / 14 / span 6 / span 8; height: 0; max-height: 25rem; }
+.grid__item:nth-child(1) .img-item { transform: scale(1); } */
+/* .grid__item:nth-child(2)  { grid-area: 2 / 18 / span 4 / span 5; }
 .grid__item:nth-child(3)  { grid-area: 1 / 29 / span 4 / span 4; }
 .grid__item:nth-child(4)  { grid-area: 4 / 4 / span 5 / span 4; }
 .grid__item:nth-child(5)  { grid-area: 6 / 9 / span 3 / span 4; }
@@ -121,8 +139,22 @@ body.loading {
 .grid__item:nth-child(10) { grid-area: 13 / 2 / span 5 / span 5; }
 .grid__item:nth-child(11) { grid-area: 14 / 13 / span 4 / span 4; }
 .grid__item:nth-child(12) { grid-area: 11 / 27 / span 4 / span 5; }
-.grid__item:nth-child(13) { grid-area: 6 / 30 / span 5 / span 4; }
+.grid__item:nth-child(13) { grid-area: 6 / 30 / span 5 / span 4; } */
 
+/* .grid__item:nth-child(5)  { grid-area: 6 / 7 / span 4 / span 6 !important; } */
+
+/* .grid__item:nth-child(10) { grid-area: 13 / 1 / span 5 / span 5 !important; } */
+/* .grid__item:nth-child(3)  { grid-area: 2 / 30 / span 4 / span 4 !important; } */
+/* .grid__item:nth-child(9)  { grid-area: 2 / 25 / span 5 / span 4 !important; } */
+/* .grid__item:nth-child(13) { grid-area: 6 / 29 / span 6 / span 5 !important; }  */
+/* .grid__item:nth-child(4)  { grid-area: 3 / 2 / span 6 / span 5 !important; } */
+/* .grid__item:nth-child(7)  { grid-area: 6 / 1 / span 5 / span 4 !important; } */
+
+
+
+/* .grid__item:nth-child(6)  { grid-area: 9 / 23 / span 6 / span 4 !important; } */
+
+/* .grid__item:nth-child(4)  { grid-area: 4 / 2 / span 5 / span 4; } */
 /* Couleurs de bordure différentes pour chaque .grid__item */
 .grid__item:nth-child(1)  { border-color: #FF0000; border-width: 9px; } 
 .grid__item:nth-child(2)  { border-color: #00FF00; }
@@ -153,22 +185,24 @@ body.loading {
 }
 
 /* Règles pour les éléments avec data-aspect="portrait" */
-/* .grid__item[data-aspect="portrait"] {
-  max-width: 20em;
+.grid__item[data-aspect="portrait"] {
+  max-width: 15em;
   max-height: 25.5em;
-} */
+}
 
 /* Règles pour les éléments avec data-aspect="landscape" */
-/* .grid__item[data-aspect="landscape"] {
-  max-width: 25em;
+.grid__item[data-aspect="landscape"] {
+  width: 100%;
+  height: 100%;
+  max-width: 20em;
   max-height: 15em;
-} */
+}
 
 .grid__item img {
   width: auto;
   height: auto;
-  max-width: 100%;
-  max-height: 100%;
+  /* max-width: 100%;
+  max-height: 100%; */
   position: relative;
   /* object-fit: cover; */
 }
