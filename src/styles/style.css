@@ -3,6 +3,39 @@ body.loading {
   cursor: progress !important;
 }
 
+.sound-handle {
+  position: absolute;
+  top: -0.5rem;
+  z-index: 2;
+  width: 100%;
+  height: 1rem;
+  background: rgba(255, 255, 255, 0.956);
+  mix-blend-mode: difference;
+  cursor: grab;
+}
+
+.sound-video {
+  position: absolute;
+  width: 3vh;
+  height: 70vh;
+  overflow: hidden;
+  /* background: rgba(255, 255, 255, 0.3); */
+  cursor: pointer;
+}
+
+.sound-bg {
+  position: absolute;
+  width: 100%;
+  height: 70%; /* Hauteur initiale */
+  bottom: 0;
+  background: white;
+}
+
+.sound-handle:active {
+  cursor: grabbing;
+}
+
+
 /* Cache tous les éléments spécifiques */
 .vjs-volume-panel,
 .vjs-remaining-time,
@@ -21,27 +54,74 @@ body.loading {
 /* Style de base de la barre de contrôle */
 .video-js.vjs-custom-theme .vjs-control-bar {
   position: absolute !important;
-  background-color: green !important;
+  background-color: transparent !important;
   display: flex !important;
   width: 100% !important;
-  height: 5px !important;
-  bottom: 0 !important;
+  /* max-width: 90% !important; */
+  margin: 0 auto !important;
+  height: 3vhpx !important;
+  bottom: -5vh !important;
+}
+
+.video-js .vjs-progress-holder .vjs-mouse-display:before {
+  width: 3px !important;
+  background: black !important;
 }
 
 
 /* Style de la barre de progression */
 .video-js.vjs-custom-theme .vjs-progress-control {
   display: block !important;
-  position: absolute !important;
   width: 100% !important;
-  bottom: 0 !important;
+  margin: 0 auto !important;
+  max-width: 90vw !important;
 }
 
 /* Assure que la barre de progression est visible */
 .video-js.vjs-custom-theme .vjs-progress-holder {
+  cursor: grab !important;
+  height: 100% !important;
+  background-color: transparent !important;
   margin: 0 !important;
+  border: 1px white solid;
 }
 
+.video-js.vjs-custom-theme .vjs-progress-holder:active {
+  cursor: grabbing !important;
+}
+
+/* .video-js.vjs-custom-theme .vjs-progress-load-holder {
+  height: 100% !important;
+  
+} */
+
+
+.video-js .vjs-load-progress,
+.video-js .vjs-load-progress div {
+  display: none !important;
+}
+
+.video-js .vjs-play-progress:before,
+.video-js .vjs-progress-control .vjs-play-progress:before {
+  display: none !important;
+}
+
+
+
+/* Assure que la ligne est bien visible */
+.video-js .vjs-progress-holder .vjs-mouse-display:before {
+  width: 3px !important;
+  background: rgb(255, 255, 255) !important;
+}
+
+/* Force la largeur sur tous les éléments possibles */
+.video-js .vjs-mouse-display,
+.video-js .vjs-mouse-display:after,
+.video-js .vjs-progress-control .vjs-mouse-display:after {
+  width: 1rem !important;
+  background: rgb(255, 255, 255) !important;
+  mix-blend-mode: difference;
+}
 /* Cache tous les contrôles sauf le volume */
 /* .video-js.vjs-custom-theme .vjs-control-bar > *:not(.vjs-volume-panel) {
   display: block !important;
@@ -61,6 +141,7 @@ body.loading {
   /* display: flex !important; */
   display: block;
   font-size: 1.5rem !important;
+  
 }
 
 /* Style du gros bouton play/pause central */
