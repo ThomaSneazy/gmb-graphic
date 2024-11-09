@@ -740,42 +740,51 @@ navLinks.forEach(link => {
 // // S'assurer que la fonction est appelée après le chargement du DOM
 // document.addEventListener('DOMContentLoaded', initializeListView);
 
-const soundContainer = document.querySelector('.sound-video');
-const soundBg = document.querySelector('.sound-bg');
-const soundHandle = document.querySelector('.sound-handle');
-let isDragging = false;
+// const soundContainer = document.querySelector('.sound-video');
+// const soundBg = document.querySelector('.sound-bg');
+// const soundHandle = document.querySelector('.sound-handle');
+// const percentageText = document.querySelector('.pourcentage');
+// let isDragging = false;
 
-const updateVolume = (e) => {
-  const rect = soundContainer.getBoundingClientRect();
-  const y = rect.bottom - e.clientY;
+// const updateVolume = (e) => {
+//   const rect = soundContainer.getBoundingClientRect();
+//   const y = rect.bottom - e.clientY;
   
-  // Calcul du pourcentage (inversé car on part du bas)
-  let percentage = Math.max(0, Math.min(100, (y / rect.height) * 100));
+//   // Calcul du pourcentage (inversé car on part du bas)
+//   let percentage = Math.max(0, Math.min(100, (y / rect.height) * 100));
   
-  // Mise à jour de la hauteur du bg
-  soundBg.style.height = `${percentage}%`;
+//   // Mise à jour de la hauteur du bg
+//   soundBg.style.height = `${percentage}%`;
   
-  // Mise à jour du volume de la vidéo (0 à 1)
-  player.volume(percentage / 100);
-};
+//   // Mise à jour du texte du pourcentage
+//   percentageText.textContent = `${Math.round(percentage)}%`;
+  
+//   // Mise à jour du volume de la vidéo (0 à 1)
+//   player.volume(percentage / 100);
+// };
 
-soundHandle.addEventListener('mousedown', () => {
-  isDragging = true;
-});
+// soundHandle.addEventListener('mousedown', () => {
+//   isDragging = true;
+// });
 
-document.addEventListener('mousemove', (e) => {
-  if (isDragging) {
-    e.preventDefault();
-    updateVolume(e);
-  }
-});
+// document.addEventListener('mousemove', (e) => {
+//   if (isDragging) {
+//     e.preventDefault();
+//     updateVolume(e);
+//   }
+// });
 
-document.addEventListener('mouseup', () => {
-  isDragging = false;
-});
+// document.addEventListener('mouseup', () => {
+//   isDragging = false;
+// });
 
-// Click direct sur le conteneur
-soundContainer.addEventListener('click', updateVolume);
+// // Click direct sur le conteneur
+// soundContainer.addEventListener('click', updateVolume);
+
+// // Initialiser le volume à 70%
+// soundBg.style.height = '70%';
+// percentageText.textContent = '70%';
+// player.volume(0.7);
 
 const videoGrid = document.querySelector('.video-grid');
 const videoShowreel = document.querySelector('.video__showreel__item');

@@ -2,10 +2,9 @@ body.loading {
   pointer-events: none;
   cursor: progress !important;
 }
-
+/* 
 .sound-handle {
   position: absolute;
-  top: -0.5rem;
   z-index: 2;
   width: 100%;
   height: 1rem;
@@ -18,25 +17,21 @@ body.loading {
   position: absolute;
   width: 3vh;
   height: 70vh;
-  overflow: hidden;
-  /* background: rgba(255, 255, 255, 0.3); */
   cursor: pointer;
 }
 
 .sound-bg {
   position: absolute;
   width: 100%;
-  height: 70%; /* Hauteur initiale */
+  height: 70%;
   bottom: 0;
   background: white;
 }
 
 .sound-handle:active {
   cursor: grabbing;
-}
+} */
 
-
-/* Cache tous les éléments spécifiques */
 .vjs-volume-panel,
 .vjs-remaining-time,
 .vjs-current-time,
@@ -51,13 +46,11 @@ body.loading {
   display: none !important;
 }
 
-/* Style de base de la barre de contrôle */
 .video-js.vjs-custom-theme .vjs-control-bar {
   position: absolute !important;
   background-color: transparent !important;
   display: flex !important;
   width: 100% !important;
-  /* max-width: 90% !important; */
   margin: 0 auto !important;
   height: 3vhpx !important;
   bottom: -5vh !important;
@@ -68,8 +61,6 @@ body.loading {
   background: black !important;
 }
 
-
-/* Style de la barre de progression */
 .video-js.vjs-custom-theme .vjs-progress-control {
   display: block !important;
   width: 100% !important;
@@ -77,7 +68,6 @@ body.loading {
   max-width: 90vw !important;
 }
 
-/* Assure que la barre de progression est visible */
 .video-js.vjs-custom-theme .vjs-progress-holder {
   cursor: grab !important;
   height: 100% !important;
@@ -90,12 +80,6 @@ body.loading {
   cursor: grabbing !important;
 }
 
-/* .video-js.vjs-custom-theme .vjs-progress-load-holder {
-  height: 100% !important;
-  
-} */
-
-
 .video-js .vjs-load-progress,
 .video-js .vjs-load-progress div {
   display: none !important;
@@ -106,15 +90,11 @@ body.loading {
   display: none !important;
 }
 
-
-
-/* Assure que la ligne est bien visible */
 .video-js .vjs-progress-holder .vjs-mouse-display:before {
   width: 3px !important;
   background: rgb(255, 255, 255) !important;
 }
 
-/* Force la largeur sur tous les éléments possibles */
 .video-js .vjs-mouse-display,
 .video-js .vjs-mouse-display:after,
 .video-js .vjs-progress-control .vjs-mouse-display:after {
@@ -122,10 +102,6 @@ body.loading {
   background: rgb(255, 255, 255) !important;
   mix-blend-mode: difference;
 }
-/* Cache tous les contrôles sauf le volume */
-/* .video-js.vjs-custom-theme .vjs-control-bar > *:not(.vjs-volume-panel) {
-  display: block !important;
-} */
 
 .vjs-volume-panel .vjs-control .vjs-volume-panel-horizontal {
   display: none !important;
@@ -135,16 +111,12 @@ body.loading {
   display: none !important;
 }
 
-/* Style du contrôle volume */
 .video-js.vjs-custom-theme .vjs-volume-panel {
   color: rgb(255, 255, 255) !important;
-  /* display: flex !important; */
   display: block;
   font-size: 1.5rem !important;
-  
 }
 
-/* Style du gros bouton play/pause central */
 .video-js.vjs-custom-theme .vjs-big-play-button {
   background-color: transparent !important;
   border: none !important;
@@ -158,19 +130,16 @@ body.loading {
   pointer-events: none !important;
 }
 
-/* État par défaut (pause) */
 .video-js.vjs-custom-theme.vjs-paused .vjs-big-play-button {
   font-size: 8rem !important;
   content: "▶" !important;
 }
 
-/* État de lecture */
 .video-js.vjs-custom-theme.vjs-playing .vjs-big-play-button {
   font-size: 10rem !important;
   content: "⏸" !important;
 }
 
-/* Affichage du bouton en mode actif */
 .video-js.vjs-custom-theme.vjs-user-active .vjs-big-play-button {
   opacity: 1 !important;
 }
