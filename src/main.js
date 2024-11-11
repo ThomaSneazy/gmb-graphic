@@ -1,8 +1,17 @@
 import './styles/style.css'
 import gsap from 'gsap'
 import SwupParallelPlugin from '@swup/parallel-plugin';
+import Swup from 'swup';
+import { log } from 'three/webgpu';
 
-
+// Initialisation de Swup
+const swup = new Swup({
+  plugins: [new SwupParallelPlugin()],
+  animationSelector: '[class*="transition-"]',
+  elements: ['#swup'],
+  cache: true,
+  animateHistoryBrowsing: true,
+});
 
 console.log('Hello KEZ')
 
@@ -342,7 +351,15 @@ function getRandomChar() {
 
 // Ajoutez cette fonction pour animer le texte
 function animateText(element) {
-  const originalText = element.getAttribute('data-project-name');
+  // Vérifier si l'élément existe
+  if (!element) return;
+
+  // Récupérer le texte soit depuis data-project-name, soit depuis le contenu texte
+  const originalText = element.getAttribute('data-project-name') || element.textContent;
+  
+  // Vérifier si on a du texte à animer
+  if (!originalText) return;
+
   const textLength = originalText.length;
   let animationFrame;
   let startTime;
@@ -351,7 +368,7 @@ function animateText(element) {
   function animate(currentTime) {
     if (!startTime) startTime = currentTime;
     const elapsedTime = currentTime - startTime;
-    const progress = Math.min(elapsedTime / 1000, 1); // Animation sur 3 secondes
+    const progress = Math.min(elapsedTime / 1000, 1); // Animation sur 1 seconde
 
     // Mettre à jour les caractères seulement toutes les 100ms
     if (currentTime - lastUpdateTime > 100) {
@@ -364,13 +381,17 @@ function animateText(element) {
     }
 
     if (progress < 1) {
-      animationFrame = requestAnimationFrame(animate);
+      element.animationFrame = requestAnimationFrame(animate);
     } else {
       element.textContent = originalText; // Assurez-vous que le texte final est correct
     }
   }
 
-  cancelAnimationFrame(element.animationFrame);
+  // Annuler l'animation précédente si elle existe
+  if (element.animationFrame) {
+    cancelAnimationFrame(element.animationFrame);
+  }
+  
   element.animationFrame = requestAnimationFrame(animate);
 }
 
@@ -805,8 +826,9 @@ if (videoGrid) {
   videoGrid.muted = true;
   videoGrid.loop = true;
 
-  // Configuration initiale de video-js
-  gsap.set(videoJs, {
+  // Configuration initiale de video-js et sound-video
+  const soundVideo = document.querySelector('.sound-video');
+  gsap.set([videoJs, soundVideo], {
     display: 'none',
     opacity: 0
   });
@@ -828,32 +850,30 @@ if (videoGrid) {
       }
     });
 
-    // Configuration initiale
     gsap.set(videoShowreel, {
       display: 'flex',
       width: '0%',
       height: '0%'
     });
 
-    // Timeline d'animation
     tl.to(videoShowreel, {
       width: '100%',
       height: '1%'
     })
-      .to(videoShowreel, {
-        height: '100%',
-        duration: 1
-      })
-      .set(videoJs, {
-        display: 'block'
-      })
-      .to(videoJs, {
-        opacity: 1,
-        duration: 0.4,
-        onComplete: () => {
-          player.play();
-        }
-      });
+    .to(videoShowreel, {
+      height: '100%',
+      duration: 1
+    })
+    .set([videoJs, soundVideo], {
+      display: 'block'
+    })
+    .to([videoJs, soundVideo], {
+      opacity: 1,
+      duration: 0.4,
+      onComplete: () => {
+        player.play();
+      }
+    });
   });
 
   const closeVideo = document.querySelector('.close-video');
@@ -865,24 +885,32 @@ if (videoGrid) {
   });
 
   const hideCloseButton = () => {
-    gsap.to(closeVideo, {
+    gsap.to([closeVideo, soundVideo], {
       opacity: 0,
       duration: 0.3,
       onComplete: () => {
-        gsap.set(closeVideo, { display: 'none' });
+        gsap.set([closeVideo, soundVideo], { display: 'none' });
       }
     });
   };
 
   videoShowreel.addEventListener('mousemove', () => {
-    gsap.set(closeVideo, { display: 'flex' });
-    gsap.to(closeVideo, {
+    gsap.set([closeVideo, soundVideo], { display: 'flex' });
+    gsap.to([closeVideo, soundVideo], {
       opacity: 1,
       duration: 0.3
     });
 
     clearTimeout(mouseTimer);
-    mouseTimer = setTimeout(hideCloseButton, 2300);
+    mouseTimer = setTimeout(() => {
+      gsap.to([closeVideo, soundVideo], {
+        opacity: 0,
+        duration: 0.3,
+        onComplete: () => {
+          gsap.set([closeVideo, soundVideo], { display: 'none' });
+        }
+      });
+    }, 2300);
   });
 
   videoShowreel.addEventListener('mouseleave', hideCloseButton);
@@ -901,32 +929,32 @@ if (videoGrid) {
       }
     });
 
-    tl.to(videoJs, {
+    tl.to([videoJs, soundVideo], {
       opacity: 0,
       duration: 0.4,
       onComplete: () => {
         player.pause();
-        gsap.set(videoJs, { display: 'none' });
+        gsap.set([videoJs, soundVideo], { display: 'none' });
       }
     })
-      .to(closeVideo, {
-        opacity: 0,
-        duration: 0.3,
-        onComplete: () => {
-          gsap.set(closeVideo, { display: 'none' });
-        }
-      })
-      .to(videoShowreel, {
-        height: '1%',
-        duration: 1
-      }, "-=0.2")
-      .to(videoShowreel, {
-        width: '0%',
-        height: '0%',
-        onComplete: () => {
-          gsap.set(videoShowreel, { display: 'none' });
-        }
-      });
+    .to(closeVideo, {
+      opacity: 0,
+      duration: 0.3,
+      onComplete: () => {
+        gsap.set(closeVideo, { display: 'none' });
+      }
+    })
+    .to(videoShowreel, {
+      height: '1%',
+      duration: 1
+    }, "-=0.2")
+    .to(videoShowreel, {
+      width: '0%',
+      height: '0%',
+      onComplete: () => {
+        gsap.set(videoShowreel, { display: 'none' });
+      }
+    });
   };
 
   // Gestionnaire pour le bouton close
@@ -1174,5 +1202,359 @@ navLinks.forEach(link => {
 document.addEventListener('DOMContentLoaded', () => {
   initializeCategoryFilter();
   // handleInitialState();
+});
+
+// Ajout du contrôle du son
+const soundContainer = document.querySelector('.sound-video');
+const soundBg = document.querySelector('.sound-bg');
+const soundHandle = document.querySelector('.sound-handle');
+const percentageText = document.querySelector('.pourcentage');
+let isDragging = false;
+
+// Fonction pour mettre à jour le volume
+const updateVolume = (e) => {
+  // Récupérer la position par rapport au sound-bg
+  const rect = soundBg.getBoundingClientRect();
+  const mouseY = e.clientY - rect.top;
+  const bgHeight = rect.height;
+  
+  // Calcul du pourcentage depuis le haut
+  let percentage = Math.max(0, Math.min(100, (mouseY / bgHeight) * 100));
+  
+  // Mise à jour de la position du handle depuis le haut
+  soundHandle.style.top = `${percentage}%`;
+  
+  // Le volume est inversé (100% en bas, 0% en haut)
+  const volumePercentage = 100 - percentage;
+  
+  // Mise à jour du texte du pourcentage
+  percentageText.textContent = `${Math.round(volumePercentage)}%`;
+  
+  // Mise à jour du volume de la vidéo (0 à 1)
+  player.volume(volumePercentage / 100);
+};
+
+// Événement mousedown sur le handle
+soundHandle.addEventListener('mousedown', (e) => {
+  isDragging = true;
+  soundHandle.style.cursor = 'grabbing';
+  e.stopPropagation(); // Empêche la propagation au conteneur
+});
+
+// Événement mousemove sur le document
+document.addEventListener('mousemove', (e) => {
+  if (isDragging) {
+    e.preventDefault();
+    updateVolume(e);
+  }
+});
+
+// Événement mouseup sur le document
+document.addEventListener('mouseup', () => {
+  isDragging = false;
+  soundHandle.style.cursor = 'grab';
+});
+
+// Click direct sur le sound-bg
+soundBg.addEventListener('click', (e) => {
+  if (e.target === soundHandle) return;
+  updateVolume(e);
+});
+
+// Initialiser le volume à 70% (donc handle à 30% depuis le haut)
+soundHandle.style.top = '30%';
+percentageText.textContent = '70%';
+player.volume(0.7);
+
+// Fonction pour réinitialiser complètement l'état de la page
+function resetPageState() {
+  // Tuer toutes les animations GSAP en cours
+  gsap.killTweensOf("*");
+  
+  // Réinitialiser les variables d'état
+  isAnimationEnabled = false;
+  
+  const gridItems = document.querySelectorAll('.grid__item');
+  const grid = document.querySelector('.grid__project');
+  const projectDescWrappers = document.querySelectorAll('.project__desc__wrapper');
+  const linkWrapperPrenom = document.querySelectorAll('.link__wrapper.is-home');
+  const linkWrapperNom = document.querySelectorAll('.link__wrapper.is-filter');
+  const listWrapper = document.querySelector('.list__wrapper');
+  const testInfo = document.querySelector('.test-info');
+  
+  if (grid) {
+    // Centrer la grid
+    gsap.set(grid, {
+      left: '50%',
+      top: '50%',
+      xPercent: -50,
+      yPercent: -50,
+      position: 'absolute',
+      display: 'grid' // Important: utiliser 'grid' au lieu de 'flex'
+    });
+
+    // Positionner correctement les items
+    gsap.set(gridItems, {
+      position: 'relative', // Changer à 'relative' au lieu de 'absolute'
+      display: 'flex',
+      opacity: 1,
+      height: 'auto',
+      left: 'auto', // Retirer le positionnement absolu
+      top: 'auto',
+      xPercent: 0, // Retirer le transform
+      yPercent: 0
+    });
+
+    gsap.set([projectDescWrappers, linkWrapperPrenom], {
+      clearProps: "all",
+      opacity: 1,
+      display: 'flex'
+    });
+
+    if (listWrapper) {
+      gsap.set(listWrapper, {
+        display: 'none',
+        height: 0,
+        opacity: 0
+      });
+    }
+
+    if (testInfo) {
+      gsap.set(testInfo, {
+        display: 'none',
+        opacity: 0
+      });
+    }
+  }
+
+  // Réinitialiser les tooltips
+  const tooltip = document.getElementById('tooltip');
+  if (tooltip) {
+    gsap.set(tooltip, {
+      display: 'none',
+      opacity: 0,
+      scale: 0.95
+    });
+  }
+
+  // Réinitialiser la vidéo
+  const videoShowreel = document.querySelector('.video__showreel__item');
+  const videoJs = document.querySelector('.videojs');
+  const soundVideo = document.querySelector('.sound-video');
+  if (videoShowreel && videoJs && soundVideo) {
+    gsap.set([videoShowreel, videoJs, soundVideo], {
+      display: 'none',
+      opacity: 0
+    });
+  }
+
+  // Réactiver l'animation de la grid
+  isAnimationEnabled = true;
+}
+
+// Fonction pour réinitialiser tous les event listeners
+function resetEventListeners() {
+  // Reset des event listeners de la grid
+  document.querySelectorAll('.grid__item').forEach(item => {
+    // Supprimer les anciens event listeners en clonant l'élément
+    const newItem = item.cloneNode(true);
+    item.parentNode.replaceChild(newItem, item);
+    
+    // Ajouter les nouveaux event listeners
+    newItem.addEventListener('mouseenter', () => {
+      // Réduire l'opacité de tous les autres items
+      document.querySelectorAll('.grid__item').forEach(otherItem => {
+        if (otherItem !== newItem) {
+          gsap.to(otherItem, {
+            opacity: 0.1,
+            duration: 0.3
+          });
+        }
+      });
+      
+      // Modifier cette partie pour cibler le bon élément
+      const projectDesc = newItem.querySelector('.project__desc');
+      if (projectDesc && projectDesc.textContent.trim() !== '') {
+        animateText(projectDesc);
+      }
+    });
+
+    newItem.addEventListener('mouseleave', () => {
+      // Restaurer l'opacité de tous les items
+      document.querySelectorAll('.grid__item').forEach(otherItem => {
+        gsap.to(otherItem, {
+          opacity: 1,
+          duration: 0.3
+        });
+      });
+      
+      // Restaurer le texte original
+      const projectDesc = newItem.querySelector('.project__desc');
+      if (projectDesc) {
+        if (projectDesc.animationFrame) {
+          cancelAnimationFrame(projectDesc.animationFrame);
+        }
+        const originalText = projectDesc.getAttribute('data-project-name') || projectDesc.textContent;
+        projectDesc.textContent = originalText;
+      }
+    });
+  });
+
+  // Réinitialiser les tooltips
+  initializeTooltips();
+  
+  // Réinitialiser les filtres de catégorie
+  initializeCategoryFilter();
+  
+  // Réinitialiser la navigation
+  const navLinks = document.querySelectorAll('.link__wrapper.is-home .link__nav');
+  navLinks.forEach(link => {
+    link.classList.remove('active');
+    if (link.classList.contains('grid')) {
+      link.classList.add('active');
+    }
+  });
+}
+
+// Ajouter cette fonction d'initialisation des tooltips
+function initializeTooltips() {
+  const tooltip = document.getElementById('tooltip');
+  const hoverables = document.querySelectorAll('.hoverable, .tooltip, .esc');
+  let tooltipAnimation;
+
+  hoverables.forEach(el => {
+    el.addEventListener('mousemove', (e) => {
+      if (tooltipAnimation) tooltipAnimation.kill();
+
+      let tooltipText;
+      if (el.classList.contains('tooltip')) {
+        tooltipText = 'click';
+      } else if (el.classList.contains('esc')) {
+        tooltipText = 'PRESS OR CLICK';
+      } else {
+        tooltipText = el.dataset.tooltip;
+      }
+
+      tooltip.textContent = tooltipText;
+      tooltip.style.display = 'block';
+
+      gsap.set(tooltip, {
+        x: e.pageX + 10,
+        y: e.pageY + 10
+      });
+
+      tooltipAnimation = gsap.to(tooltip, {
+        opacity: 1,
+        scale: 1,
+        duration: 0.2,
+        ease: "power2.out",
+        overwrite: true
+      });
+    });
+
+    el.addEventListener('mouseleave', () => {
+      if (tooltipAnimation) tooltipAnimation.kill();
+
+      tooltipAnimation = gsap.to(tooltip, {
+        opacity: 0,
+        scale: 0.95,
+        duration: 0.2,
+        ease: "power2.in",
+        onComplete: () => {
+          if (tooltip.style.opacity === '0') {
+            tooltip.style.display = 'none';
+          }
+        }
+      });
+    });
+  });
+}
+
+// Fonction pour gérer l'animation de la grid
+function initializeGridAnimations() {
+  const grid = document.querySelector('.grid__project');
+  const wrapper = document.querySelector('.page-wrapper');
+
+  if (!grid || !wrapper) return;
+
+  // Centrer initialement la grid
+  gsap.set(grid, {
+    left: '50%',
+    top: '50%',
+    xPercent: -50,
+    yPercent: -50,
+    position: 'absolute',
+    display: 'grid'
+  });
+
+  let maxMoveX = (grid.offsetWidth - wrapper.offsetWidth) / 2;
+  let maxMoveY = (grid.offsetHeight - wrapper.offsetHeight) / 2;
+
+  let currentX = 0;
+  let currentY = 0;
+  let targetX = 0;
+  let targetY = 0;
+
+  // Nettoyer l'ancien event listener s'il existe
+  wrapper.removeEventListener('mousemove', handleMouseMove);
+
+  // Créer la fonction de gestion du mouvement de la souris
+  function handleMouseMove(e) {
+    if (!isAnimationEnabled) return;
+
+    let mousePercentX = e.clientX / wrapper.offsetWidth;
+    let mousePercentY = e.clientY / wrapper.offsetHeight;
+
+    targetX = (mousePercentX - 0.5) * maxMoveX * 2.2;
+    targetY = (mousePercentY - 0.5) * maxMoveY * 2.2;
+  }
+
+  // Ajouter le nouveau event listener
+  wrapper.addEventListener('mousemove', handleMouseMove);
+
+  // Fonction d'animation
+  function animate() {
+    if (isAnimationEnabled) {
+      currentX += (targetX - currentX) * 0.325;
+      currentY += (targetY - currentY) * 0.325;
+
+      gsap.to(grid, {
+        x: -currentX,
+        y: -currentY,
+        duration: 0.6,
+        ease: "power2.out"
+      });
+    }
+
+    requestAnimationFrame(animate);
+  }
+
+  // Démarrer l'animation
+  animate();
+}
+
+// Gestionnaire principal pour Swup
+swup.hooks.on('content:replace', () => {
+  try {
+    resetPageState();
+    resetEventListeners();
+    
+    if (window.location.pathname === '/' || window.location.pathname === '/index.html') {
+      animatePrenomNomWrapper();
+      // Initialiser la grid après un court délai pour s'assurer que tout est en place
+      setTimeout(() => {
+        initializeGridAnimations();
+      }, 100);
+    }
+  } catch (error) {
+    console.error('Erreur lors de la réinitialisation de la page:', error);
+  }
+});
+
+// Initialisation au chargement initial de la page
+document.addEventListener('DOMContentLoaded', () => {
+  if (window.location.pathname === '/' || window.location.pathname === '/index.html') {
+    initializeGridAnimations();
+  }
 });
 
