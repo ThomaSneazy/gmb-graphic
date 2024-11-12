@@ -1414,6 +1414,8 @@ function resetEventListeners() {
       link.classList.add('active');
     }
   });
+
+  initializeNavigationHandlers();
 }
 
 // Ajouter cette fonction d'initialisation des tooltips
@@ -1557,4 +1559,309 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeGridAnimations();
   }
 });
+
+function initializeNavigationHandlers() {
+  const navLinks = document.querySelectorAll('.link__wrapper.is-home .link__nav');
+  const gridProject = document.querySelector('.grid__project');
+  const gridItems = document.querySelectorAll('.grid__item');
+  const listWrapper = document.querySelector('.list__wrapper');
+  const nomWrapper = document.querySelector('.nom__wrapper');
+  const nom = nomWrapper.querySelector('.nom');
+  const linkWrapperNom = document.querySelectorAll('.link__wrapper.is-filter');
+
+  // Cacher la list__wrapper au chargement
+  gsap.set(listWrapper, { display: 'none', height: 0 });
+  gsap.set(nom, { position: 'absolute', bottom: 0, top: 'auto' });
+  gsap.set(linkWrapperNom, { position: 'absolute', bottom: 0, top: 'auto' });
+  gsap.set('.img__list', { opacity: 0 });
+  gsap.set('.test-info', { display: 'none', opacity: 0 });
+
+  navLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      document.body.style.cursor = 'progress';
+
+      navLinks.forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+
+      if (link.classList.contains('list')) {
+        handleListView(gridProject, gridItems, nom, listWrapper, linkWrapperNom);
+      } 
+      else if (link.classList.contains('grid')) {
+        handleGridView(gridProject, gridItems, nom, listWrapper, linkWrapperNom);
+      } 
+      else if (link.classList.contains('info')) {
+        handleInfoView(gridProject, gridItems, nom, listWrapper, linkWrapperNom);
+      }
+    });
+  });
+}
+
+function handleListView(gridProject, gridItems, nom, listWrapper, linkWrapperNom) {
+  const tl = gsap.timeline({ 
+    defaults: { ease: "power3.inOut" },
+    onComplete: () => {
+      document.body.style.cursor = 'default';
+    }
+  });
+
+  // Masquer .test-info si elle est visible
+  if (document.querySelector('.test-info').style.display === 'block') {
+    tl.to('.test-info', {
+      opacity: 0,
+      duration: 0.3,
+      onComplete: () => gsap.set('.test-info', { display: 'none' })
+    });
+  }
+
+  gsap.set('.list__link__item', {
+    opacity: 0,
+    x: 50
+  });
+  
+  gsap.set(linkWrapperNom, {
+    display: 'none',
+    yPercent: -20,
+    opacity: 0,
+  });
+
+  tl.to(gridProject, {
+    x: 0,
+    y: 0,
+    duration: 0.6
+  })
+  .to(gridItems, {
+    opacity: 0,
+    duration: 0.6,
+    stagger: 0.04,
+    onComplete: () => {
+      gsap.set(gridItems, { display: 'none' });
+      isAnimationEnabled = false;
+    }
+  }, "<")
+  .to(nom, {
+    top: 0,
+    bottom: 'auto',
+    duration: 1,
+    ease: "power3.inOut"
+  })
+  .set(listWrapper, { display: 'flex' })
+  .to(listWrapper, {
+    opacity: 1,
+    height: '100vh',
+    duration: 0.8
+  })
+  .to(linkWrapperNom, {
+    display: 'flex',
+    yPercent: 0,
+    opacity: 1,
+    duration: 0.8
+  }, "<")
+  .to('.list__link__item', {
+    opacity: 0.4,
+    x: 0,
+    duration: 0.5,
+    stagger: 0.05,
+    ease: "power2.out",
+    onComplete: initializeListView
+  }, "-=0.4")
+  .to('.img__list', {
+    opacity: 1,
+    duration: 0.5,
+    ease: "power2.out"
+  }, "+=0.01");
+}
+
+function handleGridView(gridProject, gridItems, nom, listWrapper, linkWrapperNom) {
+  const tl = gsap.timeline({ 
+    defaults: { ease: "power3.inOut" },
+    onComplete: () => {
+      document.body.style.cursor = 'default';
+      isAnimationEnabled = true;
+    }
+  });
+
+  // Masquer .test-info si elle est visible
+  if (document.querySelector('.test-info').style.display === 'block') {
+    tl.to('.test-info', {
+      opacity: 0,
+      duration: 0.3,
+      onComplete: () => gsap.set('.test-info', { display: 'none' })
+    });
+  }
+
+  tl.to('.img__list', {
+    opacity: 0,
+    duration: 0.5,
+    ease: "power2.out"
+  })
+  .to(nom, {
+    y: '-100vh',
+    duration: 0.8,
+    ease: "power2.in"
+  })
+  .to('.list__link__item', {
+    opacity: 0,
+    x: 50,
+    duration: 0.3,
+    stagger: 0.05
+  }, "<")
+  .set(nom, {
+    opacity: 0,
+    y: '100%',
+    position: 'absolute',
+    bottom: 0,
+    top: 'auto'
+  })
+  .to(linkWrapperNom, {
+    yPercent: -20,
+    opacity: 0,
+    duration: 0.3,
+    onComplete: () => gsap.set(linkWrapperNom, { display: 'none' })
+  }, "<")
+  .to(listWrapper, {
+    height: 0,
+    opacity: 0,
+    duration: 1,
+    onComplete: () => gsap.set(listWrapper, { display: 'none' })
+  }, "<")
+  .to(nom, {
+    y: '0%',
+    opacity: 1,
+    duration: 0.5,
+    ease: "power3.out",
+  })
+  .set(gridProject, { display: 'grid' })
+  .set(gridItems, { display: 'flex' })
+  .to(gridItems, {
+    opacity: 1,
+    duration: 0.6,
+    stagger: 0.05
+  });
+}
+
+function handleInfoView(gridProject, gridItems, nom, listWrapper, linkWrapperNom) {
+  const tl = gsap.timeline({ 
+    defaults: { ease: "power3.inOut" },
+    onComplete: () => {
+      document.body.style.cursor = 'default';
+      isAnimationEnabled = false;
+    }
+  });
+
+  gsap.set('.info__text__block', {
+    opacity: 0,
+    y: -20
+  });
+  
+  gsap.set('.img-info__wrapper img', {
+    opacity: 0
+  });
+
+  // Si on est sur la liste
+  if (listWrapper.style.display !== 'none') {
+    tl.to('.img__list', {
+      opacity: 0,
+      duration: 0.5,
+      ease: "power2.out"
+    })
+    .to('.list__link__item', {
+      opacity: 0,
+      x: 50,
+      duration: 0.3,
+      stagger: 0.05
+    }, "<")
+    .to(linkWrapperNom, {
+      yPercent: -20,
+      opacity: 0,
+      duration: 0.3,
+      onComplete: () => gsap.set(linkWrapperNom, { display: 'none' })
+    })
+    .to(listWrapper, {
+      height: 0,
+      opacity: 0,
+      duration: 1,
+      onComplete: () => gsap.set(listWrapper, { display: 'none' })
+    }, "<");
+  }
+  // Si on est sur la grid
+  else if (gridProject.style.display !== 'none') {
+    tl.to(gridProject, {
+      x: 0,
+      y: 0,
+      duration: 0.6
+    })
+    .to(gridItems, {
+      opacity: 0,
+      duration: 0.6,
+      stagger: 0.04,
+      onComplete: () => gsap.set(gridItems, { display: 'none' })
+    }, "<")
+    .to(nom, {
+      top: 0,
+      bottom: 'auto',
+      duration: 1,
+      ease: "power3.inOut"
+    });
+  }
+
+  tl.set('.test-info', { display: 'block' })
+    .to('.test-info', {
+      opacity: 1,
+      duration: 0.3
+    })
+    .to('.info__text__block', {
+      opacity: 1,
+      y: 0,
+      duration: 0.6,
+      stagger: 0.1
+    })
+    .to('.img-info__wrapper img', {
+      opacity: 1,
+      duration: 0.8,
+      ease: "power2.inOut"
+    }, "-=0.3");
+}
+
+function initializeListView() {
+  const listItems = document.querySelectorAll('.list__link__item');
+  const imgItems = document.querySelectorAll('.list__link__img__item');
+
+  if (listItems[0]) {
+    listItems[0].classList.add('active');
+    gsap.to(listItems[0], { opacity: 1, duration: 0 });
+
+    const firstProjectId = listItems[0].getAttribute('data-list-project');
+    const firstImg = document.querySelector(`.list__link__img__item[data-list-project="${firstProjectId}"]`);
+    if (firstImg) {
+      firstImg.classList.add('active');
+      gsap.to(firstImg, { opacity: 1, duration: 0 });
+    }
+  }
+
+  listItems.forEach(item => {
+    item.addEventListener('mouseenter', () => {
+      const projectId = item.getAttribute('data-list-project');
+
+      listItems.forEach(otherItem => {
+        otherItem.classList.remove('active');
+        gsap.to(otherItem, { opacity: 0.4, duration: 0 });
+      });
+      
+      imgItems.forEach(img => {
+        img.classList.remove('active');
+        gsap.to(img, { opacity: 0, duration: 0 });
+      });
+
+      item.classList.add('active');
+      gsap.to(item, { opacity: 1, duration: 0 });
+
+      const correspondingImg = document.querySelector(`.list__link__img__item[data-list-project="${projectId}"]`);
+      if (correspondingImg) {
+        correspondingImg.classList.add('active');
+        gsap.to(correspondingImg, { opacity: 1, duration: 0 });
+      }
+    });
+  });
+}
 
