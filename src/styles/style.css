@@ -2,7 +2,7 @@ body.loading {
   pointer-events: none;
   cursor: progress !important;
 }
-.transition-main {
+/* .transition-main {
   transition-property: opacity, transform;
   transition-duration: 250ms;
   transition-timing-function: cubic-bezier(0.77, 0, 0.175, 1);
@@ -27,7 +27,7 @@ html.is-animating.to-left .transition-main {
 
 html.is-leaving.to-left .transition-main {
   transform: translateX(-1em);
-}
+} */
 
 .sound-video {
   position: absolute;
@@ -263,7 +263,7 @@ html.is-leaving.to-left .transition-main {
 
 /* .grid__item:nth-child(4)  { grid-area: 4 / 2 / span 5 / span 4; } */
 /* Couleurs de bordure différentes pour chaque .grid__item */
-.grid__item:nth-child(1)  { border-color: #FF0000; border-width: 9px; } 
+/* .grid__item:nth-child(1)  { border-color: #FF0000; border-width: 9px; } 
 .grid__item:nth-child(2)  { border-color: #00FF00; }
 .grid__item:nth-child(3)  { border-color: #0000FF; } 
 .grid__item:nth-child(4)  { border-color: #FFFF00; } 
@@ -275,7 +275,7 @@ html.is-leaving.to-left .transition-main {
 .grid__item:nth-child(10) { border-color: #8888fd; } 
 .grid__item:nth-child(11) { border-color: #FFC0CB; } 
 .grid__item:nth-child(12) { border-color: #c615b4; } 
-.grid__item:nth-child(13) { border-color: #808080; } 
+.grid__item:nth-child(13) { border-color: #808080; }  */
 
 /* Styles de base pour tous les .grid__item */
 .grid__item {
@@ -285,7 +285,7 @@ html.is-leaving.to-left .transition-main {
   position: relative;
   opacity: 1;
   transition: opacity 0.3s ease;
-  border: 1px solid #f30000c6;
+  /* border: 1px solid #f30000c6; */
   display: flex;
   /* align-items: center;
   justify-content: center; */
