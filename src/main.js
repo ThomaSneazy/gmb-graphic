@@ -1,8 +1,24 @@
 import './styles/style.css'
 import gsap from 'gsap'
-import SwupParallelPlugin from '@swup/parallel-plugin';
+// import barba from '@barba/core'
 
-
+// barba.init({
+//   transitions: [{
+//     name: 'opacity-transition',
+//     leave(data) {
+//       return gsap.to(data.current.container.querySelector('.page-wrapper'), {
+//         opacity: 0,
+//         duration: 0.5
+//       });
+//     },
+//     enter(data) {
+//       return gsap.from(data.next.container.querySelector('.section'), {
+//         opacity: 0,
+//         duration: 0.5
+//       });
+//     }
+//   }]
+// });
 
 console.log('Hello KEZ')
 
@@ -800,6 +816,11 @@ if (videoGrid) {
 
   });
 
+  gsap.set('.video-showreel__wrapper', {
+    display: 'none',
+    opacity: 0
+  });
+
   // Configuration de base de la vidéo grid
   videoGrid.autoplay = false;
   videoGrid.muted = true;
@@ -807,7 +828,8 @@ if (videoGrid) {
 
   // Configuration initiale de video-js et sound-video
   const soundVideo = document.querySelector('.sound-video');
-  gsap.set([videoJs, soundVideo], {
+  const soundBg = document.querySelector('.sound-bg');
+  gsap.set([videoJs, soundVideo, soundBg], {
     display: 'none',
     opacity: 0
   });
@@ -829,6 +851,11 @@ if (videoGrid) {
       }
     });
 
+    gsap.set('.video-showreel__wrapper', {
+      display: 'flex',
+      opacity: 1
+    });
+
     gsap.set(videoShowreel, {
       display: 'flex',
       width: '0%',
@@ -843,10 +870,10 @@ if (videoGrid) {
       height: '100%',
       duration: 1
     })
-    .set([videoJs, soundVideo], {
+    .set([videoJs, soundVideo, soundBg], {
       display: 'block'
     })
-    .to([videoJs, soundVideo], {
+    .to([videoJs, soundVideo, soundBg], {
       opacity: 1,
       duration: 0.4,
       onComplete: () => {
@@ -1184,64 +1211,64 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Ajout du contrôle du son
-const soundContainer = document.querySelector('.sound-video');
-const soundBg = document.querySelector('.sound-bg');
-const soundHandle = document.querySelector('.sound-handle');
-const percentageText = document.querySelector('.pourcentage');
-let isDragging = false;
+// const soundContainer = document.querySelector('.sound-video');
+// const soundBg = document.querySelector('.sound-bg');
+// const soundHandle = document.querySelector('.sound-handle');
+// const percentageText = document.querySelector('.pourcentage');
+// let isDragging = false;
 
-// Fonction pour mettre à jour le volume
-const updateVolume = (e) => {
-  // Récupérer la position par rapport au sound-bg
-  const rect = soundBg.getBoundingClientRect();
-  const mouseY = e.clientY - rect.top;
-  const bgHeight = rect.height;
+// // Fonction pour mettre à jour le volume
+// const updateVolume = (e) => {
+//   // Récupérer la position par rapport au sound-bg
+//   const rect = soundBg.getBoundingClientRect();
+//   const mouseY = e.clientY - rect.top;
+//   const bgHeight = rect.height;
   
-  // Calcul du pourcentage depuis le haut
-  let percentage = Math.max(0, Math.min(100, (mouseY / bgHeight) * 100));
+//   // Calcul du pourcentage depuis le haut
+//   let percentage = Math.max(0, Math.min(100, (mouseY / bgHeight) * 100));
   
-  // Mise à jour de la position du handle depuis le haut
-  soundHandle.style.top = `${percentage}%`;
+//   // Mise à jour de la position du handle depuis le haut
+//   soundHandle.style.top = `${percentage}%`;
   
-  // Le volume est inversé (100% en bas, 0% en haut)
-  const volumePercentage = 100 - percentage;
+//   // Le volume est inversé (100% en bas, 0% en haut)
+//   const volumePercentage = 100 - percentage;
   
-  // Mise à jour du texte du pourcentage
-  percentageText.textContent = `${Math.round(volumePercentage)}%`;
+//   // Mise à jour du texte du pourcentage
+//   percentageText.textContent = `${Math.round(volumePercentage)}%`;
   
-  // Mise à jour du volume de la vidéo (0 à 1)
-  player.volume(volumePercentage / 100);
-};
+//   // Mise à jour du volume de la vidéo (0 à 1)
+//   player.volume(volumePercentage / 100);
+// };
 
-// Événement mousedown sur le handle
-soundHandle.addEventListener('mousedown', (e) => {
-  isDragging = true;
-  soundHandle.style.cursor = 'grabbing';
-  e.stopPropagation(); // Empêche la propagation au conteneur
-});
+// // Événement mousedown sur le handle
+// soundHandle.addEventListener('mousedown', (e) => {
+//   isDragging = true;
+//   soundHandle.style.cursor = 'grabbing';
+//   e.stopPropagation(); // Empêche la propagation au conteneur
+// });
 
-// Événement mousemove sur le document
-document.addEventListener('mousemove', (e) => {
-  if (isDragging) {
-    e.preventDefault();
-    updateVolume(e);
-  }
-});
+// // Événement mousemove sur le document
+// document.addEventListener('mousemove', (e) => {
+//   if (isDragging) {
+//     e.preventDefault();
+//     updateVolume(e);
+//   }
+// });
 
-// Événement mouseup sur le document
-document.addEventListener('mouseup', () => {
-  isDragging = false;
-  soundHandle.style.cursor = 'grab';
-});
+// // Événement mouseup sur le document
+// document.addEventListener('mouseup', () => {
+//   isDragging = false;
+//   soundHandle.style.cursor = 'grab';
+// });
 
-// Click direct sur le sound-bg
-soundBg.addEventListener('click', (e) => {
-  if (e.target === soundHandle) return;
-  updateVolume(e);
-});
+// // Click direct sur le sound-bg
+// soundBg.addEventListener('click', (e) => {
+//   if (e.target === soundHandle) return;
+//   updateVolume(e);
+// });
 
-// Initialiser le volume à 70% (donc handle à 30% depuis le haut)
-soundHandle.style.top = '30%';
-percentageText.textContent = '70%';
-player.volume(0.7);
+// // Initialiser le volume à 70% (donc handle à 30% depuis le haut)
+// soundHandle.style.top = '30%';
+// percentageText.textContent = '70%';
+// player.volume(0.7);
 
