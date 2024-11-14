@@ -1276,47 +1276,50 @@ document.addEventListener('DOMContentLoaded', () => {
 // player.volume(0.7);
 
 // Fonction pour gérer la transition de sortie
+// Fonction de transition de page
 function handlePageTransition(e) {
-  // Vérifier si le lien cliqué mène vers /projects
-  if (e.currentTarget.getAttribute('href').includes('/projects')) {
-    // e.preventDefault(); // Empêcher la navigation immédiate
+  e.preventDefault();
+  const targetUrl = e.currentTarget.href;
 
-    const prenom = document.querySelector('.prenom');
-    const nom = document.querySelector('.nom');
-    const nomStyle = window.getComputedStyle(nom);
-    const tl = gsap.timeline({
-      onComplete: () => {
-        // Rediriger vers la page après l'animation
-        window.location.href = e.currentTarget.href;
-      }
-    });
+  const prenom = document.querySelector('.prenom');
+  const nom = document.querySelector('.nom');
+  const overlayLoad = document.querySelector('.overlay-load');
+  
+  // Préparer l'overlay
+  gsap.set(overlayLoad, {
+    display: 'none',
+    opacity: 0
+  });
 
-    // Vérifier la position de .nom
-    if (nomStyle.position === 'absolute' && nomStyle.top === '0px') {
-      // Si .nom est en absolute top
-      tl.to([prenom, nom], {
-        y: -500,
-        duration: 0.8,
-        ease: "power3.inOut"
-      });
-    } else if (nomStyle.position === 'absolute' && nomStyle.bottom === '0px') {
-      // Si .nom est en absolute bottom
-      tl.to(prenom, {
-        y: -500,
-        duration: 0.8,
-        ease: "power3.inOut"
-      })
-      .to(nom, {
-        y: 500,
-        duration: 0.8,
-        ease: "power3.inOut"
-      }, "<"); // Animation simultanée
+  const tl = gsap.timeline({
+    onComplete: () => {
+      window.location.href = targetUrl;
     }
-  }
+  });
+
+  tl.to(nom, {
+    top: 0,
+    bottom: 'auto',
+    duration: 0.8,
+    ease: "power3.inOut"
+  })
+  .to([prenom, nom], {
+    y: -500,
+    duration: 0.8,
+    ease: "power3.inOut"
+  })
+  // Afficher l'overlay
+  .set(overlayLoad, {
+    display: 'block'
+  })
+  .to(overlayLoad, {
+    opacity: 1,
+    duration: 0.3,
+    ease: "power2.inOut"
+  });
 }
 
-// Ajouter l'écouteur d'événements aux liens vers /projects
-document.querySelectorAll('a[href*="/projects"]').forEach(link => {
+// Ajouter l'écouteur d'événements spécifiquement aux liens .link-to-project
+document.querySelectorAll('.link-to-project').forEach(link => {
   link.addEventListener('click', handlePageTransition);
 });
-

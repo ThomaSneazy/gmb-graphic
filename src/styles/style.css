@@ -2,6 +2,11 @@ body.loading {
   pointer-events: none;
   cursor: progress !important;
 }
+
+/* .prenom.is_project,
+.nom.is_project {
+  transform: translateY(-100%);
+} */
 /* .transition-main {
   transition-property: opacity, transform;
   transition-duration: 250ms;
