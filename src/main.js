@@ -483,10 +483,11 @@ navLinks.forEach(link => {
           duration: 1,
           ease: "power3.inOut"
         })
-        .set(listWrapper, { display: 'flex' })
+        .set(listWrapper, { display: 'none', height: '100vh' })
         .to(listWrapper, {
+          display: 'flex',
           opacity: 1,
-          height: '100vh',
+          // height: '100vh',
           duration: 0.8
         })
         .to(linkWrapperNom, {
@@ -1179,7 +1180,9 @@ navLinks.forEach(link => {
     // Ajouter le hash correspondant
     if (link.classList.contains('grid')) {
       window.location.hash = '';
-      resetFilters(); // Réinitialiser les filtres quand on retourne à la grille
+      // setTimeout(() => {
+      //   resetFilters(); // Réinitialiser les filtres quand on retourne à la grille
+      // }, 2000);
     } else if (link.classList.contains('list')) {
       window.location.hash = 'list';
     } else if (link.classList.contains('info')) {
@@ -1271,4 +1274,49 @@ document.addEventListener('DOMContentLoaded', () => {
 // soundHandle.style.top = '30%';
 // percentageText.textContent = '70%';
 // player.volume(0.7);
+
+// Fonction pour gérer la transition de sortie
+function handlePageTransition(e) {
+  // Vérifier si le lien cliqué mène vers /projects
+  if (e.currentTarget.getAttribute('href').includes('/projects')) {
+    // e.preventDefault(); // Empêcher la navigation immédiate
+
+    const prenom = document.querySelector('.prenom');
+    const nom = document.querySelector('.nom');
+    const nomStyle = window.getComputedStyle(nom);
+    const tl = gsap.timeline({
+      onComplete: () => {
+        // Rediriger vers la page après l'animation
+        window.location.href = e.currentTarget.href;
+      }
+    });
+
+    // Vérifier la position de .nom
+    if (nomStyle.position === 'absolute' && nomStyle.top === '0px') {
+      // Si .nom est en absolute top
+      tl.to([prenom, nom], {
+        y: -500,
+        duration: 0.8,
+        ease: "power3.inOut"
+      });
+    } else if (nomStyle.position === 'absolute' && nomStyle.bottom === '0px') {
+      // Si .nom est en absolute bottom
+      tl.to(prenom, {
+        y: -500,
+        duration: 0.8,
+        ease: "power3.inOut"
+      })
+      .to(nom, {
+        y: 500,
+        duration: 0.8,
+        ease: "power3.inOut"
+      }, "<"); // Animation simultanée
+    }
+  }
+}
+
+// Ajouter l'écouteur d'événements aux liens vers /projects
+document.querySelectorAll('a[href*="/projects"]').forEach(link => {
+  link.addEventListener('click', handlePageTransition);
+});
 
