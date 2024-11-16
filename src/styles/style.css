@@ -3,6 +3,23 @@ body.loading {
   cursor: progress !important;
 }
 
+/* .link__wrapper.is-filter {
+  opacity: 0;
+  display: none;
+  transform: translateY(-20%);
+} */
+
+/* .page-wrapper {
+  overflow-y: auto;
+  height: 100vh;
+  scroll-behavior: smooth;
+}
+
+body {
+  overflow: hidden;
+  margin: 0;
+} */
+
 /* .prenom.is_project,
 .nom.is_project {
   transform: translateY(-100%);
