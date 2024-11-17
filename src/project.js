@@ -152,10 +152,11 @@ const setupSmoothScroll = () => {
     smooth: true,
     smoothTouch: false,
     touchMultiplier: 2,
-    infinite: true
+    infinite: false,
+    wrapper: document.querySelector('.infinite-content'),
+    content: document.querySelector('.page-wrapper')
   })
 
-  // Intégration de Lenis avec GSAP
   function raf(time) {
     lenis.raf(time)
     requestAnimationFrame(raf)
@@ -169,6 +170,6 @@ window.addEventListener('load', () => {
   addTooltipListeners(document)
   addNavigationListeners(document)
   playPageAnimation()
-  setupSmoothScroll() // Remplacer setupInfiniteScroll par setupSmoothScroll
+  setupSmoothScroll()
 })
 
