@@ -154,22 +154,13 @@ const setupInfiniteScroll = () => {
   const pageWrapper = document.querySelector('.infinite-wrapper');
   const content = document.querySelector('.page-wrapper');
   
-  // Positionner le wrapper correctement
-  pageWrapper.style.height = '100vh';
-  pageWrapper.style.overflow = 'auto';
-  
   const contentClone = content.cloneNode(true);
   
   // Ajouter les event listeners aux éléments clonés
   addTooltipListeners(contentClone);
   addNavigationListeners(contentClone);
   
-  // Ajouter le clone immédiatement
   pageWrapper.appendChild(contentClone);
-  
-  // Positionner le scroll au milieu pour éviter le trou blanc
-  const halfHeight = pageWrapper.scrollHeight / 4;
-  window.scrollTo(0, halfHeight);
 
   // Gérer le scroll
   let scrollPos = 0;
