@@ -664,7 +664,52 @@ navLinks.forEach(link => {
                   link.style.pointerEvents = 'auto';
                 });
 
-                // Reste du code desktop inchangé...
+                // Configuration desktop
+                gsap.set(listItems, {
+                  opacity: 0.4
+                });
+
+                gsap.set(imgItems, {
+                  opacity: 0
+                });
+
+                // Activer le premier élément
+                if (listItems[0]) {
+                  listItems[0].classList.add('active');
+                  gsap.to(listItems[0], { opacity: 1, duration: 0 });
+
+                  const firstProjectId = listItems[0].getAttribute('data-list-project');
+                  const firstImg = document.querySelector(`.list__link__img__item[data-list-project="${firstProjectId}"]`);
+                  if (firstImg) {
+                    firstImg.classList.add('active');
+                    gsap.to(firstImg, { opacity: 1, duration: 0 });
+                  }
+                }
+
+                // Gérer les interactions de survol
+                listItems.forEach(item => {
+                  item.addEventListener('mouseenter', () => {
+                    const projectId = item.getAttribute('data-list-project');
+
+                    listItems.forEach(otherItem => {
+                      otherItem.classList.remove('active');
+                      gsap.to(otherItem, { opacity: 0.4, duration: 0 });
+                    });
+                    imgItems.forEach(img => {
+                      img.classList.remove('active');
+                      gsap.to(img, { opacity: 0, duration: 0 });
+                    });
+
+                    item.classList.add('active');
+                    gsap.to(item, { opacity: 1, duration: 0 });
+
+                    const correspondingImg = document.querySelector(`.list__link__img__item[data-list-project="${projectId}"]`);
+                    if (correspondingImg) {
+                      correspondingImg.classList.add('active');
+                      gsap.to(correspondingImg, { opacity: 1, duration: 0 });
+                    }
+                  });
+                });
               }
             }
             initializeListView();
