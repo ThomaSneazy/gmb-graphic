@@ -979,14 +979,23 @@ let player;
 
 if (videoGrids.length > 0) {
   if (window.innerWidth > 991) {
-    // Garder toute la configuration desktop existante intacte
+    // GARDER TOUT LE CODE DESKTOP EXISTANT INTACT
     player = videojs('my-video', {
       controls: true,
       autoplay: false,
       preload: 'auto'
     });
 
-    // Tout le code desktop existant reste inchangé...
+    const bigPlayButton = player.getChild('BigPlayButton');
+
+    player.on('play', () => {
+      bigPlayButton.el().textContent = '⏸';
+    });
+
+    player.on('pause', () => {
+      bigPlayButton.el().textContent = '▶';
+    });
+
     videoGrids.forEach(videoGrid => {
       videoGrid.autoplay = false;
       videoGrid.muted = true;
@@ -1003,7 +1012,7 @@ if (videoGrids.length > 0) {
       videoGrid.addEventListener('click', playFullVideo);
     });
   } else {
-    // Uniquement pour mobile
+    // AJOUTER UNIQUEMENT CETTE PARTIE POUR MOBILE
     const mobileVideo = document.createElement('video');
     mobileVideo.src = videoGrids[0].src;
     mobileVideo.controls = true;
@@ -1033,7 +1042,6 @@ if (videoGrids.length > 0) {
       mobileVideo.style.display = 'none';
     });
 
-    // Fermeture au tap
     mobileVideo.addEventListener('click', () => {
       mobileVideo.style.display = 'none';
       mobileVideo.pause();
@@ -1041,14 +1049,183 @@ if (videoGrids.length > 0) {
   }
 }
 
-const bigPlayButton = player.getChild('BigPlayButton');
+const closeVideo = document.querySelector('.close-video');
+let mouseTimer;
 
-player.on('play', () => {
-  bigPlayButton.el().textContent = '⏸';
+gsap.set(closeVideo, {
+  opacity: 0,
+  display: 'none'
 });
 
-player.on('pause', () => {
-  bigPlayButton.el().textContent = '▶';
+const hideCloseButton = () => {
+  gsap.to([closeVideo, soundVideo], {
+    opacity: 0,
+    duration: 0.3,
+    onComplete: () => {
+      gsap.set([closeVideo, soundVideo], { display: 'none' });
+    }
+  });
+};
+
+videoShowreel.addEventListener('mousemove', () => {
+  gsap.set([closeVideo, soundVideo], { display: 'flex' });
+  gsap.to([closeVideo, soundVideo], {
+    opacity: 1,
+    duration: 0.3
+  });
+
+  clearTimeout(mouseTimer);
+  mouseTimer = setTimeout(() => {
+    gsap.to([closeVideo, soundVideo], {
+      opacity: 0,
+      duration: 0.3,
+      onComplete: () => {
+        gsap.set([closeVideo, soundVideo], { display: 'none' });
+      }
+    });
+  }, 2300);
+});
+
+videoShowreel.addEventListener('mouseleave', hideCloseButton);
+
+// Ajouter l'écouteur d'événement pour la fin de la vidéo
+player.on('ended', () => {
+  closeVideoWithAnimation();
+});
+
+// Fonction pour fermer la vidéo avec animation
+const closeVideoWithAnimation = () => {
+  const tl = gsap.timeline({
+    defaults: {
+      ease: "power3.inOut",
+      duration: 1
+    }
+  });
+
+  tl.to([videoJs, soundVideo], {
+    opacity: 0,
+    duration: 0.4,
+    onComplete: () => {
+      player.pause();
+      gsap.set([videoJs, soundVideo], { display: 'none' });
+    }
+  })
+  .to(closeVideo, {
+    opacity: 0,
+    duration: 0.3,
+    onComplete: () => {
+      gsap.set(closeVideo, { display: 'none' });
+    }
+  })
+  .to(videoShowreel, {
+    height: '1%',
+    duration: 1
+  }, "-=0.2")
+  .to(videoShowreel, {
+    width: '0%',
+    height: '0%',
+    onComplete: () => {
+      gsap.set(videoShowreel, { display: 'none' });
+    }
+  });
+};
+
+// Gestionnaire pour le bouton close
+closeVideo.addEventListener('click', closeVideoWithAnimation);
+
+// Gestionnaire pour la touche Échap
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && videoShowreel.style.display !== 'none') {
+    closeVideoWithAnimation();
+  }
+});
+
+let controlsTimer;
+
+// Ajouter une fonction pour gérer l'affichage des contrôles selon la taille d'écran
+function updateControlsVisibility() {
+  const closeVideo = document.querySelector('.close-video');
+  const soundVideo = document.querySelector('.sound-video');
+
+  if (window.innerWidth <= 991) {
+    // Version mobile
+    player.controlBar.hide();
+    videoShowreel.style.cursor = 'none';
+    
+    // Garder le bouton ESC toujours visible
+    gsap.set(closeVideo, {
+      display: 'flex',
+      opacity: 1
+    });
+    
+    // Cacher les contrôles de son
+    gsap.set(soundVideo, {
+      display: 'none',
+      opacity: 0
+    });
+  } else {
+    // Version desktop - revenir au comportement normal
+    gsap.set([closeVideo, soundVideo], {
+      opacity: 0,
+      display: 'none'
+    });
+
+    videoShowreel.addEventListener('mousemove', () => {
+      // Afficher les contrôles et le curseur
+      player.controlBar.show();
+      videoShowreel.style.cursor = 'default';
+
+      gsap.set([closeVideo, soundVideo], { 
+        display: 'flex' 
+      });
+      gsap.to([closeVideo, soundVideo], {
+        opacity: 1,
+        duration: 0.3
+      });
+
+      // Réinitialiser le timer à chaque mouvement
+      clearTimeout(controlsTimer);
+      controlsTimer = setTimeout(() => {
+        player.controlBar.hide();
+        videoShowreel.style.cursor = 'none';
+        gsap.to([closeVideo, soundVideo], {
+          opacity: 0,
+          duration: 0.3,
+          onComplete: () => {
+            gsap.set([closeVideo, soundVideo], { 
+              display: 'none' 
+            });
+          }
+        });
+      }, 2300);
+    });
+  }
+}
+
+// Appeler la fonction au chargement et au redimensionnement
+updateControlsVisibility();
+window.addEventListener('resize', updateControlsVisibility);
+
+// Modifier l'événement mouseleave pour ne s'appliquer qu'en desktop
+videoShowreel.addEventListener('mouseleave', () => {
+  if (window.innerWidth > 991) {
+    player.controlBar.hide();
+    videoShowreel.style.cursor = 'default';
+    clearTimeout(controlsTimer);
+  }
+});
+
+// Ajouter un gestionnaire d'événements pour la touche espace
+document.addEventListener('keydown', (e) => {
+  // Vérifier si la vidéo est visible et si c'est la touche espace
+  if (e.code === 'Space' && videoShowreel.style.display !== 'none') {
+    e.preventDefault(); // Empêcher le défilement de la page
+    if (player.paused()) {
+      player.play();
+    } else {
+      player.pause();
+    }
+  }
 });
 
 // Ajout du système de filtrage par catégorie
