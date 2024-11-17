@@ -143,8 +143,6 @@ const addTooltipListeners = (element) => {
 
 // Mise à jour de setupInfiniteScroll
 const setupInfiniteScroll = () => {
-  if (window.innerWidth <= 991) return;
-
   const pageWrapper = document.querySelector('.infinite-wrapper');
   const section = document.querySelector('.section');
   const nameWrapper = document.querySelector('.name-prenom__wrapper');
@@ -155,56 +153,34 @@ const setupInfiniteScroll = () => {
   // Ajouter les event listeners aux éléments clonés
   addTooltipListeners(sectionClone);
   addTooltipListeners(nameWrapperClone);
-  addNavigationListeners(sectionClone);
-  addNavigationListeners(nameWrapperClone);
+  addNavigationListeners(sectionClone);  // Ajout des listeners de navigation
+  addNavigationListeners(nameWrapperClone);  // Ajout des listeners de navigation
   
   pageWrapper.appendChild(nameWrapperClone);
   pageWrapper.appendChild(sectionClone);
 
+  // Gérer le scroll
+  let scrollPos = 0;
   const totalHeight = pageWrapper.scrollHeight / 2;
-  let isScrolling = false;
 
   window.addEventListener('scroll', () => {
-    if (isScrolling) return;
-    
     const currentScroll = window.scrollY;
     
     if (currentScroll >= totalHeight) {
-      isScrolling = true;
-      window.scrollTo({
-        top: 1,
-        behavior: 'instant' // Utilisation de 'instant' au lieu de 'auto' pour éviter les saccades
-      });
-      isScrolling = false;
+      window.scrollTo(0, 1); // Retour en haut avec un petit offset
+      scrollPos = 1;
     } else if (currentScroll <= 0) {
-      isScrolling = true;
-      window.scrollTo({
-        top: totalHeight - 1,
-        behavior: 'instant'
-      });
-      isScrolling = false;
+      window.scrollTo(0, totalHeight - 1); // Aller en bas avec un petit offset
+      scrollPos = totalHeight - 1;
     }
   });
 }
 
-// Mise à jour de l'initialisation pour gérer le redimensionnement
+// Initialisation
 window.addEventListener('load', () => {
   addTooltipListeners(document);
-  addNavigationListeners(document);
+  addNavigationListeners(document);  // Ajout des listeners de navigation initiaux
   playPageAnimation();
-  
-  // Configuration initiale du scroll infini
   setupInfiniteScroll();
-  
-  // Réinitialiser lors du redimensionnement
-  window.addEventListener('resize', () => {
-    // Supprimer les clones si la largeur est <= 991px
-    if (window.innerWidth <= 991) {
-      const clones = document.querySelectorAll('.section:not(:first-child), .name-prenom__wrapper:not(:first-child)');
-      clones.forEach(clone => clone.remove());
-    } else {
-      setupInfiniteScroll();
-    }
-  });
-});
+})
 
