@@ -143,6 +143,9 @@ const addTooltipListeners = (element) => {
 
 // Mise à jour de setupInfiniteScroll
 const setupInfiniteScroll = () => {
+  // Vérifier si la largeur de l'écran est supérieure à 991px
+  if (window.innerWidth <= 991) return;
+
   const pageWrapper = document.querySelector('.infinite-wrapper');
   const section = document.querySelector('.section');
   const nameWrapper = document.querySelector('.name-prenom__wrapper');
@@ -176,11 +179,24 @@ const setupInfiniteScroll = () => {
   });
 }
 
-// Initialisation
+// Mise à jour de l'initialisation pour gérer le redimensionnement
 window.addEventListener('load', () => {
   addTooltipListeners(document);
-  addNavigationListeners(document);  // Ajout des listeners de navigation initiaux
+  addNavigationListeners(document);
   playPageAnimation();
+  
+  // Configuration initiale du scroll infini
   setupInfiniteScroll();
-})
+  
+  // Réinitialiser lors du redimensionnement
+  window.addEventListener('resize', () => {
+    // Supprimer les clones si la largeur est <= 991px
+    if (window.innerWidth <= 991) {
+      const clones = document.querySelectorAll('.section:not(:first-child), .name-prenom__wrapper:not(:first-child)');
+      clones.forEach(clone => clone.remove());
+    } else {
+      setupInfiniteScroll();
+    }
+  });
+});
 

@@ -1,4 +1,4 @@
-import { log } from 'three/webgpu';
+// import { log } from 'three/webgpu';
 import './styles/style.css'
 import gsap from 'gsap'
 // import barba from '@barba/core'
