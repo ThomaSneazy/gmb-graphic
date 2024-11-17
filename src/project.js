@@ -143,63 +143,37 @@ const addTooltipListeners = (element) => {
 
 // Mise à jour de setupInfiniteScroll
 const setupInfiniteScroll = () => {
-  // Nettoyer d'abord les clones existants
-  const clones = document.querySelectorAll('.page-wrapper:nth-child(n+2)');
-  clones.forEach(clone => clone.remove());
-
-  // Si on est en mobile, on s'arrête ici
-  if (window.innerWidth <= 991) return;
-
   const pageWrapper = document.querySelector('.infinite-wrapper');
-  const content = document.querySelector('.page-wrapper');
-  
-  // S'assurer que le contenu original est visible
-  content.style.display = 'block';
-  
-  // Créer les clones et les ajouter immédiatement après l'original
-  const numberOfClones = 3;
-  const cloneElements = [];
-  
-  for (let i = 0; i < numberOfClones; i++) {
-    const clone = content.cloneNode(true);
-    clone.style.display = 'block'; // S'assurer que les clones sont visibles
-    addTooltipListeners(clone);
-    addNavigationListeners(clone);
-    pageWrapper.appendChild(clone);
-    cloneElements.push(clone);
-  }
+  const section = document.querySelector('.section');
+  const nameWrapper = document.querySelector('.name-prenom__wrapper');
 
-  // Calculer la hauteur d'une section
-  const sectionHeight = content.offsetHeight;
-  let lastScrollTop = window.scrollY;
-  let isScrolling = false;
+  const sectionClone = section.cloneNode(true);
+  const nameWrapperClone = nameWrapper.cloneNode(true);
+  
+  // Ajouter les event listeners aux éléments clonés
+  addTooltipListeners(sectionClone);
+  addTooltipListeners(nameWrapperClone);
+  addNavigationListeners(sectionClone);  // Ajout des listeners de navigation
+  addNavigationListeners(nameWrapperClone);  // Ajout des listeners de navigation
+  
+  pageWrapper.appendChild(nameWrapperClone);
+  pageWrapper.appendChild(sectionClone);
+
+  // Gérer le scroll
+  let scrollPos = 0;
+  const totalHeight = pageWrapper.scrollHeight / 2;
 
   window.addEventListener('scroll', () => {
-    if (!isScrolling) {
-      window.requestAnimationFrame(() => {
-        const scrollTop = window.scrollY;
-        const totalHeight = sectionHeight * numberOfClones;
-
-        // Déterminer la direction du scroll
-        const scrollingDown = scrollTop > lastScrollTop;
-        
-        if (scrollTop >= sectionHeight * 2) {
-          // Revenir au premier tiers quand on scroll vers le bas
-          window.scrollTo(0, scrollTop - sectionHeight);
-        } else if (scrollTop <= sectionHeight / 2) {
-          // Aller au deuxième tiers quand on scroll vers le haut
-          window.scrollTo(0, scrollTop + sectionHeight);
-        }
-
-        lastScrollTop = window.scrollY;
-        isScrolling = false;
-      });
+    const currentScroll = window.scrollY;
+    
+    if (currentScroll >= totalHeight) {
+      window.scrollTo(0, 1); // Retour en haut avec un petit offset
+      scrollPos = 1;
+    } else if (currentScroll <= 0) {
+      window.scrollTo(0, totalHeight - 1); // Aller en bas avec un petit offset
+      scrollPos = totalHeight - 1;
     }
-    isScrolling = true;
   });
-
-  // Position initiale au milieu du premier clone
-  window.scrollTo(0, sectionHeight);
 }
 
 // Initialisation
@@ -208,8 +182,5 @@ window.addEventListener('load', () => {
   addNavigationListeners(document);  // Ajout des listeners de navigation initiaux
   playPageAnimation();
   setupInfiniteScroll();
-
-  // Ajouter l'écouteur de redimensionnement
-  window.addEventListener('resize', setupInfiniteScroll);
 })
 
