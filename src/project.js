@@ -143,6 +143,14 @@ const addTooltipListeners = (element) => {
 
 // Mise à jour de setupInfiniteScroll
 const setupInfiniteScroll = () => {
+  // Vérifier si la largeur de l'écran est inférieure ou égale à 991px
+  if (window.innerWidth <= 991) {
+    // Supprimer les clones existants s'il y en a
+    const clones = document.querySelectorAll('.section:not(:first-child), .name-prenom__wrapper:not(:first-child)');
+    clones.forEach(clone => clone.remove());
+    return;
+  }
+
   const pageWrapper = document.querySelector('.infinite-wrapper');
   const section = document.querySelector('.section');
   const nameWrapper = document.querySelector('.name-prenom__wrapper');
@@ -182,5 +190,8 @@ window.addEventListener('load', () => {
   addNavigationListeners(document);  // Ajout des listeners de navigation initiaux
   playPageAnimation();
   setupInfiniteScroll();
+
+  // Ajouter l'écouteur de redimensionnement
+  window.addEventListener('resize', setupInfiniteScroll);
 })
 
