@@ -143,7 +143,6 @@ const addTooltipListeners = (element) => {
 
 // Mise à jour de setupInfiniteScroll
 const setupInfiniteScroll = () => {
-  // Vérifier si la largeur de l'écran est supérieure à 991px
   if (window.innerWidth <= 991) return;
 
   const pageWrapper = document.querySelector('.infinite-wrapper');
@@ -156,25 +155,34 @@ const setupInfiniteScroll = () => {
   // Ajouter les event listeners aux éléments clonés
   addTooltipListeners(sectionClone);
   addTooltipListeners(nameWrapperClone);
-  addNavigationListeners(sectionClone);  // Ajout des listeners de navigation
-  addNavigationListeners(nameWrapperClone);  // Ajout des listeners de navigation
+  addNavigationListeners(sectionClone);
+  addNavigationListeners(nameWrapperClone);
   
   pageWrapper.appendChild(nameWrapperClone);
   pageWrapper.appendChild(sectionClone);
 
-  // Gérer le scroll
-  let scrollPos = 0;
   const totalHeight = pageWrapper.scrollHeight / 2;
+  let isScrolling = false;
 
   window.addEventListener('scroll', () => {
+    if (isScrolling) return;
+    
     const currentScroll = window.scrollY;
     
     if (currentScroll >= totalHeight) {
-      window.scrollTo(0, 1); // Retour en haut avec un petit offset
-      scrollPos = 1;
+      isScrolling = true;
+      window.scrollTo({
+        top: 1,
+        behavior: 'instant' // Utilisation de 'instant' au lieu de 'auto' pour éviter les saccades
+      });
+      isScrolling = false;
     } else if (currentScroll <= 0) {
-      window.scrollTo(0, totalHeight - 1); // Aller en bas avec un petit offset
-      scrollPos = totalHeight - 1;
+      isScrolling = true;
+      window.scrollTo({
+        top: totalHeight - 1,
+        behavior: 'instant'
+      });
+      isScrolling = false;
     }
   });
 }
