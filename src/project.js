@@ -142,7 +142,7 @@ const addTooltipListeners = (element) => {
   });
 };
 
-// Remplacer setupInfiniteScroll par la nouvelle configuration Lenis
+// Configuration simple de Lenis pour le smooth scroll
 const setupSmoothScroll = () => {
   const lenis = new Lenis({
     duration: 1.2,
@@ -151,10 +151,7 @@ const setupSmoothScroll = () => {
     gestureDirection: 'vertical',
     smooth: true,
     smoothTouch: false,
-    touchMultiplier: 2,
-    infinite: false,
-    wrapper: document.querySelector('.infinite-content'),
-    content: document.querySelector('.page-wrapper')
+    touchMultiplier: 2
   })
 
   function raf(time) {
@@ -165,11 +162,45 @@ const setupSmoothScroll = () => {
   requestAnimationFrame(raf)
 }
 
-// Mise à jour de l'initialisation
+// Fonction pour gérer les hovers des projets
+const setupProjectHover = () => {
+  const btnItems = document.querySelectorAll('.list-project__btn.last .list-project__btn-item')
+  const imgItems = document.querySelectorAll('.list-project__img .list-project__img-item')
+  
+  // Mettre toutes les images en opacity 0 par défaut
+  imgItems.forEach(img => {
+    gsap.set(img, { opacity: 0 })
+  })
+
+  btnItems.forEach(btn => {
+    btn.addEventListener('mouseenter', () => {
+      const projectName = btn.getAttribute('data-name-project')
+      
+      // Trouver l'image correspondante
+      const matchingImg = document.querySelector(`.list-project__img-item[data-name-project="${projectName}"]`)
+      if (matchingImg) {
+        gsap.set(matchingImg, { opacity: 1 })
+      }
+    })
+
+    btn.addEventListener('mouseleave', () => {
+      const projectName = btn.getAttribute('data-name-project')
+      
+      // Trouver l'image correspondante
+      const matchingImg = document.querySelector(`.list-project__img-item[data-name-project="${projectName}"]`)
+      if (matchingImg) {
+        gsap.set(matchingImg, { opacity: 0 })
+      }
+    })
+  })
+}
+
+// Initialisation
 window.addEventListener('load', () => {
   addTooltipListeners(document)
   addNavigationListeners(document)
   playPageAnimation()
   setupSmoothScroll()
+  setupProjectHover()
 })
 
