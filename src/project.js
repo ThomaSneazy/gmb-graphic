@@ -144,7 +144,7 @@ const addTooltipListeners = (element) => {
 // Mise à jour de setupInfiniteScroll
 const setupInfiniteScroll = () => {
   // Nettoyer d'abord les clones existants
-  const clones = document.querySelectorAll('.section:nth-child(n+2), .name-prenom__wrapper:nth-child(n+2)');
+  const clones = document.querySelectorAll('.page-wrapper:nth-child(n+2)');
   clones.forEach(clone => clone.remove());
 
   // Si on est en mobile, on s'arrête ici
@@ -152,20 +152,15 @@ const setupInfiniteScroll = () => {
 
   // Sinon, on met en place le scroll infini
   const pageWrapper = document.querySelector('.infinite-wrapper');
-  const section = document.querySelector('.section');
-  const nameWrapper = document.querySelector('.name-prenom__wrapper');
-
-  const sectionClone = section.cloneNode(true);
-  const nameWrapperClone = nameWrapper.cloneNode(true);
+  const content = document.querySelector('.page-wrapper');
+  
+  const contentClone = content.cloneNode(true);
   
   // Ajouter les event listeners aux éléments clonés
-  addTooltipListeners(sectionClone);
-  addTooltipListeners(nameWrapperClone);
-  addNavigationListeners(sectionClone);
-  addNavigationListeners(nameWrapperClone);
+  addTooltipListeners(contentClone);
+  addNavigationListeners(contentClone);
   
-  pageWrapper.appendChild(nameWrapperClone);
-  pageWrapper.appendChild(sectionClone);
+  pageWrapper.appendChild(contentClone);
 
   // Gérer le scroll
   let scrollPos = 0;
@@ -175,10 +170,10 @@ const setupInfiniteScroll = () => {
     const currentScroll = window.scrollY;
     
     if (currentScroll >= totalHeight) {
-      window.scrollTo(0, 1); // Retour en haut avec un petit offset
+      window.scrollTo(0, 1);
       scrollPos = 1;
     } else if (currentScroll <= 0) {
-      window.scrollTo(0, totalHeight - 1); // Aller en bas avec un petit offset
+      window.scrollTo(0, totalHeight - 1);
       scrollPos = totalHeight - 1;
     }
   });
