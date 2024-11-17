@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 import glsl from 'vite-plugin-glsl';
+import { resolve } from 'path'
 
-// vite.config.js
 export default defineConfig({
   plugins: [glsl()],
   server: {
@@ -18,8 +18,13 @@ export default defineConfig({
     manifest: true,
     rollupOptions: {
       input: {
-        main: './index.html',
-        project: './project.html'
+        main: resolve(__dirname, 'index.html'),
+        project: resolve(__dirname, 'src/project.js')
+      },
+      output: {
+        entryFileNames: '[name].js',
+        chunkFileNames: '[name]-[hash].js',
+        assetFileNames: '[name]-[hash][extname]'
       }
     }
   },
