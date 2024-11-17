@@ -97,6 +97,8 @@ const addTooltipListeners = (element) => {
         tooltipText = 'ENJOY ☻';
       } else if (el.classList.contains('next')) {
         tooltipText = 'Next Work';
+      } else if (el.classList.contains('last')) {
+        tooltipText = 'Next Work';
       } else {
         tooltipText = el.dataset.tooltip;
       }
