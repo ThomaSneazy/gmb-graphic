@@ -153,39 +153,52 @@ const setupInfiniteScroll = () => {
   const pageWrapper = document.querySelector('.infinite-wrapper');
   const content = document.querySelector('.page-wrapper');
   
-  // Créer trois clones pour une transition plus fluide
-  for (let i = 0; i < 3; i++) {
-    const contentClone = content.cloneNode(true);
-    addTooltipListeners(contentClone);
-    addNavigationListeners(contentClone);
-    pageWrapper.appendChild(contentClone);
+  // S'assurer que le contenu original est visible
+  content.style.display = 'block';
+  
+  // Créer les clones et les ajouter immédiatement après l'original
+  const numberOfClones = 3;
+  const cloneElements = [];
+  
+  for (let i = 0; i < numberOfClones; i++) {
+    const clone = content.cloneNode(true);
+    clone.style.display = 'block'; // S'assurer que les clones sont visibles
+    addTooltipListeners(clone);
+    addNavigationListeners(clone);
+    pageWrapper.appendChild(clone);
+    cloneElements.push(clone);
   }
 
   // Calculer la hauteur d'une section
   const sectionHeight = content.offsetHeight;
+  let lastScrollTop = window.scrollY;
   let isScrolling = false;
 
   window.addEventListener('scroll', () => {
     if (!isScrolling) {
       window.requestAnimationFrame(() => {
-        const currentScroll = window.scrollY;
-        const maxScroll = sectionHeight * 2;
+        const scrollTop = window.scrollY;
+        const totalHeight = sectionHeight * numberOfClones;
 
-        if (currentScroll >= maxScroll) {
-          // Revenir au premier tiers
-          window.scrollTo(0, currentScroll - sectionHeight);
-        } else if (currentScroll <= 0) {
-          // Aller au deuxième tiers
-          window.scrollTo(0, currentScroll + sectionHeight);
+        // Déterminer la direction du scroll
+        const scrollingDown = scrollTop > lastScrollTop;
+        
+        if (scrollTop >= sectionHeight * 2) {
+          // Revenir au premier tiers quand on scroll vers le bas
+          window.scrollTo(0, scrollTop - sectionHeight);
+        } else if (scrollTop <= sectionHeight / 2) {
+          // Aller au deuxième tiers quand on scroll vers le haut
+          window.scrollTo(0, scrollTop + sectionHeight);
         }
 
+        lastScrollTop = window.scrollY;
         isScrolling = false;
       });
     }
     isScrolling = true;
   });
 
-  // Position initiale au milieu
+  // Position initiale au milieu du premier clone
   window.scrollTo(0, sectionHeight);
 }
 
