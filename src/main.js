@@ -1156,27 +1156,77 @@ if (videoGrids.length > 0) {
 
   let controlsTimer;
 
-  // Ajouter une classe pour gérer le curseur
-  videoShowreel.style.cursor = 'default';
+  // Ajouter une fonction pour gérer l'affichage des contrôles selon la taille d'écran
+  function updateControlsVisibility() {
+    const closeVideo = document.querySelector('.close-video');
+    const soundVideo = document.querySelector('.sound-video');
 
-  videoShowreel.addEventListener('mousemove', () => {
-    // Afficher les contrôles et le curseur
-    player.controlBar.show();
-    videoShowreel.style.cursor = 'default';
-
-    // Réinitialiser le timer à chaque mouvement
-    clearTimeout(controlsTimer);
-    controlsTimer = setTimeout(() => {
+    if (window.innerWidth <= 991) {
+      // Version mobile
       player.controlBar.hide();
-      videoShowreel.style.cursor = 'none'; // Cacher le curseur
-    }, 2300);
-  });
+      videoShowreel.style.cursor = 'none';
+      
+      // Garder le bouton ESC toujours visible
+      gsap.set(closeVideo, {
+        display: 'flex',
+        opacity: 1
+      });
+      
+      // Cacher les contrôles de son
+      gsap.set(soundVideo, {
+        display: 'none',
+        opacity: 0
+      });
+    } else {
+      // Version desktop - revenir au comportement normal
+      gsap.set([closeVideo, soundVideo], {
+        opacity: 0,
+        display: 'none'
+      });
 
-  // Cacher les contrôles et le curseur quand la souris quitte la zone
+      videoShowreel.addEventListener('mousemove', () => {
+        // Afficher les contrôles et le curseur
+        player.controlBar.show();
+        videoShowreel.style.cursor = 'default';
+
+        gsap.set([closeVideo, soundVideo], { 
+          display: 'flex' 
+        });
+        gsap.to([closeVideo, soundVideo], {
+          opacity: 1,
+          duration: 0.3
+        });
+
+        // Réinitialiser le timer à chaque mouvement
+        clearTimeout(controlsTimer);
+        controlsTimer = setTimeout(() => {
+          player.controlBar.hide();
+          videoShowreel.style.cursor = 'none';
+          gsap.to([closeVideo, soundVideo], {
+            opacity: 0,
+            duration: 0.3,
+            onComplete: () => {
+              gsap.set([closeVideo, soundVideo], { 
+                display: 'none' 
+              });
+            }
+          });
+        }, 2300);
+      });
+    }
+  }
+
+  // Appeler la fonction au chargement et au redimensionnement
+  updateControlsVisibility();
+  window.addEventListener('resize', updateControlsVisibility);
+
+  // Modifier l'événement mouseleave pour ne s'appliquer qu'en desktop
   videoShowreel.addEventListener('mouseleave', () => {
-    player.controlBar.hide();
-    videoShowreel.style.cursor = 'default';
-    clearTimeout(controlsTimer);
+    if (window.innerWidth > 991) {
+      player.controlBar.hide();
+      videoShowreel.style.cursor = 'default';
+      clearTimeout(controlsTimer);
+    }
   });
 
   // Ajouter un gestionnaire d'événements pour la touche espace
