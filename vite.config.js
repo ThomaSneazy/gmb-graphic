@@ -11,22 +11,16 @@ export default defineConfig({
       host: 'localhost',
       protocol: 'ws',
     },
+    open: true
   },
   build: {
     minify: true,
     manifest: true,
     rollupOptions: {
-      input: './src/main.js',
-      output: {
-        format: 'umd',
-        entryFileNames: 'main.js',
-        esModule: false,
-        compact: true,
-        globals: {
-          jquery: '$',
-        },
-      },
-      external: ['jquery'],
-    },
+      input: {
+        main: './index.html',
+        project: './project.html'
+      }
+    }
   },
 })
