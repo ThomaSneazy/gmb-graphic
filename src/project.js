@@ -143,14 +143,14 @@ const addTooltipListeners = (element) => {
 
 // Mise à jour de setupInfiniteScroll
 const setupInfiniteScroll = () => {
-  // Vérifier si la largeur de l'écran est inférieure ou égale à 991px
-  if (window.innerWidth <= 991) {
-    // Supprimer les clones existants s'il y en a
-    const clones = document.querySelectorAll('.section:not(:first-child), .name-prenom__wrapper:not(:first-child)');
-    clones.forEach(clone => clone.remove());
-    return;
-  }
+  // Nettoyer d'abord les clones existants
+  const clones = document.querySelectorAll('.section:nth-child(n+2), .name-prenom__wrapper:nth-child(n+2)');
+  clones.forEach(clone => clone.remove());
 
+  // Si on est en mobile, on s'arrête ici
+  if (window.innerWidth <= 991) return;
+
+  // Sinon, on met en place le scroll infini
   const pageWrapper = document.querySelector('.infinite-wrapper');
   const section = document.querySelector('.section');
   const nameWrapper = document.querySelector('.name-prenom__wrapper');
@@ -161,8 +161,8 @@ const setupInfiniteScroll = () => {
   // Ajouter les event listeners aux éléments clonés
   addTooltipListeners(sectionClone);
   addTooltipListeners(nameWrapperClone);
-  addNavigationListeners(sectionClone);  // Ajout des listeners de navigation
-  addNavigationListeners(nameWrapperClone);  // Ajout des listeners de navigation
+  addNavigationListeners(sectionClone);
+  addNavigationListeners(nameWrapperClone);
   
   pageWrapper.appendChild(nameWrapperClone);
   pageWrapper.appendChild(sectionClone);
