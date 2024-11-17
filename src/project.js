@@ -150,33 +150,43 @@ const setupInfiniteScroll = () => {
   // Si on est en mobile, on s'arrête ici
   if (window.innerWidth <= 991) return;
 
-  // Sinon, on met en place le scroll infini
   const pageWrapper = document.querySelector('.infinite-wrapper');
   const content = document.querySelector('.page-wrapper');
   
-  const contentClone = content.cloneNode(true);
-  
-  // Ajouter les event listeners aux éléments clonés
-  addTooltipListeners(contentClone);
-  addNavigationListeners(contentClone);
-  
-  pageWrapper.appendChild(contentClone);
+  // Créer trois clones pour une transition plus fluide
+  for (let i = 0; i < 3; i++) {
+    const contentClone = content.cloneNode(true);
+    addTooltipListeners(contentClone);
+    addNavigationListeners(contentClone);
+    pageWrapper.appendChild(contentClone);
+  }
 
-  // Gérer le scroll
-  let scrollPos = 0;
-  const totalHeight = pageWrapper.scrollHeight / 2;
+  // Calculer la hauteur d'une section
+  const sectionHeight = content.offsetHeight;
+  let isScrolling = false;
 
   window.addEventListener('scroll', () => {
-    const currentScroll = window.scrollY;
-    
-    if (currentScroll >= totalHeight) {
-      window.scrollTo(0, 1);
-      scrollPos = 1;
-    } else if (currentScroll <= 0) {
-      window.scrollTo(0, totalHeight - 1);
-      scrollPos = totalHeight - 1;
+    if (!isScrolling) {
+      window.requestAnimationFrame(() => {
+        const currentScroll = window.scrollY;
+        const maxScroll = sectionHeight * 2;
+
+        if (currentScroll >= maxScroll) {
+          // Revenir au premier tiers
+          window.scrollTo(0, currentScroll - sectionHeight);
+        } else if (currentScroll <= 0) {
+          // Aller au deuxième tiers
+          window.scrollTo(0, currentScroll + sectionHeight);
+        }
+
+        isScrolling = false;
+      });
     }
+    isScrolling = true;
   });
+
+  // Position initiale au milieu
+  window.scrollTo(0, sectionHeight);
 }
 
 // Initialisation
