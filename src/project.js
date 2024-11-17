@@ -78,7 +78,7 @@ let tooltipAnimation;
 
 // Fonction pour ajouter les event listeners des tooltips
 const addTooltipListeners = (element) => {
-  const hoverables = element.querySelectorAll('.hoverable, .tooltip, .esc, .back, .follow, .watch, .next');
+  const hoverables = element.querySelectorAll('.hoverable, .tooltip, .esc, .back, .follow, .watch, .next, .last');
   
   hoverables.forEach(el => {
     el.addEventListener('mousemove', (e) => {
