@@ -969,29 +969,24 @@ navLinks.forEach(link => {
 // percentageText.textContent = '70%';
 // player.volume(0.7);
 
-const videoGrid = document.querySelector('.video-grid');
+// Sélectionner tous les éléments avec la classe video-grid
+const videoGrids = document.querySelectorAll('.video-grid');
 const videoShowreel = document.querySelector('.video__showreel__item');
 const videoJs = document.querySelector('.videojs');
 let player;
 
-if (videoGrid) {
-  // Initialisation de Video.js
+if (videoGrids.length > 0) {
+  // Initialisation de Video.js (une seule fois)
   player = videojs('my-video', {
     controls: true,
     autoplay: false,
     preload: 'auto',
-
   });
 
   gsap.set('.video-showreel__wrapper', {
     display: 'none',
     opacity: 0
   });
-
-  // Configuration de base de la vidéo grid
-  videoGrid.autoplay = false;
-  videoGrid.muted = true;
-  videoGrid.loop = true;
 
   // Configuration initiale de video-js et sound-video
   const soundVideo = document.querySelector('.sound-video');
@@ -1001,51 +996,60 @@ if (videoGrid) {
     opacity: 0
   });
 
-  // Animation au survol
-  videoGrid.addEventListener('mouseenter', () => {
-    videoGrid.play();
-  });
+  // Appliquer les événements à tous les .video-grid
+  videoGrids.forEach(videoGrid => {
+    // Configuration de base de chaque vidéo grid
+    videoGrid.autoplay = false;
+    videoGrid.muted = true;
+    videoGrid.loop = true;
 
-  videoGrid.addEventListener('mouseleave', () => {
-    videoGrid.pause();
-  });
+    // Animation au survol pour chaque vidéo
+    videoGrid.addEventListener('mouseenter', () => {
+      videoGrid.play();
+    });
 
-  videoGrid.addEventListener('click', () => {
-    const tl = gsap.timeline({
-      defaults: {
-        ease: "power3.inOut",
+    videoGrid.addEventListener('mouseleave', () => {
+      videoGrid.pause();
+    });
+
+    // Animation au clic pour chaque vidéo
+    videoGrid.addEventListener('click', () => {
+      const tl = gsap.timeline({
+        defaults: {
+          ease: "power3.inOut",
+          duration: 1
+        }
+      });
+
+      gsap.set('.video-showreel__wrapper', {
+        display: 'flex',
+        opacity: 1
+      });
+
+      gsap.set(videoShowreel, {
+        display: 'flex',
+        width: '0%',
+        height: '0%'
+      });
+
+      tl.to(videoShowreel, {
+        width: '100%',
+        height: '1%'
+      })
+      .to(videoShowreel, {
+        height: '100%',
         duration: 1
-      }
-    });
-
-    gsap.set('.video-showreel__wrapper', {
-      display: 'flex',
-      opacity: 1
-    });
-
-    gsap.set(videoShowreel, {
-      display: 'flex',
-      width: '0%',
-      height: '0%'
-    });
-
-    tl.to(videoShowreel, {
-      width: '100%',
-      height: '1%'
-    })
-    .to(videoShowreel, {
-      height: '100%',
-      duration: 1
-    })
-    .set([videoJs, soundVideo, soundBg], {
-      display: 'block'
-    })
-    .to([videoJs, soundVideo, soundBg], {
-      opacity: 1,
-      duration: 0.4,
-      onComplete: () => {
-        player.play();
-      }
+      })
+      .set([videoJs, soundVideo, soundBg], {
+        display: 'block'
+      })
+      .to([videoJs, soundVideo, soundBg], {
+        opacity: 1,
+        duration: 0.4,
+        onComplete: () => {
+          player.play();
+        }
+      });
     });
   });
 
