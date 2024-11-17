@@ -3,10 +3,10 @@ body.loading {
   cursor: progress !important;
 }
 
+
 /* .link__wrapper.is-filter {
-  opacity: 0;
-  display: none;
-  transform: translateY(-20%);
+  opacity: 1;
+  scale: 1;
 } */
 
 /* .page-wrapper {

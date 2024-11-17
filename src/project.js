@@ -77,7 +77,7 @@ let tooltipAnimation;
 
 // Fonction pour ajouter les event listeners des tooltips
 const addTooltipListeners = (element) => {
-  const hoverables = element.querySelectorAll('.hoverable, .tooltip, .esc, .back, .follow, .watch');
+  const hoverables = element.querySelectorAll('.hoverable, .tooltip, .esc, .back, .follow, .watch, .next');
   
   hoverables.forEach(el => {
     el.addEventListener('mousemove', (e) => {
@@ -94,6 +94,8 @@ const addTooltipListeners = (element) => {
         tooltipText = 'let\'s FOLLOW';
       } else if (el.classList.contains('watch')) {
         tooltipText = 'ENJOY ☻';
+      } else if (el.classList.contains('next')) {
+        tooltipText = 'Next Work';
       } else {
         tooltipText = el.dataset.tooltip;
       }
@@ -180,5 +182,5 @@ window.addEventListener('load', () => {
   addNavigationListeners(document);  // Ajout des listeners de navigation initiaux
   playPageAnimation();
   setupInfiniteScroll();
-});
+})
 

@@ -1,3 +1,4 @@
+import { log } from 'three/webgpu';
 import './styles/style.css'
 import gsap from 'gsap'
 // import barba from '@barba/core'
@@ -215,6 +216,7 @@ animate();
 //   });
 // }
 
+
 // Ajoutez cette nouvelle fonction pour l'animation du prénom et du nom
 function animatePrenomNomWrapper() {
   const prenomWrapper = document.querySelector('.prenom__wrapper');
@@ -240,7 +242,7 @@ function animatePrenomNomWrapper() {
     gsap.set([prenomWrapper, nomWrapper], {
       height: '50vh',
       display: 'flex',
-      alignItems: 'flex-start' // Pour aligner en haut
+      alignItems: 'flex-start'
     });
     
     gsap.set([prenom, nom], {
@@ -249,10 +251,13 @@ function animatePrenomNomWrapper() {
       scale: 0.8
     });
     
-    gsap.set(bgWrapper, {
-      opacity: 1
+    // Réinitialiser les styles de position pour link__wrapper.is-filter sur mobile
+    gsap.set('.link__wrapper.is-filter', {
+      clearProps: "position,top,bottom,yPercent", // Nettoie toutes les propriétés de position
+      display: 'none',
+      opacity: 0
     });
-
+    
     gsap.timeline({
       defaults: { duration: 1.2, ease: "power3.inOut" }
     })
@@ -274,17 +279,17 @@ function animatePrenomNomWrapper() {
         opacity: 1,
         duration: 0.4,
       })
-      .to(linkWrapperNom, {
+      .to('.link__wrapper.is-filter', {
         display: 'flex',
         opacity: 1,
         duration: 0.4,
       })
-      .to(projectDescWrappers, {
-        yPercent: 0,
-        opacity: 1,
-        duration: 0.4,
-        ease: "power2.out",
-      });
+      // .to(projectDescWrappers, {
+      //   yPercent: 0,
+      //   opacity: 1,
+      //   duration: 0.4,
+      //   ease: "power2.out",
+      // });
   } else {
     // Version desktop (votre code original)
     gsap.set(gridItems, {
@@ -501,7 +506,7 @@ gsap.set(listWrapper, { display: 'none', height: 0 });
 
 // Positionner .nom initialement
 gsap.set(nom, { position: 'absolute', bottom: 0, top: 'auto' });
-gsap.set(linkWrapperNom, { position: 'absolute', bottom: 0, top: 'auto' });
+gsap.set(linkWrapperNom, { position: 'absolute',  top: 'auto' });
 gsap.set('.img__list', { opacity: 0 });
 gsap.set('.test-info', { display: 'none', opacity: 0 });
 // gsap.set('.grid__item', { display: 'none', opacity: 0 });
@@ -589,44 +594,78 @@ navLinks.forEach(link => {
             function initializeListView() {
               const listItems = document.querySelectorAll('.list__link__item');
               const imgItems = document.querySelectorAll('.list__link__img__item');
+              const links = document.querySelectorAll('.link__list.link-to-project');
+              const goTextLinks = document.querySelectorAll('.go-text');
 
-              if (listItems[0]) {
-                listItems[0].classList.add('active');
-                gsap.to(listItems[0], { opacity: 1, duration: 0 }); // Ajout de l'animation d'opacité
-
-                const firstProjectId = listItems[0].getAttribute('data-list-project');
-                const firstImg = document.querySelector(`.list__link__img__item[data-list-project="${firstProjectId}"]`);
-                if (firstImg) {
-                  firstImg.classList.add('active');
-                  gsap.to(firstImg, { opacity: 1, duration: 0 }); // Ajout de l'animation d'opacité
-                }
-              }
-
-              listItems.forEach(item => {
-                item.addEventListener('mouseenter', () => {
-                  const projectId = item.getAttribute('data-list-project');
-
-                  // Animer tous les éléments vers l'opacité 0.4
-                  listItems.forEach(otherItem => {
-                    otherItem.classList.remove('active');
-                    gsap.to(otherItem, { opacity: 0.4, duration: 0 });
-                  });
-                  imgItems.forEach(img => {
-                    img.classList.remove('active');
-                    gsap.to(img, { opacity: 0, duration: 0 });
-                  });
-
-                  // Animer l'élément actif vers l'opacité 1
-                  item.classList.add('active');
-                  gsap.to(item, { opacity: 1, duration: 0 });
-
-                  const correspondingImg = document.querySelector(`.list__link__img__item[data-list-project="${projectId}"]`);
-                  if (correspondingImg) {
-                    correspondingImg.classList.add('active');
-                    gsap.to(correspondingImg, { opacity: 1, duration: 0 });
-                  }
+              if (window.innerWidth <= 991) {
+                // Désactiver les liens principaux en mode mobile
+                links.forEach(link => {
+                  link.style.pointerEvents = 'none';
                 });
-              });
+
+                // Garder les liens .go-text cliquables
+                goTextLinks.forEach(link => {
+                  link.style.pointerEvents = 'auto';
+                });
+
+                // Configuration mobile
+                gsap.set(imgItems, {
+                  opacity: 0
+                });
+
+                // Activer le premier élément
+                if (listItems[0]) {
+                  listItems[0].classList.add('active');
+                  gsap.to(listItems[0], { opacity: 1, duration: 0 });
+
+                  const firstProjectId = listItems[0].getAttribute('data-list-project');
+                  const firstImg = document.querySelector(`.list__link__img__item[data-list-project="${firstProjectId}"]`);
+                  if (firstImg) {
+                    firstImg.classList.add('active');
+                    gsap.to(firstImg, { opacity: 0.5, duration: 0 });
+                  }
+                }
+
+                // Gérer les clics sur les items de la liste
+                listItems.forEach(item => {
+                  item.addEventListener('click', (e) => {
+                    // Ne pas déclencher l'événement si le clic vient de .go-text
+                    if (e.target.closest('.go-text')) {
+                      return;
+                    }
+
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const projectId = item.getAttribute('data-list-project');
+
+                    listItems.forEach(otherItem => {
+                      otherItem.classList.remove('active');
+                      gsap.to(otherItem, { opacity: 0.5, duration: 0 });
+                    });
+                    imgItems.forEach(img => {
+                      img.classList.remove('active');
+                      gsap.to(img, { opacity: 0, duration: 0 });
+                    });
+
+                    item.classList.add('active');
+                    gsap.to(item, { opacity: 1, duration: 0 });
+
+                    const correspondingImg = document.querySelector(`.list__link__img__item[data-list-project="${projectId}"]`);
+                    if (correspondingImg) {
+                      correspondingImg.classList.add('active');
+                      gsap.to(correspondingImg, { opacity: 0.5, duration: 0 });
+                    }
+                  });
+                });
+              } else {
+                // Version desktop - réactiver tous les liens
+                links.forEach(link => {
+                  link.style.pointerEvents = 'auto';
+                });
+
+                // Reste du code desktop inchangé...
+              }
             }
             initializeListView();
           }
@@ -1391,8 +1430,8 @@ function handlePageTransition(e) {
   // });
 }
 
-// Ajouter l'écouteur d'événements spécifiquement aux liens .link-to-project
-document.querySelectorAll('.link-to-project').forEach(link => {
+// Ajouter l'écouteur d'événements aux liens .link-to-project et .go-text
+document.querySelectorAll('.link-to-project, .go-text').forEach(link => {
   link.addEventListener('click', handlePageTransition);
 });
 
@@ -1436,4 +1475,9 @@ function handleResponsive() {
 
 // Appeler la fonction après le chargement du DOM
 document.addEventListener('DOMContentLoaded', handleResponsive);
+
+// Ajouter un écouteur pour le redimensionnement
+window.addEventListener('resize', () => {
+  initializeListView();
+});
 
