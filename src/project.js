@@ -143,24 +143,24 @@ const addTooltipListeners = (element) => {
 };
 
 // Configuration simple de Lenis pour le smooth scroll
-const setupSmoothScroll = () => {
-  const lenis = new Lenis({
-    duration: 1.2,
-    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-    direction: 'vertical',
-    gestureDirection: 'vertical',
-    smooth: true,
-    smoothTouch: false,
-    touchMultiplier: 2
-  })
+// const setupSmoothScroll = () => {
+//   const lenis = new Lenis({
+//     duration: 1.2,
+//     easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+//     direction: 'vertical',
+//     gestureDirection: 'vertical',
+//     smooth: true,
+//     smoothTouch: false,
+//     touchMultiplier: 2
+//   })
 
-  function raf(time) {
-    lenis.raf(time)
-    requestAnimationFrame(raf)
-  }
+//   function raf(time) {
+//     lenis.raf(time)
+//     requestAnimationFrame(raf)
+//   }
 
-  requestAnimationFrame(raf)
-}
+//   requestAnimationFrame(raf)
+// }
 
 // // Fonction pour gérer les hovers des projets
 // const setupProjectHover = () => {
@@ -195,12 +195,12 @@ const setupSmoothScroll = () => {
 //   })
 // }
 
-// // Initialisation
-// window.addEventListener('load', () => {
-//   addTooltipListeners(document)
-//   addNavigationListeners(document)
-//   playPageAnimation()
-//   setupSmoothScroll()
+// Initialisation
+window.addEventListener('load', () => {
+  addTooltipListeners(document)
+  addNavigationListeners(document)
+  playPageAnimation()
+  setupSmoothScroll()
 //   setupProjectHover()
-// })
+})
 
