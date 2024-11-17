@@ -1040,7 +1040,22 @@ if (videoGrids.length > 0) {
         opacity: 1,
         duration: 0.4,
         onComplete: () => {
-          player.play();
+          // Forcer la lecture sur mobile
+          try {
+            player.muted(true); // D'abord mettre en muet pour iOS
+            player.play()
+              .then(() => {
+                player.muted(false); // Remettre le son une fois la lecture démarrée
+              })
+              .catch(error => {
+                console.log('Erreur de lecture:', error);
+                // Réessayer avec le mode muet
+                player.muted(true);
+                player.play().catch(e => console.log('Échec même en muet:', e));
+              });
+          } catch (error) {
+            console.log('Erreur lors de la tentative de lecture:', error);
+          }
         }
       });
     };
@@ -1057,10 +1072,35 @@ if (videoGrids.length > 0) {
     videoGrid.addEventListener('click', playFullVideo);
 
     // Événement mobile
+    let touchStartTime = 0;
+    
     videoGrid.addEventListener('touchstart', (e) => {
-      e.preventDefault(); // Empêcher le comportement par défaut
-      playFullVideo();
-    });
+      touchStartTime = Date.now();
+    }, { passive: false });
+
+    videoGrid.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      const touchDuration = Date.now() - touchStartTime;
+      
+      // Si le toucher dure moins de 200ms, considérer comme un tap
+      if (touchDuration < 200) {
+        playFullVideo();
+        
+        // Forcer le plein écran sur mobile
+        try {
+          const videoElement = player.el().querySelector('video');
+          if (videoElement.requestFullscreen) {
+            videoElement.requestFullscreen();
+          } else if (videoElement.webkitRequestFullscreen) {
+            videoElement.webkitRequestFullscreen();
+          } else if (videoElement.mozRequestFullScreen) {
+            videoElement.mozRequestFullScreen();
+          }
+        } catch (error) {
+          console.log('Erreur lors de la tentative de plein écran:', error);
+        }
+      }
+    }, { passive: false });
   });
 
   const closeVideo = document.querySelector('.close-video');
