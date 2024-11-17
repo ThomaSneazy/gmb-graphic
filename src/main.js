@@ -1005,17 +1005,8 @@ if (videoGrids.length > 0) {
     videoGrid.muted = true;
     videoGrid.loop = true;
 
-    // Animation au survol pour chaque vidéo
-    videoGrid.addEventListener('mouseenter', () => {
-      videoGrid.play();
-    });
-
-    videoGrid.addEventListener('mouseleave', () => {
-      videoGrid.pause();
-    });
-
-    // Animation au clic pour chaque vidéo
-    videoGrid.addEventListener('click', () => {
+    // Fonction pour lancer l'animation de la vidéo
+    const playFullVideo = () => {
       const tl = gsap.timeline({
         defaults: {
           ease: "power3.inOut",
@@ -1052,6 +1043,23 @@ if (videoGrids.length > 0) {
           player.play();
         }
       });
+    };
+
+    // Événements desktop
+    videoGrid.addEventListener('mouseenter', () => {
+      videoGrid.play();
+    });
+
+    videoGrid.addEventListener('mouseleave', () => {
+      videoGrid.pause();
+    });
+
+    videoGrid.addEventListener('click', playFullVideo);
+
+    // Événement mobile
+    videoGrid.addEventListener('touchstart', (e) => {
+      e.preventDefault(); // Empêcher le comportement par défaut
+      playFullVideo();
     });
   });
 
