@@ -1,5 +1,6 @@
 import './styles/style.css'
 import gsap from 'gsap'
+import Lenis from '@studio-freight/lenis'
 
 // Fonction pour l'animation
 const playPageAnimation = () => {
@@ -141,46 +142,33 @@ const addTooltipListeners = (element) => {
   });
 };
 
-// Mise à jour de setupInfiniteScroll
-const setupInfiniteScroll = () => {
-  const pageWrapper = document.querySelector('.infinite-wrapper');
-  const section = document.querySelector('.section');
-  const nameWrapper = document.querySelector('.name-prenom__wrapper');
+// Remplacer setupInfiniteScroll par la nouvelle configuration Lenis
+const setupSmoothScroll = () => {
+  const lenis = new Lenis({
+    duration: 1.2,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    direction: 'vertical',
+    gestureDirection: 'vertical',
+    smooth: true,
+    smoothTouch: false,
+    touchMultiplier: 2,
+    infinite: true
+  })
 
-  const sectionClone = section.cloneNode(true);
-  const nameWrapperClone = nameWrapper.cloneNode(true);
-  
-  // Ajouter les event listeners aux éléments clonés
-  addTooltipListeners(sectionClone);
-  addTooltipListeners(nameWrapperClone);
-  addNavigationListeners(sectionClone);  // Ajout des listeners de navigation
-  addNavigationListeners(nameWrapperClone);  // Ajout des listeners de navigation
-  
-  pageWrapper.appendChild(nameWrapperClone);
-  pageWrapper.appendChild(sectionClone);
+  // Intégration de Lenis avec GSAP
+  function raf(time) {
+    lenis.raf(time)
+    requestAnimationFrame(raf)
+  }
 
-  // Gérer le scroll
-  let scrollPos = 0;
-  const totalHeight = pageWrapper.scrollHeight / 2;
-
-  window.addEventListener('scroll', () => {
-    const currentScroll = window.scrollY;
-    
-    if (currentScroll >= totalHeight) {
-      window.scrollTo(0, 1); // Retour en haut avec un petit offset
-      scrollPos = 1;
-    } else if (currentScroll <= 0) {
-      window.scrollTo(0, totalHeight - 1); // Aller en bas avec un petit offset
-      scrollPos = totalHeight - 1;
-    }
-  });
+  requestAnimationFrame(raf)
 }
 
-// Initialisation
+// Mise à jour de l'initialisation
 window.addEventListener('load', () => {
-  addTooltipListeners(document);
-  addNavigationListeners(document);  // Ajout des listeners de navigation initiaux
-  playPageAnimation();
-  setupInfiniteScroll();
+  addTooltipListeners(document)
+  addNavigationListeners(document)
+  playPageAnimation()
+  setupSmoothScroll() // Remplacer setupInfiniteScroll par setupSmoothScroll
 })
 
