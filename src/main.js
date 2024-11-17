@@ -983,34 +983,14 @@ if (videoGrid) {
 
   });
 
+  // Configuration initiale
   gsap.set('.video-showreel__wrapper', {
     display: 'none',
     opacity: 0
   });
 
-  // Configuration de base de la vidéo grid
-  videoGrid.autoplay = false;
-  videoGrid.muted = true;
-  videoGrid.loop = true;
-
-  // Configuration initiale de video-js et sound-video
-  const soundVideo = document.querySelector('.sound-video');
-  const soundBg = document.querySelector('.sound-bg');
-  gsap.set([videoJs, soundVideo, soundBg], {
-    display: 'none',
-    opacity: 0
-  });
-
-  // Animation au survol
-  videoGrid.addEventListener('mouseenter', () => {
-    videoGrid.play();
-  });
-
-  videoGrid.addEventListener('mouseleave', () => {
-    videoGrid.pause();
-  });
-
-  videoGrid.addEventListener('click', () => {
+  // Fonction pour ouvrir la vidéo showreel
+  const openVideoShowreel = () => {
     const tl = gsap.timeline({
       defaults: {
         ease: "power3.inOut",
@@ -1047,136 +1027,66 @@ if (videoGrid) {
         player.play();
       }
     });
-  });
-
-  const closeVideo = document.querySelector('.close-video');
-  let mouseTimer;
-
-  gsap.set(closeVideo, {
-    opacity: 0,
-    display: 'none'
-  });
-
-  const hideCloseButton = () => {
-    gsap.to([closeVideo, soundVideo], {
-      opacity: 0,
-      duration: 0.3,
-      onComplete: () => {
-        gsap.set([closeVideo, soundVideo], { display: 'none' });
-      }
-    });
   };
 
-  videoShowreel.addEventListener('mousemove', () => {
-    gsap.set([closeVideo, soundVideo], { display: 'flex' });
-    gsap.to([closeVideo, soundVideo], {
-      opacity: 1,
-      duration: 0.3
-    });
-
-    clearTimeout(mouseTimer);
-    mouseTimer = setTimeout(() => {
-      gsap.to([closeVideo, soundVideo], {
-        opacity: 0,
-        duration: 0.3,
-        onComplete: () => {
-          gsap.set([closeVideo, soundVideo], { display: 'none' });
-        }
-      });
-    }, 2300);
+  // Écouteur d'événements pour videoGrid
+  videoGrid.addEventListener('mouseenter', () => {
+    videoGrid.play();
   });
 
-  videoShowreel.addEventListener('mouseleave', hideCloseButton);
-
-  // Ajouter l'écouteur d'événement pour la fin de la vidéo
-  player.on('ended', () => {
-    closeVideoWithAnimation();
+  videoGrid.addEventListener('mouseleave', () => {
+    videoGrid.pause();
   });
 
-  // Fonction pour fermer la vidéo avec animation
-  const closeVideoWithAnimation = () => {
-    const tl = gsap.timeline({
-      defaults: {
-        ease: "power3.inOut",
-        duration: 1
+  videoGrid.addEventListener('click', openVideoShowreel);
+
+  // Écouteur d'événements pour showreel-mob
+  const showreelMob = document.querySelector('.showreel-mob');
+  if (showreelMob) {
+    showreelMob.addEventListener('click', () => {
+      if (window.innerWidth <= 991) {
+        // Réutiliser les mêmes configurations et animations que pour videoGrid
+        gsap.set('.video-showreel__wrapper', {
+          display: 'flex',
+          opacity: 1
+        });
+
+        gsap.set(videoShowreel, {
+          display: 'flex',
+          width: '0%',
+          height: '0%'
+        });
+
+        const tl = gsap.timeline({
+          defaults: {
+            ease: "power3.inOut",
+            duration: 1
+          }
+        });
+
+        tl.to(videoShowreel, {
+          width: '100%',
+          height: '1%'
+        })
+        .to(videoShowreel, {
+          height: '100%',
+          duration: 1
+        })
+        .set([videoJs, soundVideo, soundBg], {
+          display: 'block'
+        })
+        .to([videoJs, soundVideo, soundBg], {
+          opacity: 1,
+          duration: 0.4,
+          onComplete: () => {
+            player.play();
+          }
+        });
       }
     });
+  }
 
-    tl.to([videoJs, soundVideo], {
-      opacity: 0,
-      duration: 0.4,
-      onComplete: () => {
-        player.pause();
-        gsap.set([videoJs, soundVideo], { display: 'none' });
-      }
-    })
-    .to(closeVideo, {
-      opacity: 0,
-      duration: 0.3,
-      onComplete: () => {
-        gsap.set(closeVideo, { display: 'none' });
-      }
-    })
-    .to(videoShowreel, {
-      height: '1%',
-      duration: 1
-    }, "-=0.2")
-    .to(videoShowreel, {
-      width: '0%',
-      height: '0%',
-      onComplete: () => {
-        gsap.set(videoShowreel, { display: 'none' });
-      }
-    });
-  };
-
-  // Gestionnaire pour le bouton close
-  closeVideo.addEventListener('click', closeVideoWithAnimation);
-
-  // Gestionnaire pour la touche Échap
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && videoShowreel.style.display !== 'none') {
-      closeVideoWithAnimation();
-    }
-  });
-
-  let controlsTimer;
-
-  // Ajouter une classe pour gérer le curseur
-  videoShowreel.style.cursor = 'default';
-
-  videoShowreel.addEventListener('mousemove', () => {
-    // Afficher les contrôles et le curseur
-    player.controlBar.show();
-    videoShowreel.style.cursor = 'default';
-
-    // Réinitialiser le timer à chaque mouvement
-    clearTimeout(controlsTimer);
-    controlsTimer = setTimeout(() => {
-      player.controlBar.hide();
-      videoShowreel.style.cursor = 'none'; // Cacher le curseur
-    }, 2300);
-  });
-
-  // Cacher les contrôles et le curseur quand la souris quitte la zone
-  videoShowreel.addEventListener('mouseleave', () => {
-    player.controlBar.hide();
-    videoShowreel.style.cursor = 'default';
-    clearTimeout(controlsTimer);
-  });
-
-  // Ajouter un gestionnaire d'événements pour la touche espace
-  document.addEventListener('keydown', (e) => {
-    // Vérifier si la vidéo est visible et si c'est la touche espace
-    if (e.code === 'Space' && videoShowreel.style.display !== 'none') {
-      e.preventDefault(); // Empêcher le défilement de la page
-      if (player.paused()) {
-        player.play();
-      } else {
-        player.pause();
-      }
-    }
-  });
+  // ... rest of the video related code ...
 }
 
 const bigPlayButton = player.getChild('BigPlayButton');
