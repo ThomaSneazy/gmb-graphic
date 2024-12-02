@@ -272,10 +272,10 @@ function animatePrenomNomWrapper() {
         height: '100vh',
         duration: 1
       }, "+=0.2")
-      // .to(bgWrapper, {
-      //   backgroundColor: 'red',
-      //   duration: 0.4
-      // })
+      .to(bgWrapper, {
+        backgroundColor: 'var(--text-color--text-primary)',
+        duration: 0.4
+      })
       .to(linkWrapperPrenom, {
         display: 'flex',
         opacity: 1,
@@ -403,10 +403,10 @@ function animatePrenomNomWrapper() {
         height: '100%',
         duration: 1
       }, "<")
-      // .to(bgWrapper, {
-      //   backgroundColor: 'red',
-      //   duration: 0.4
-      // }, "<")
+      .to(bgWrapper, {
+        backgroundColor: 'transparent',
+        duration: 0.4
+      }, "<")
       .to(linkWrapperPrenom, {
         display: 'flex',
         yPercent: 0,
