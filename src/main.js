@@ -274,7 +274,7 @@ function animatePrenomNomWrapper() {
       }, "+=0.2")
       .to(bgWrapper, {
         backgroundColor: 'var(--text-color--text-primary)',
-        duration: 0.4
+        duration: 0
       })
       .to(linkWrapperPrenom, {
         display: 'flex',
@@ -405,7 +405,7 @@ function animatePrenomNomWrapper() {
       }, "<")
       .to(bgWrapper, {
         backgroundColor: 'transparent',
-        duration: 0.4
+        duration: 0
       }, "<")
       .to(linkWrapperPrenom, {
         display: 'flex',
