@@ -3,6 +3,8 @@ import './styles/style.css'
 import gsap from 'gsap'
 // import barba from '@barba/core'
 
+
+
 // barba.init({
 //   transitions: [{
 //     name: 'opacity-transition',
@@ -21,7 +23,7 @@ import gsap from 'gsap'
 //   }]
 // });
 
-console.log('Hello KEZ')
+// console.log('Hello KEZ')
 
 // document.addEventListener('DOMContentLoaded', function() {
 //   var player = videojs('my-video', {
