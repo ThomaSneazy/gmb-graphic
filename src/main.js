@@ -273,7 +273,7 @@ function animatePrenomNomWrapper() {
         duration: 1
       }, "+=0.2")
       .to(bgWrapper, {
-        backgroundColor: 'transparent',
+        backgroundColor: 'black',
         duration: 0.4
       })
       .to(linkWrapperPrenom, {
