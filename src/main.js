@@ -43,12 +43,10 @@ document.querySelectorAll('.project__desc.date, .date-list').forEach(el => {
 const tooltip = document.getElementById('tooltip');
 const hoverables = document.querySelectorAll('.hoverable, .tooltip, .esc, .link-to-social.serious, .link-to-social.cool, .watch, .switch');
 
-// Variable pour suivre l'état de l'animation
 let tooltipAnimation;
 
 hoverables.forEach(el => {
   el.addEventListener('mousemove', (e) => {
-    // Annuler l'animation précédente si elle existe
     if (tooltipAnimation) tooltipAnimation.kill();
 
     let tooltipText;
@@ -70,16 +68,13 @@ hoverables.forEach(el => {
 
     tooltip.textContent = tooltipText;
 
-    // Assurer que le tooltip est visible
     tooltip.style.display = 'block';
 
-    // Animation de position immédiate
     gsap.set(tooltip, {
       x: e.pageX + 10,
       y: e.pageY + 10
     });
 
-    // Animation de l'apparition
     tooltipAnimation = gsap.to(tooltip, {
       opacity: 1,
       scale: 1,
@@ -90,7 +85,6 @@ hoverables.forEach(el => {
   });
 
   el.addEventListener('mouseleave', () => {
-    // Annuler l'animation précédente si elle existe
     if (tooltipAnimation) tooltipAnimation.kill();
 
     tooltipAnimation = gsap.to(tooltip, {
@@ -171,7 +165,6 @@ wrapper.addEventListener('mousemove', (e) => {
   //   targetY: targetY
   // });
 
-  // Modification pour cibler les images à l'intérieur des .img-item avec smooth et delay
   // const imgItems = document.querySelectorAll('.img-item img');
   // imgItems.forEach((img, index) => {
   //   const moveX = (0.5 - mousePercentX) * 20;
@@ -223,7 +216,6 @@ animate();
 // }
 
 
-// Ajoutez cette nouvelle fonction pour l'animation du prénom et du nom
 function animatePrenomNomWrapper() {
   const prenomWrapper = document.querySelector('.prenom__wrapper');
   const prenom = prenomWrapper.querySelector('.prenom');
@@ -237,7 +229,6 @@ function animatePrenomNomWrapper() {
   const bgWrapper = document.querySelector('.test-bg');
 
   if (window.innerWidth <= 991) {
-    // Version mobile
     gsap.set([gridItems, grid], { display: 'none' });
     gsap.set(projectDescWrappers, {
       yPercent: -20,
@@ -257,7 +248,6 @@ function animatePrenomNomWrapper() {
       scale: 0.8
     });
     
-    // Réinitialiser les styles de position pour link__wrapper.is-filter sur mobile
     gsap.set('.link__wrapper.is-filter', {
       clearProps: "position,top,bottom,yPercent", // Nettoie toutes les propriétés de position
       display: 'none',
@@ -297,7 +287,6 @@ function animatePrenomNomWrapper() {
       //   ease: "power2.out",
       // });
   } else {
-    // Version desktop (votre code original)
     gsap.set(gridItems, {
       xPercent: -50,
       yPercent: -50,
@@ -449,7 +438,6 @@ function getRandomChar() {
   return chars[Math.floor(Math.random() * chars.length)];
 }
 
-// Ajoutez cette fonction pour animer le texte
 function animateText(element) {
   const originalText = element.getAttribute('data-project-name');
   const textLength = originalText.length;
@@ -460,9 +448,7 @@ function animateText(element) {
   function animate(currentTime) {
     if (!startTime) startTime = currentTime;
     const elapsedTime = currentTime - startTime;
-    const progress = Math.min(elapsedTime / 1000, 1); // Animation sur 3 secondes
-
-    // Mettre à jour les caractères seulement toutes les 100ms
+    const progress = Math.min(elapsedTime / 1000, 1); 
     if (currentTime - lastUpdateTime > 100) {
       const animatedText = originalText.split('').map((letter, index) => {
         return Math.random() > progress ? getRandomChar() : originalText[index];
@@ -475,7 +461,7 @@ function animateText(element) {
     if (progress < 1) {
       animationFrame = requestAnimationFrame(animate);
     } else {
-      element.textContent = originalText; // Assurez-vous que le texte final est correct
+      element.textContent = originalText; 
     }
   }
 
@@ -496,7 +482,6 @@ function animateText(element) {
 // });
 
 
-// Gestion des clics sur les liens de navigation
 const navLinks = document.querySelectorAll('.link__wrapper.is-home .link__nav');
 const gridProject = document.querySelector('.grid__project');
 const gridItems = document.querySelectorAll('.grid__item');
@@ -507,10 +492,8 @@ const nom = nomWrapper.querySelector('.nom');
 const linkWrapperNom = document.querySelectorAll('.link__wrapper.is-filter');
 
 
-// Cacher la list__wrapper au chargement
 gsap.set(listWrapper, { display: 'none', height: 0 });
 
-// Positionner .nom initialement
 gsap.set(nom, { position: 'absolute', bottom: 0, top: 'auto' });
 gsap.set(linkWrapperNom, { position: 'absolute',  top: 'auto' });
 gsap.set('.img__list', { opacity: 0 });
@@ -525,7 +508,6 @@ navLinks.forEach(link => {
   link.addEventListener('click', (e) => {
     e.preventDefault();
 
-    // Ajouter le curseur de chargement au début
     document.body.style.cursor = 'progress';
 
     navLinks.forEach(l => l.classList.remove('active'));
@@ -535,12 +517,10 @@ navLinks.forEach(link => {
       const tl = gsap.timeline({ 
         defaults: { ease: "power3.inOut" },
         onComplete: () => {
-          // Remettre le curseur normal à la fin
           document.body.style.cursor = 'default';
         }
       });
 
-      // Masquer .test-info si elle est visible
       if (document.querySelector('.test-info').style.display === 'block') {
         tl.to('.test-info', {
           opacity: 0,
@@ -589,7 +569,6 @@ navLinks.forEach(link => {
           opacity: 1,
           duration: 0.8
         }, "<")
-        // Animation des éléments de liste
         .to('.list__link__item', {
           opacity: 0.4,
           x: 0,
@@ -609,17 +588,14 @@ navLinks.forEach(link => {
                   link.style.pointerEvents = 'none';
                 });
 
-                // Garder les liens .go-text cliquables
                 goTextLinks.forEach(link => {
                   link.style.pointerEvents = 'auto';
                 });
 
-                // Configuration mobile
                 gsap.set(imgItems, {
                   opacity: 0
                 });
 
-                // Activer le premier élément
                 if (listItems[0]) {
                   listItems[0].classList.add('active');
                   gsap.to(listItems[0], { opacity: 1, duration: 0 });
@@ -632,10 +608,8 @@ navLinks.forEach(link => {
                   }
                 }
 
-                // Gérer les clics sur les items de la liste
                 listItems.forEach(item => {
                   item.addEventListener('click', (e) => {
-                    // Ne pas déclencher l'événement si le clic vient de .go-text
                     if (e.target.closest('.go-text')) {
                       return;
                     }
@@ -665,12 +639,10 @@ navLinks.forEach(link => {
                   });
                 });
               } else {
-                // Version desktop - réactiver tous les liens
                 links.forEach(link => {
                   link.style.pointerEvents = 'auto';
                 });
 
-                // Configuration desktop
                 gsap.set(listItems, {
                   opacity: 0.4
                 });
@@ -679,7 +651,6 @@ navLinks.forEach(link => {
                   opacity: 0
                 });
 
-                // Activer le premier élément
                 if (listItems[0]) {
                   listItems[0].classList.add('active');
                   gsap.to(listItems[0], { opacity: 1, duration: 0 });
@@ -692,7 +663,6 @@ navLinks.forEach(link => {
                   }
                 }
 
-                // Gérer les interactions de survol
                 listItems.forEach(item => {
                   item.addEventListener('mouseenter', () => {
                     const projectId = item.getAttribute('data-list-project');
@@ -736,7 +706,6 @@ navLinks.forEach(link => {
         }
       });
 
-      // Masquer .test-info si elle est visible
       if (document.querySelector('.test-info').style.display === 'block') {
         tl.to('.test-info', {
           opacity: 0,
@@ -750,7 +719,6 @@ navLinks.forEach(link => {
         duration: 0.5,
         ease: "power2.out"
       })
-        // Animation initiale visible du nom
         .to(nom, {
           y: '-100vh',
           duration: 0.8,
@@ -806,7 +774,6 @@ navLinks.forEach(link => {
         }
       });
 
-      // Configuration initiale
       gsap.set('.info__text__block', {
         opacity: 0,
         y: -20
@@ -819,7 +786,6 @@ navLinks.forEach(link => {
         opacity: 0
       });
 
-      // Si on est sur la liste
       if (listWrapper.style.display !== 'none') {
         tl.to('.img__list', {
           opacity: 0,
@@ -845,7 +811,6 @@ navLinks.forEach(link => {
           onComplete: () => gsap.set(listWrapper, { display: 'none' })
         }, "<");
       }
-      // Si on est sur la grid
       else if (gridProject.style.display !== 'none') {
         tl.to(gridProject, {
           x: 0,
@@ -866,7 +831,6 @@ navLinks.forEach(link => {
         });
       }
 
-      // Animation de test-info
       tl.set('.test-info', { display: 'block' })
         .to('.test-info', {
           opacity: 1,
@@ -982,7 +946,6 @@ const videoJs = document.querySelector('.videojs');
 let player;
 
 if (videoGrids.length > 0) {
-  // Initialisation de Video.js (une seule fois)
   player = videojs('my-video', {
     controls: true,
     autoplay: false,
@@ -994,7 +957,6 @@ if (videoGrids.length > 0) {
     opacity: 0
   });
 
-  // Configuration initiale de video-js et sound-video
   const soundVideo = document.querySelector('.sound-video');
   const soundBg = document.querySelector('.sound-bg');
   gsap.set([videoJs, soundVideo, soundBg], {
@@ -1002,14 +964,11 @@ if (videoGrids.length > 0) {
     opacity: 0
   });
 
-  // Appliquer les événements à tous les .video-grid
   videoGrids.forEach(videoGrid => {
-    // Configuration de base de chaque vidéo grid
     videoGrid.autoplay = false;
     videoGrid.muted = true;
     videoGrid.loop = true;
 
-    // Fonction pour lancer l'animation de la vidéo
     const playFullVideo = () => {
       const tl = gsap.timeline({
         defaults: {
@@ -1044,16 +1003,14 @@ if (videoGrids.length > 0) {
         opacity: 1,
         duration: 0.4,
         onComplete: () => {
-          // Forcer la lecture sur mobile
           try {
-            player.muted(true); // D'abord mettre en muet pour iOS
+            player.muted(true); 
             player.play()
               .then(() => {
-                player.muted(false); // Remettre le son une fois la lecture démarrée
+                player.muted(false); 
               })
               .catch(error => {
                 console.log('Erreur de lecture:', error);
-                // Réessayer avec le mode muet
                 player.muted(true);
                 player.play().catch(e => console.log('Échec même en muet:', e));
               });
@@ -1064,7 +1021,6 @@ if (videoGrids.length > 0) {
       });
     };
 
-    // Événements desktop
     videoGrid.addEventListener('mouseenter', () => {
       videoGrid.play();
     });
@@ -1075,7 +1031,6 @@ if (videoGrids.length > 0) {
 
     videoGrid.addEventListener('click', playFullVideo);
 
-    // Événement mobile
     let touchStartTime = 0;
     
     videoGrid.addEventListener('touchstart', (e) => {
@@ -1086,11 +1041,9 @@ if (videoGrids.length > 0) {
       e.preventDefault();
       const touchDuration = Date.now() - touchStartTime;
       
-      // Si le toucher dure moins de 200ms, considérer comme un tap
       if (touchDuration < 200) {
         playFullVideo();
         
-        // Forcer le plein écran sur mobile
         try {
           const videoElement = player.el().querySelector('video');
           if (videoElement.requestFullscreen) {
@@ -1146,12 +1099,10 @@ if (videoGrids.length > 0) {
 
   videoShowreel.addEventListener('mouseleave', hideCloseButton);
 
-  // Ajouter l'écouteur d'événement pour la fin de la vidéo
   player.on('ended', () => {
     closeVideoWithAnimation();
   });
 
-  // Fonction pour fermer la vidéo avec animation
   const closeVideoWithAnimation = () => {
     const tl = gsap.timeline({
       defaults: {
@@ -1188,10 +1139,8 @@ if (videoGrids.length > 0) {
     });
   };
 
-  // Gestionnaire pour le bouton close
   closeVideo.addEventListener('click', closeVideoWithAnimation);
 
-  // Gestionnaire pour la touche Échap
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && videoShowreel.style.display !== 'none') {
       closeVideoWithAnimation();
@@ -1200,36 +1149,30 @@ if (videoGrids.length > 0) {
 
   let controlsTimer;
 
-  // Ajouter une fonction pour gérer l'affichage des contrôles selon la taille d'écran
   function updateControlsVisibility() {
     const closeVideo = document.querySelector('.close-video');
     const soundVideo = document.querySelector('.sound-video');
 
     if (window.innerWidth <= 991) {
-      // Version mobile
       player.controlBar.hide();
       videoShowreel.style.cursor = 'none';
       
-      // Garder le bouton ESC toujours visible
       gsap.set(closeVideo, {
         display: 'flex',
         opacity: 1
       });
       
-      // Cacher les contrôles de son
       gsap.set(soundVideo, {
         display: 'none',
         opacity: 0
       });
     } else {
-      // Version desktop - revenir au comportement normal
       gsap.set([closeVideo, soundVideo], {
         opacity: 0,
         display: 'none'
       });
 
       videoShowreel.addEventListener('mousemove', () => {
-        // Afficher les contrôles et le curseur
         player.controlBar.show();
         videoShowreel.style.cursor = 'default';
 
@@ -1241,7 +1184,6 @@ if (videoGrids.length > 0) {
           duration: 0.3
         });
 
-        // Réinitialiser le timer à chaque mouvement
         clearTimeout(controlsTimer);
         controlsTimer = setTimeout(() => {
           player.controlBar.hide();
@@ -1260,11 +1202,9 @@ if (videoGrids.length > 0) {
     }
   }
 
-  // Appeler la fonction au chargement et au redimensionnement
   updateControlsVisibility();
   window.addEventListener('resize', updateControlsVisibility);
 
-  // Modifier l'événement mouseleave pour ne s'appliquer qu'en desktop
   videoShowreel.addEventListener('mouseleave', () => {
     if (window.innerWidth > 991) {
       player.controlBar.hide();
@@ -1273,11 +1213,9 @@ if (videoGrids.length > 0) {
     }
   });
 
-  // Ajouter un gestionnaire d'événements pour la touche espace
   document.addEventListener('keydown', (e) => {
-    // Vérifier si la vidéo est visible et si c'est la touche espace
     if (e.code === 'Space' && videoShowreel.style.display !== 'none') {
-      e.preventDefault(); // Empêcher le défilement de la page
+      e.preventDefault(); 
       if (player.paused()) {
         player.play();
       } else {
@@ -1297,7 +1235,6 @@ player.on('pause', () => {
   bigPlayButton.el().textContent = '▶';
 });
 
-// Ajout du système de filtrage par catégorie
 function initializeCategoryFilter() {
   const filterLinks = document.querySelectorAll('.link__wrapper.is-filter .link__nav');
   const listItems = document.querySelectorAll('.list__link__item');
@@ -1345,17 +1282,14 @@ function initializeCategoryFilter() {
         stagger: 0.05,
         ease: "power2.out",
         onComplete: () => {
-          // Attendre que l'animation soit complètement terminée avant d'activer le premier item
           const visibleItems = Array.from(listItems).filter(item => item.style.display !== 'none');
           const firstVisibleItem = visibleItems[0];
 
           if (firstVisibleItem) {
-            // Mettre à jour les classes active
             listItems.forEach(item => item.classList.remove('active'));
             firstVisibleItem.classList.add('active');
             gsap.to(firstVisibleItem, { opacity: 1, duration: 0.2 });
 
-            // Mettre à jour l'image correspondante
             const projectId = firstVisibleItem.getAttribute('data-list-project');
             const imgs = document.querySelectorAll('.list__link__img__item');
             imgs.forEach(img => {
@@ -1402,13 +1336,11 @@ function updateCategoryCounts() {
   });
 }
 
-// Fonction pour réinitialiser les filtres et les images
 function resetFilters() {
   const allLink = document.querySelector('.link__nav.all.tooltip');
   const listItems = document.querySelectorAll('.list__link__item');
   const imgs = document.querySelectorAll('.list__link__img__item');
 
-  // Réinitialiser le filtre "all"
   if (allLink) {
     document.querySelectorAll('.link__wrapper.is-filter .link__nav').forEach(link => {
       link.classList.remove('active');
@@ -1416,12 +1348,10 @@ function resetFilters() {
     allLink.classList.add('active');
   }
 
-  // Réinitialiser l'affichage des items
   listItems.forEach(item => {
     gsap.set(item, { display: 'flex', opacity: 0.4 });
   });
 
-  // Activer le premier item et son image
   if (listItems[0]) {
     listItems.forEach(item => item.classList.remove('active'));
     listItems[0].classList.add('active');
@@ -1440,7 +1370,6 @@ function resetFilters() {
   }
 }
 
-// Modification du gestionnaire des liens de navigation
 navLinks.forEach(link => {
   link.addEventListener('click', (e) => {
     e.preventDefault(); 
@@ -1451,7 +1380,6 @@ navLinks.forEach(link => {
       link.classList.add('active');
     }
 
-    // Ajouter le hash correspondant
     if (link.classList.contains('grid')) {
       window.location.hash = '';
       // setTimeout(() => {
@@ -1463,7 +1391,6 @@ navLinks.forEach(link => {
       window.location.hash = 'info';
     }
 
-    // Le reste de votre code existant pour grid/list/info...
   });
 });
 
@@ -1583,12 +1510,10 @@ function handlePageTransition(e) {
   // });
 }
 
-// Ajouter l'écouteur d'événements aux liens .link-to-project et .go-text
 document.querySelectorAll('.link-to-project, .go-text').forEach(link => {
   link.addEventListener('click', handlePageTransition);
 });
 
-// Ajouter cette fonction pour gérer la responsivité
 function handleResponsive() {
   const gridProject = document.querySelector('.grid__project');
   const gridLink = document.querySelector('.link__nav.grid');
@@ -1596,7 +1521,6 @@ function handleResponsive() {
 
   function checkWidth() {
     if (window.innerWidth <= 991) {
-      // Cacher la grille et son lien de navigation
       if (gridProject) {
         gsap.set(gridProject, { display: 'none' });
       }
@@ -1604,12 +1528,10 @@ function handleResponsive() {
         gridLink.style.display = 'none';
       }
       
-      // Activer automatiquement la vue liste
       if (listLink && !listLink.classList.contains('active')) {
         listLink.click();
       }
     } else {
-      // Réafficher la grille et son lien de navigation
       if (gridProject) {
         gsap.set(gridProject, { display: 'grid' });
       }
@@ -1619,17 +1541,13 @@ function handleResponsive() {
     }
   }
 
-  // Vérifier au chargement
   checkWidth();
 
-  // Vérifier au redimensionnement
   window.addEventListener('resize', checkWidth);
 }
 
-// Appeler la fonction après le chargement du DOM
 document.addEventListener('DOMContentLoaded', handleResponsive);
 
-// Ajouter un écouteur pour le redimensionnement
 window.addEventListener('resize', () => {
   initializeListView();
 });
