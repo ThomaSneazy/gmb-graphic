@@ -41,7 +41,7 @@ document.querySelectorAll('.project__desc.date, .date-list').forEach(el => {
 
 
 const tooltip = document.getElementById('tooltip');
-const hoverables = document.querySelectorAll('.hoverable, .tooltip, .esc, .link-to-social.serious, .link-to-social.cool, .watch');
+const hoverables = document.querySelectorAll('.hoverable, .tooltip, .esc, .link-to-social.serious, .link-to-social.cool, .watch, .switch');
 
 // Variable pour suivre l'état de l'animation
 let tooltipAnimation;
@@ -56,6 +56,8 @@ hoverables.forEach(el => {
       tooltipText = 'click';
     } else if (el.classList.contains('esc')) {
       tooltipText = 'PRESS OR CLICK';
+    }  else if (el.classList.contains('switch')) {
+        tooltipText = 'SPAM';
     } else if (el.classList.contains('serious')) {
       tooltipText = 'The serious me';
     } else if (el.classList.contains('cool')) {
