@@ -249,7 +249,7 @@ function animatePrenomNomWrapper() {
     });
     
     gsap.set('.link__wrapper.is-filter', {
-      clearProps: "position,top,bottom,yPercent", // Nettoie toutes les propriétés de position
+      clearProps: "position,top,bottom,yPercent",
       display: 'none',
       opacity: 0
     });
