@@ -97,7 +97,7 @@ const addTooltipListeners = (element) => {
         tooltipText = 'ENJOY ☻';
       } else if (el.classList.contains('next')) {
         tooltipText = 'Next Work';
-      } else if (el.classList.contains('next')) {
+      } else if (el.classList.contains('switch')) {
         tooltipText = 'Spam';
       } else if (el.classList.contains('last')) {
         tooltipText = 'Next Work';
