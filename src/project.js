@@ -78,7 +78,7 @@ let tooltipAnimation;
 
 // Fonction pour ajouter les event listeners des tooltips
 const addTooltipListeners = (element) => {
-  const hoverables = element.querySelectorAll('.hoverable, .tooltip, .esc, .back, .follow, .watch, .next, .last');
+  const hoverables = element.querySelectorAll('.hoverable, .tooltip, .esc, .back, .follow, .watch, .next, .last, .switch');
   
   hoverables.forEach(el => {
     el.addEventListener('mousemove', (e) => {
@@ -97,6 +97,8 @@ const addTooltipListeners = (element) => {
         tooltipText = 'ENJOY ☻';
       } else if (el.classList.contains('next')) {
         tooltipText = 'Next Work';
+      } else if (el.classList.contains('next')) {
+        tooltipText = 'Spam';
       } else if (el.classList.contains('last')) {
         tooltipText = 'Next Work';
       } else {
