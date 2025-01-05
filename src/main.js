@@ -560,7 +560,6 @@ navLinks.forEach(link => {
         .to(listWrapper, {
           display: 'flex',
           opacity: 1,
-          // height: '100vh',
           duration: 0.8
         })
         .to(linkWrapperNom, {
