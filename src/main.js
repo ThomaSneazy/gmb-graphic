@@ -748,13 +748,13 @@ navLinks.forEach(link => {
           opacity: 0,
           duration: 1,
           onComplete: () => gsap.set(listWrapper, { display: 'none' })
-        }, "<")
+        }, "<+=0.4")
         .to(nom, {
           y: '0%',
           opacity: 1,
           duration: 0.5,
           ease: "power3.out",
-        })
+        }, "<")
         .set(gridProject, { display: 'grid' })
         .set(gridItems, { display: 'flex' })
         .to(gridItems, {
@@ -778,35 +778,31 @@ navLinks.forEach(link => {
         y: -20
       });
       gsap.set('.img-info__wrapper img', {
-        // bottom: 0,
-        // top: 'auto',
-        // height: 0,
-        transformOrigin: 'bottom',
         opacity: 0
       });
 
       if (listWrapper.style.display !== 'none') {
         tl.to('.img__list', {
           opacity: 0,
-          duration: 0.5,
+          duration: 0.3,
           ease: "power2.out"
         })
         .to('.list__link__item', {
           opacity: 0,
           x: 50,
-          duration: 0.3,
-          stagger: 0.05
+          duration: 0.2,
+          stagger: 0.03,
         }, "<")
         .to(linkWrapperNom, {
           yPercent: -20,
           opacity: 0,
-          duration: 0.3,
+          duration: 0.2,
           onComplete: () => gsap.set(linkWrapperNom, { display: 'none' })
         })
         .to(listWrapper, {
           height: 0,
           opacity: 0,
-          duration: 1,
+          duration: 0.6,
           onComplete: () => gsap.set(listWrapper, { display: 'none' })
         }, "<");
       }
@@ -833,18 +829,18 @@ navLinks.forEach(link => {
       tl.set('.test-info', { display: 'block' })
         .to('.test-info', {
           opacity: 1,
-          duration: 0.3
+          duration: 0.2
         })
         .to('.info__text__block', {
           opacity: 1,
           y: 0,
-          duration: 0.6,
-          stagger: 0.1
+          duration: 0.4,
+          stagger: 0.05,
+          ease: "power2.out"
         })
         .to('.img-info__wrapper img', {
-          // height: '100%',
           opacity: 1,
-          duration: 0.8,
+          duration: 0.5,
           ease: "power2.inOut"
         }, "-=0.3");
 
@@ -951,7 +947,15 @@ if (videoGrids.length > 0) {
     preload: 'auto',
   });
 
+  // Définir le volume par défaut à 70%
+  player.volume(0.7);
+
   gsap.set('.video-showreel__wrapper', {
+    display: 'none',
+    opacity: 0
+  });
+
+  gsap.set(videoJs, {
     display: 'none',
     opacity: 0
   });

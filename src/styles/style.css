@@ -4,6 +4,22 @@ body.loading {
 }
 
 
+.volume-btn {
+  background: transparent;
+  border: 1px solid white;
+  color: white;
+  width: 3vw;
+  height: 3vh;
+  cursor: pointer;
+  z-index: 10;
+  font-size: 0.8rem;
+}
+
+.volume-btn:hover {
+  background: white;
+  color: black;
+}
+
 /* .link__wrapper.is-filter {
   opacity: 1;
   scale: 1;
@@ -51,12 +67,10 @@ html.is-leaving.to-left .transition-main {
   transform: translateX(-1em);
 } */
 
-.sound-video {
-  position: absolute;
-  bottom: auto;
-  top: auto;
-  /* height: 40rem; */
-  
+.sound-video,
+.sound-bg,
+.sound-handle {
+  display: none;
 }
 
 /* .sound-bg{ */
@@ -102,7 +116,7 @@ html.is-leaving.to-left .transition-main {
   cursor: grabbing;
 }
 
-.vjs-volume-panel,
+
 .vjs-remaining-time,
 .vjs-current-time,
 .vjs-time-control,
@@ -111,8 +125,8 @@ html.is-leaving.to-left .transition-main {
 .vjs-play-control,
 .vjs-time-divider,
 .vjs-live-control,
-.vjs-playback-rate,
-.vjs-volume-panel-horizontal {
+.vjs-playback-rate
+ {
   display: none !important;
 }
 
@@ -120,10 +134,12 @@ html.is-leaving.to-left .transition-main {
   position: absolute !important;
   background-color: transparent !important;
   display: flex !important;
+  flex-direction: row-reverse !important;
   width: 100% !important;
   margin: 0 auto !important;
-  height: 3vhpx !important;
+  /* height: 3vh !important; */
   bottom: -6vh !important;
+  overflow: hidden !important;
 }
 
 .video-js .vjs-progress-holder .vjs-mouse-display:before {
@@ -132,7 +148,7 @@ html.is-leaving.to-left .transition-main {
 }
 
 .video-js.vjs-custom-theme .vjs-progress-control {
-  display: block !important;
+  display: flex !important;
   width: 100% !important;
   margin: 0 auto !important;
   max-width: 90vw !important;
@@ -144,6 +160,7 @@ html.is-leaving.to-left .transition-main {
   background-color: transparent !important;
   margin: 0 !important;
   border: 1px white solid;
+  overflow: hidden !important;
 }
 
 .video-js.vjs-custom-theme .vjs-progress-holder:active {
@@ -174,7 +191,7 @@ html.is-leaving.to-left .transition-main {
 }
 
 .vjs-volume-panel .vjs-control .vjs-volume-panel-horizontal {
-  display: none !important;
+  display: block !important;
 }
 
 .vjs-remaining-time .vjs-time-control {
@@ -182,9 +199,12 @@ html.is-leaving.to-left .transition-main {
 }
 
 .video-js.vjs-custom-theme .vjs-volume-panel {
-  color: rgb(255, 255, 255) !important;
-  display: block;
+  width: auto !important;
+  display: flex !important;
   font-size: 1.5rem !important;
+  position: relative !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 
 .video-js.vjs-custom-theme .vjs-big-play-button {
@@ -225,6 +245,33 @@ html.is-leaving.to-left .transition-main {
   box-shadow: none !important;
 }
 
+.video-js .vjs-volume-panel-horizontal {
+  width: 2em !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.video-js .vjs-volume-control {
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: 100% !important;
+}
+
+.vjs-button > .vjs-icon-placeholder:before {
+  font-size: 1em;
+  line-height: 1.67;
+}
+
+/* Masquer le panneau de contrôle du volume mais garder le bouton mute/unmute */
+.video-js .vjs-volume-control,
+.video-js .vjs-volume-panel-horizontal {
+  display: none !important;
+}
+.video-js .vjs-control {
+  width: 3rem !important;
+  margin-top: -0.2rem !important;
+
+}
 /* .grid__project {
   display: grid;
   grid-template-columns: repeat(34, 1fr);
@@ -399,3 +446,5 @@ Test ZSH
 .grid__item.reset-position {
   position: static;
 } */
+
+
