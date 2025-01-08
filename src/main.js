@@ -112,17 +112,6 @@ document.querySelectorAll('.grid__item').forEach(item => {
     const projectName = item.getAttribute('data-project-name') || projectDesc.textContent;
     projectDesc.setAttribute('data-project-name', projectName);
     projectDesc.textContent = projectName;
-
-    if (isComingSoon) {
-      item.style.cursor = 'default';
-      item.removeAttribute('href');
-      item.classList.add('coming-soon');
-      
-      item.addEventListener('click', (e) => {
-        e.preventDefault();
-        return false;
-      });
-    }
   }
 
   item.addEventListener('mouseenter', () => {
@@ -132,9 +121,7 @@ document.querySelectorAll('.grid__item').forEach(item => {
       }
     });
     if (projectDesc) {
-      if (!isComingSoon) {
-        animateText(projectDesc);
-      }
+      animateText(projectDesc);
     }
   });
 
