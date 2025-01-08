@@ -117,6 +117,11 @@ document.querySelectorAll('.grid__item').forEach(item => {
       item.style.cursor = 'default';
       item.removeAttribute('href');
       item.classList.add('coming-soon');
+      
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        return false;
+      });
     }
   }
 
