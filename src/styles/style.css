@@ -287,7 +287,7 @@ html.is-leaving.to-left .transition-main {
   /* cursor: default; */
 }
 
-.grid__item:nth-child(1) { grid-area: 7 / 14 / span 6 / span 8; height: 0; max-height: 25rem; }
+/* .grid__item:nth-child(1) { grid-area: 7 / 14 / span 6 / span 8; height: 0; max-height: 25rem; }
 .grid__item:nth-child(1) .img-item { transform: scale(1); }
 .grid__item:nth-child(2)  { grid-area: 2 / 18 / span 4 / span 5 !important; }
 .grid__item:nth-child(3)  { grid-area: 2 / 30 / span 4 / span 4 !important; }
@@ -303,7 +303,7 @@ html.is-leaving.to-left .transition-main {
 .grid__item:nth-child(13) { grid-area: 6 / 29 / span 6 / span 6 !important; }
 .grid__item:nth-child(14) { grid-area: 12 / 20 / span 6 / span 6 !important; border: 1px solid red; }
 .grid__item:nth-child(15) { grid-area: 2 / 11 / span 4 / span 6 !important; border: 1px solid rgb(234, 255, 0); }
-
+ */
 
 
 

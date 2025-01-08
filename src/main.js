@@ -62,6 +62,8 @@ hoverables.forEach(el => {
       tooltipText = 'A little less serious';
     } else if (el.classList.contains('watch')) {
       tooltipText = 'ENJOY ☻';
+    } else if (el.closest('.grid__item')?.getAttribute('coming-soon') === 'yes') {
+      tooltipText = 'COMING SOON';
     } else {
       tooltipText = el.dataset.tooltip;
     }
@@ -104,11 +106,18 @@ hoverables.forEach(el => {
 
 document.querySelectorAll('.grid__item').forEach(item => {
   const projectDesc = item.querySelector('.project__desc');
+  const isComingSoon = item.getAttribute('coming-soon') === 'yes';
 
   if (projectDesc) {
     const projectName = item.getAttribute('data-project-name') || projectDesc.textContent;
     projectDesc.setAttribute('data-project-name', projectName);
     projectDesc.textContent = projectName;
+
+    if (isComingSoon) {
+      item.style.cursor = 'default';
+      item.removeAttribute('href');
+      item.classList.add('coming-soon');
+    }
   }
 
   item.addEventListener('mouseenter', () => {
@@ -118,7 +127,9 @@ document.querySelectorAll('.grid__item').forEach(item => {
       }
     });
     if (projectDesc) {
-      animateText(projectDesc);
+      if (!isComingSoon) {
+        animateText(projectDesc);
+      }
     }
   });
 
