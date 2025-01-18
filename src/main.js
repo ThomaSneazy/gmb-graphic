@@ -4,6 +4,144 @@ import gsap from 'gsap'
 // import barba from '@barba/core'
 
 
+// const favicons = {
+//   default: 'https://cdn.prod.website-files.com/6702c92998140d417ddaef1c/675476c21b87359f85c685cb_favicon-32x32.png',
+//   theme0: 'https://cdn.prod.website-files.com/6702c92998140d417ddaef1c/675476c21b87359f85c685cb_favicon-32x32.png',
+//   theme1: 'https://cdn.prod.website-files.com/6702c92998140d417ddaef1c/67547a1c4d7431902d73aab5_whiteonblue.png',
+//   theme2: 'https://cdn.prod.website-files.com/6702c92998140d417ddaef1c/67547928c9989275efd5a1ea_black-on-whitefavicon-32x32.jpeg',
+//   theme3: 'https://cdn.prod.website-files.com/6702c92998140d417ddaef1c/67547a60e5c867c41624be75_redonpink.png', 
+//   theme4: 'https://cdn.prod.website-files.com/6702c92998140d417ddaef1c/67547a938710618b4a638e6a_greyonyellow.png',
+//   theme5: 'https://cdn.prod.website-files.com/6702c92998140d417ddaef1c/67547acaf504517d45038fc8_greyonwhite.png',
+//   theme6: 'https://cdn.prod.website-files.com/6702c92998140d417ddaef1c/67803842cb73e2c744ae17d5_Artboard%207-100.jpg',
+//   theme7: 'https://cdn.prod.website-files.com/6702c92998140d417ddaef1c/678038425cd1c6fe8d36542b_Artboard%208-100.jpg',
+//   theme8: 'https://cdn.prod.website-files.com/6702c92998140d417ddaef1c/6780384232d7b472a6be4de5_Artboard%208%20copy-100.jpg',
+//   theme9: 'https://cdn.prod.website-files.com/6702c92998140d417ddaef1c/678038426d87663f93536c57_Artboard%208%20copy%202-100.jpg',
+//   theme10: 'https://cdn.prod.website-files.com/6702c92998140d417ddaef1c/678038424a284facefb49a75_Artboard%208%20copy%203-100.jpg',
+//   theme11: 'https://cdn.prod.website-files.com/6702c92998140d417ddaef1c/678038421bd7b9ee27e75dc7_Artboard%208%20copy%204-100.jpg',
+//   theme12: 'https://cdn.prod.website-files.com/6702c92998140d417ddaef1c/6780384226c9deacd625bcac_Artboard%208%20copy%205-100.jpg',
+//   theme13: 'https://cdn.prod.website-files.com/6702c92998140d417ddaef1c/67803842cb73e2c744ae17f5_Artboard%208%20copy%206-100.jpg',
+//   theme14: 'https://cdn.prod.website-files.com/6702c92998140d417ddaef1c/67803f528ee28e6557031ae5_Capture%20d%E2%80%99e%CC%81cran%202025-01-09%20a%CC%80%2022.27.22.png'
+// };
+
+// const colorPalettes = [
+//   { 
+//     textColor: 'var(--base-color-brand--black)', 
+//     backgroundColor: 'var(--base-color-brand--white)' 
+//   },
+//   { 
+//     textColor: 'var(--base-color-brand--blue-electric)', 
+//     backgroundColor: 'var(--base-color-brand--white)' 
+//   },
+//   { 
+//     textColor: 'var(--background-color--background-primary)', 
+//     backgroundColor: 'var(--text-color--text-primary)' 
+//   },
+//   { 
+//     textColor: 'var(--base-color-brand--pearl)', 
+//     backgroundColor: 'var(--base-color-brand--red)' 
+//   },
+//   { 
+//     textColor: 'var(--base-color-brand--grey-dark)', 
+//     backgroundColor: 'var(--base-color-brand--yellow)' 
+//   },
+//   { 
+//     textColor: 'var(--base-color-brand--grey-marine)', 
+//     backgroundColor: 'var(--base-color-brand--grey-light)' 
+//   },
+//   {
+//     textColor: 'var(--base-color-brand--dark-red)',
+//     backgroundColor: 'var(--base-color-brand--red)'
+//   },
+//   {
+//     textColor: 'var(--base-color-brand--blue-light)',
+//     backgroundColor: 'var(--base-color-brand--lime)'
+//   },
+//   {
+//     textColor: 'var(--base-color-brand--yellow-on-pink)',
+//     backgroundColor: 'var(--base-color-brand--pink-on-yellow)'
+//   },
+//   {
+//     textColor: 'var(--base-color-brand--grey-blue)',
+//     backgroundColor: 'var(--base-color-brand--blue-on-grey)'
+//   },
+//   {
+//     textColor: 'var(--base-color-brand--kaki)',
+//     backgroundColor: 'var(--base-color-brand--pink-light)'
+//   },
+//   {
+//     textColor: 'var(--base-color-brand--blue-dark)',
+//     backgroundColor: 'var(--base-color-brand--cream)'
+//   },
+//   {
+//     textColor: 'var(--base-color-brand--orange)',
+//     backgroundColor: 'var(--base-color-brand--blue-orange)'
+//   },
+//   {
+//     textColor: 'var(--base-color-brand--grey-kaki)',
+//     backgroundColor: 'var(--base-color-brand--grey-yellow)'
+//   },
+//   {
+//     textColor: 'var(--base-color-brand--green-dark)',
+//     backgroundColor: 'var(--base-color-brand--green-cornichon)'
+//   }
+// ];
+
+// let currentPaletteIndex = 0;
+
+// function removeExistingFavicons() {
+//   const existingFavicons = document.querySelectorAll("link[rel*='icon']");
+//   existingFavicons.forEach(favicon => favicon.remove());
+// }
+
+// function changeFavicon(themeIndex) {
+//   removeExistingFavicons();
+//   const link = document.createElement('link');
+//   link.type = 'image/png';
+//   link.rel = 'icon';
+//   link.href = favicons[`theme${themeIndex}`] || favicons.default;
+//   document.head.appendChild(link);
+// }
+
+// function applyStoredColors() {
+//   const root = document.documentElement;
+//   const storedTextColor = localStorage.getItem('textColor');
+//   const storedBackgroundColor = localStorage.getItem('backgroundColor');
+//   const storedPaletteIndex = localStorage.getItem('paletteIndex');
+
+//   if (storedTextColor && storedBackgroundColor) {
+//     root.style.setProperty('--text-color--text-primary', storedTextColor);
+//     root.style.setProperty('--background-color--background-primary', storedBackgroundColor);
+    
+//     if (storedPaletteIndex) {
+//       currentPaletteIndex = parseInt(storedPaletteIndex);
+//       changeFavicon(currentPaletteIndex);
+//     }
+//   }
+// }
+
+// document.addEventListener('DOMContentLoaded', () => {
+//   removeExistingFavicons();
+//   changeFavicon(currentPaletteIndex);
+//   applyStoredColors();
+// });
+
+// document.querySelectorAll('.switch').forEach(button => {
+//   button.addEventListener('click', () => {
+//     const root = document.documentElement;
+//     currentPaletteIndex = (currentPaletteIndex + 1) % colorPalettes.length;
+//     const newPalette = colorPalettes[currentPaletteIndex];
+
+//     root.style.setProperty('--text-color--text-primary', newPalette.textColor);
+//     root.style.setProperty('--background-color--background-primary', newPalette.backgroundColor);
+
+//     localStorage.setItem('textColor', newPalette.textColor);
+//     localStorage.setItem('backgroundColor', newPalette.backgroundColor);
+//     localStorage.setItem('paletteIndex', currentPaletteIndex);
+
+//     changeFavicon(currentPaletteIndex);
+//   });
+// });
+
 
 // barba.init({
 //   transitions: [{
@@ -35,9 +173,9 @@ import gsap from 'gsap'
 
 
 
-document.querySelectorAll('.project__desc.date, .date-list').forEach(el => {
-  el.textContent = el.textContent.replace(/\b20/, '');
-});
+// document.querySelectorAll('.project__desc.date, .date-list').forEach(el => {
+//   el.textContent = el.textContent.replace(/\b20/, '');
+// });
 
 
 const tooltip = document.getElementById('tooltip');
@@ -106,7 +244,6 @@ hoverables.forEach(el => {
 
 document.querySelectorAll('.grid__item').forEach(item => {
   const projectDesc = item.querySelector('.project__desc');
-  const isComingSoon = item.getAttribute('coming-soon') === 'yes';
 
   if (projectDesc) {
     const projectName = item.getAttribute('data-project-name') || projectDesc.textContent;
