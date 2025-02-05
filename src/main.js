@@ -224,6 +224,8 @@ hoverables.forEach(el => {
     });
   });
 
+
+  //try
   el.addEventListener('mouseleave', () => {
     if (tooltipAnimation) tooltipAnimation.kill();
 
