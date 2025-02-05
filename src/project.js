@@ -4,30 +4,27 @@ import Lenis from '@studio-freight/lenis'
 
 // Fonction pour l'animation
 const playPageAnimation = () => {
+  // Animation immédiate des éléments de la page
   gsap.set('.page-wrapper', {
     opacity: 0,
     scale: 0.8
   })
+
+  // Démarrer l'animation sans attendre
+  requestAnimationFrame(() => {
+    gsap.timeline()
+      .to('.page-wrapper', {
+        opacity: 1,
+        scale: 1,
+        duration: 0.8,
+        ease: 'power2.out'
+      })
+  })
+
   // Commenté : animation du nom et prénom
   /*gsap.set(['.name-prenom__wrapper', '.info__text__wrapper'], {
     opacity: 0,
   })*/
-
-  gsap.timeline()
-    .to('.page-wrapper', {
-      opacity: 1,
-      scale: 1,
-      duration: 0.8,
-      ease: 'power2.out'
-    })
-    /* Commenté : animation du nom et prénom
-    .to(['.name-prenom__wrapper', '.info__text__wrapper'], {
-      opacity: 1,
-      duration: 0.6,
-      stagger: 0.2,
-      ease: 'power2.out'
-    }, '-=0.4')
-    */
 }
 
 // Animation de sortie
@@ -200,7 +197,7 @@ const addTooltipListeners = (element) => {
 // }
 
 // Initialisation
-window.addEventListener('load', () => {
+window.addEventListener('DOMContentLoaded', () => {
   addTooltipListeners(document)
   addNavigationListeners(document)
   playPageAnimation()
